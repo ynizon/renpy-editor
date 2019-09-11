@@ -97,9 +97,9 @@ class DatabaseSeeder extends Seeder
 			array(
 				'story_id' => '1',				
 				'name'=>'001-Start',
+				"end"=>0,
 				'parameters'=>json_encode([
-						'scene_id' => '1',
-						"end"=>0,
+						'scene_id' => '1',						
 						"say"=>"Hello, do you want to leave ?",
 						"behaviour_id"=>1,
 						"music_id"=>"0",
@@ -117,11 +117,11 @@ class DatabaseSeeder extends Seeder
 		DB::table('actions')->insert(
 			array(
 				'story_id' => '1',				
-				'name'=>'001-Start',
+				'name'=>'002-End',
+				"end"=>1,
 				'parameters'=>json_encode([
 						'scene_id' => '1',
-						"say"=>"Bye, bye",
-						"end"=>1,
+						"say"=>"Bye, bye",						
 						"behaviour_id"=>3,
 						"music_id"=>"0",
 						"menu1_to"=>"0",

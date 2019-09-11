@@ -38,14 +38,14 @@ class StoryController extends Controller
 	{
 		$story = Story::find($id);
 		
-		if (!is_dir("story")){
-			mkdir ("story");
+		if (!is_dir("stories")){
+			mkdir ("stories");
 		}
-		if (!is_dir("story/".$id)){
-			mkdir ("story/".$id);
+		if (!is_dir("stories/".$id)){
+			mkdir ("stories/".$id);
 		}
-		if (!is_dir("story/".$id."/characters")){
-			mkdir ("story/".$id."/characters");
+		if (!is_dir("stories/".$id."/characters")){
+			mkdir ("stories/".$id."/characters");
 		}
 		$characters = $story->characters();
 		foreach ($characters as $character){
@@ -54,7 +54,7 @@ class StoryController extends Controller
 				if ($behaviour->picture != ""){
 					try{
 						$s = file_get_contents($behaviour->picture);
-						$file = "story/".$id."/characters/".$behaviour->name;
+						$file = "stories/".$id."/characters/".$behaviour->name;
 						file_put_contents($file,$s);
 					}catch(\Exception $e){
 					}
@@ -62,45 +62,45 @@ class StoryController extends Controller
 			}
 		}
 		
-		if (!is_dir("story/".$id."/things")){
-			mkdir ("story/".$id."/things");
+		if (!is_dir("stories/".$id."/things")){
+			mkdir ("stories/".$id."/things");
 		}
 		$things = $story->things();
 		foreach ($things as $thing){
 			if ($thing->picture != ""){
 				try{
 					$s = file_get_contents($thing->picture);
-					$file = "story/".$id."/things/".$thing->name;
+					$file = "stories/".$id."/things/".$thing->name;
 					file_put_contents($file,$s);
 				}catch(\Exception $e){
 				}
 			}
 		}
 		
-		if (!is_dir("story/".$id."/backgrounds")){
-			mkdir ("story/".$id."/backgrounds");
+		if (!is_dir("stories/".$id."/backgrounds")){
+			mkdir ("stories/".$id."/backgrounds");
 		}
 		$backgrounds = $story->backgrounds();
 		foreach ($backgrounds as $background){
 			if ($background->picture != ""){
 				try{
 					$s = file_get_contents($background->picture);
-					$file = "story/".$id."/backgrounds/".$background->name;
+					$file = "stories/".$id."/backgrounds/".$background->name;
 					file_put_contents($file,$s);
 				}catch(\Exception $e){
 				}
 			}
 		}
 		
-		if (!is_dir("story/".$id."/musics")){
-			mkdir ("story/".$id."/musics");
+		if (!is_dir("stories/".$id."/musics")){
+			mkdir ("stories/".$id."/musics");
 		}
 		$musics = $story->musics();
 		foreach ($musics as $music){
 			if ($music->music != ""){
 				try{
 					$s = file_get_contents($music->music);
-					$file = "story/".$id."/musics/".$music->name;
+					$file = "stories/".$id."/musics/".$music->name;
 					file_put_contents($file,$s);
 				}catch(\Exception $e){
 				}

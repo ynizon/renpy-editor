@@ -6,7 +6,7 @@ When you have a lot of scenes, you can chain them with actions.
 When you have finished your story, export the script to Ren'Py and enjoy your visual novel.
 
 ##Install
-php artisan migrate:refresh --seed
-folder public/story must be writable
+- php artisan migrate:refresh --seed
+- folder public/stories must be writable
 
 ## Licence free for non commercial use only
