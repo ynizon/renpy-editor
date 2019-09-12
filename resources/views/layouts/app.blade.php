@@ -80,6 +80,20 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+		<footer>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header" style="text-align:center">
+								<a target="_blank" href='https://www.gameandme.fr/renpy-editor'>(c) Yohann Nizon 2019</a> - <a target="_blank" href='https://github.com/ynizon/renpy-editor'>Github Ren'py editor</a> 
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</footer>
     </div>
 </body>
 </html>

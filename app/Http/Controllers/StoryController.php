@@ -42,12 +42,14 @@ class StoryController extends Controller
 			$scene->name = "001-Start";
 			$scene->story_id = $story->id;
 			$scene->noremove = 1;
+			$scene->parameters = json_encode($scene->getParams());
 			$scene->save();
 			
 			$scene = new Scene();
 			$scene->name = "999-End";
 			$scene->story_id = $story->id;
 			$scene->noremove = 1;
+			$scene->parameters = json_encode($scene->getParams());
 			$scene->save();
 		}
 		
@@ -57,7 +59,7 @@ class StoryController extends Controller
 	public function show($id)
 	{
 		$story = Story::find($id);
-		
+		$errors = [];
 		if (!is_dir("stories")){
 			mkdir ("stories");
 		}
@@ -74,13 +76,19 @@ class StoryController extends Controller
 			}
 			$behaviours = $character->behaviours();
 			foreach ($behaviours as $behaviour){
+				$bOk = false;
 				if ($behaviour->picture != ""){
 					try{
 						$s = file_get_contents($behaviour->picture);
 						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
 						file_put_contents($file,$s);
+						$bOk = true;
 					}catch(\Exception $e){
+						
 					}
+				}
+				if (!$bOk){
+					$errors["/story/".$character->story_id."/character/".$character->id."/behaviour"] =  $character->name. ">".$behaviour->name ." doesn't have a valid picture.";
 				}
 			}
 		}
@@ -90,13 +98,18 @@ class StoryController extends Controller
 		}
 		$things = $story->things();
 		foreach ($things as $thing){
+			$bOk = false;
 			if ($thing->picture != ""){
 				try{
 					$s = file_get_contents($thing->picture);
 					$file = "stories/".$id."/images/things/".Helpers::encName(basename($thing->picture));
 					file_put_contents($file,$s);
+					$bOk = true;
 				}catch(\Exception $e){
 				}
+			}
+			if (!$bOk){
+				$errors["/thing/".$thing->id."/edit"] = $thing->name ." doesn't have a valid picture.";
 			}
 		}
 		
@@ -105,6 +118,7 @@ class StoryController extends Controller
 		}
 		$backgrounds = $story->backgrounds();
 		foreach ($backgrounds as $background){
+			$bOk = false;
 			if ($background->picture != ""){
 				try{
 					$s = file_get_contents($background->picture);
@@ -114,28 +128,39 @@ class StoryController extends Controller
 					$pic = new ResizeImage($file);
 					$pic->resizeTo($story->width,$story->height);
 					$pic->saveImage($file);
+					$bOk = true;
 				}catch(\Exception $e){
 				}
+			}
+			if (!$bOk){
+				$errors["/background/".$background->id."/edit"] = $background->name ." doesn't have a valid picture.";
 			}
 		}
 		
 		$musics = $story->musics();
 		foreach ($musics as $music){
+			$bOk = false;
 			if ($music->music != ""){
 				try{
 					$s = file_get_contents($music->music);
 					$file = "stories/".$id."/".Helpers::encName(basename($music->music));
 					file_put_contents($file,$s);
+					$bOk = true;
 				}catch(\Exception $e){
 				}
+			}
+			if (!$bOk){
+				$errors["/music/".$music->id."/edit"] = $music->name ." doesn't have a valid music.";
 			}
 		}
 		
 		define("TAB","    ");
+		
+		
 		$script = View::make('story/script', compact('story','TAB'))->render();
 		file_put_contents("stories/".$id."/script.rpy",$script);
 		
-		return view('story/show',compact('story','TAB'));
+		return view('story/show',compact('story','TAB','errors'));
 	}
 
 	private function save($story, $request)

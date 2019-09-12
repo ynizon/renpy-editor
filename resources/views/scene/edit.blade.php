@@ -10,10 +10,14 @@ $params = $scene->getParams();
         <div class="col-md-12">
             <div class="card">
                 <h2 class="card-header">Edit</h2>
-                <div class="card-body">
-					
+                <div class="card-body">					
 					<div class="row">
-                        <div class="col-md-4">
+						<div class="col-md-12">
+							<p>
+								Add your scene components, save, then add actions. Use control key to add many components.
+							</p>
+						</div>
+                        <div class="col-md-4">							
 							{!! Form::model($scene, ['route' => ['scene.update', $scene->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
 							<h3>Design</h3>
 							{{ csrf_field() }}
@@ -34,7 +38,7 @@ $params = $scene->getParams();
 							</div>
 							
 							<div class="form-group{{ $errors->has('background') ? ' has-error' : '' }}">
-								<label for="background" class="col-md-4 control-label">Backgrounds</label>
+								<label for="background" class="col-md-5 control-label">Backgrounds</label>
 
 								<div class="col-md-12">								
 									<select id="backgrounds" multiple class="form-control" name="backgrounds[]" >

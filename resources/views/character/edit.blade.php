@@ -29,7 +29,7 @@
                             <label for="color" class="col-md-4 control-label">Color</label>
 
                             <div class="col-md-6">								
-                                <input id="color" maxlength="6" type="text" class="form-control" name="color" placeholder = "c8ffc8" value="{!! $character->color !!}" required  />
+                                <input type="color" id="color" maxlength="6" type="text" class="form-control" name="color" placeholder = "c8ffc8" value="#{!! $character->color !!}" required  />
 
                                 @if ($errors->has('color'))
                                     <span class="help-block">
@@ -40,8 +40,8 @@
                         </div>
 						
 						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Import Behaviours from<br/>
-								<a target="_blank" href='https://cloudnovel.net/browse/free/character/popular'><i class="fa fa-hyperlink"></i></a>
+                            <label for="name" class="col-md-4 control-label">Import Behaviours from&nbsp;&nbsp;
+								<a target="_blank" href='https://cloudnovel.net/browse/free/character/popular'><i class="fa fa-link"></i></a>
 							</label>
 
                             <div class="col-md-6">								
