@@ -38,6 +38,14 @@ class DatabaseSeeder extends Seeder
 			)
 		); 
 		
+		DB::table('musics')->insert(
+			array(
+				'story_id' => '1',
+				'name'=>'Default',
+				'music'=>'https://renpy.gameandme.fr/sounds/classical.mp3'
+			)
+		); 
+		
 		DB::table('backgrounds')->insert(
 			array(
 				'story_id' => '1',
@@ -82,54 +90,141 @@ class DatabaseSeeder extends Seeder
 		DB::table('scenes')->insert(
 			array(
 				'story_id' => '1',
-				'name'=>'Start',
-				'parameters'=>json_encode([
-						"background_id"=>"1",
-						"characters_id"=>[1],
-						"music_id"=>"0",
-						"things_id"=>["1"]
-					]
-				)
-			)
-		); 
-		
-		DB::table('actions')->insert(
-			array(
-				'story_id' => '1',				
 				'name'=>'001-Start',
-				"end"=>0,
+				'noremove'=>1,
 				'parameters'=>json_encode([
-						'scene_id' => '1',						
-						"say"=>"Hello, do you want to leave ?",
-						"behaviour_id"=>1,
-						"music_id"=>"0",
-						"menu1"=>"Yes",
-						"menu1_to"=>"2",
-						"menu2"=>"No",
-						"menu2_to"=>"1",
-						"menu3_to"=>"0",
-						"menu4_to"=>"0"
+						"backgrounds_id"=>[1],
+						"characters_id"=>[1],
+						"musics_id"=>[],
+						"things_id"=>[1]
 					]
 				)
+			)
+		); 
+		
+		DB::table('scenes')->insert(
+			array(
+				'story_id' => '1',
+				'name'=>'999-End',
+				'noremove'=>1,
+				'parameters'=>json_encode([
+						"backgrounds_id"=>[1],
+						"characters_id"=>[1],
+						"musics_id"=>[],
+						"things_id"=>[1]
+					]
+				)
+			)
+		); 
+		
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'1',
+				'name'=>'Bedroom show',
+				'parameters'=>'{"element":"background","subject_id":"1","verb":"show","info":null}'
 			)
 		); 
 		
 		DB::table('actions')->insert(
 			array(
 				'story_id' => '1',				
-				'name'=>'002-End',
-				"end"=>1,
-				'parameters'=>json_encode([
-						'scene_id' => '1',
-						"say"=>"Bye, bye",						
-						"behaviour_id"=>3,
-						"music_id"=>"0",
-						"menu1_to"=>"0",
-						"menu2_to"=>"0",
-						"menu3_to"=>"0",
-						"menu4_to"=>"0"
-					]
-				)
+				'scene_id' => '1',				
+				'num_order'=>'2',
+				'name'=>'Default play',
+				'parameters'=>'{"element":"music","subject_id":"1","verb":"play","info":null}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'3',
+				'name'=>'Ma Baker show:Smile',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"show","info":"1"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'4',
+				'name'=>'Ma Baker say:hello',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"say","info":"hello"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'5',
+				'name'=>'Ma Baker move:left',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"move","info":"left"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'6',
+				'name'=>'Keys show',
+				'parameters'=>'{"element":"thing","subject_id":"1","verb":"show","info":null}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'7',
+				'name'=>'Ma Baker say:I give you the keys of this project',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"say","info":"I give you the keys of this project, do you want to restart the tutorial ?"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'8',
+				'name'=>'Keys hide',
+				'parameters'=>'{"element":"thing","subject_id":"1","verb":"hide","info":null}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '1',				
+				'num_order'=>'9',
+				'name'=>'Ma Baker menu',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"menu","info":"{\"menu1\":\"Yes\",\"menu1_to\":\"1\",\"menu2\":\"No\",\"menu2_to\":\"2\",\"menu3\":\"\",\"menu3_to\":\"0\",\"menu4\":\"\",\"menu4_to\":\"0\"}"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '2',				
+				'num_order'=>'2',
+				'name'=>'Ma Baker say:end',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"say","info":"End"}'
+			)
+		); 
+		
+		DB::table('actions')->insert(
+			array(
+				'story_id' => '1',				
+				'scene_id' => '2',				
+				'num_order'=>'2',
+				'name'=>'game end',
+				'parameters'=>'{"element":"game","subject_id":"0","verb":"end","info":null}'
 			)
 		); 
     }

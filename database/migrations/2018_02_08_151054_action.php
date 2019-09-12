@@ -16,9 +16,13 @@ class Action extends Migration
 		Schema::create('actions', function(Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name')->default("");
-			$table->integer('end')->default("0");
 			$table->text('parameters');
+			$table->integer('num_order')->default(1);
 			$table->timestamps();
+			
+			$table->BigInteger('scene_id')->unsigned();
+			$table->foreign('scene_id')->references('id')
+				->on('scenes')->onDelete('cascade'); 
 			
 			$table->BigInteger('story_id')->unsigned();
 			$table->foreign('story_id')->references('id')

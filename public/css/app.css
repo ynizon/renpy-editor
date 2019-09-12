@@ -13688,3 +13688,7 @@ a.text-dark:focus {
   }
 }
 
+.action_type {
+  display: none;
+}
+

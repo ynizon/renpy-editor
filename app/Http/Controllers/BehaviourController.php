@@ -45,12 +45,6 @@ class BehaviourController extends Controller
 		return redirect('story/'.$behaviour->story_id.'/character/'.$behaviour->character_id.'/behaviour')->withOk("The behaviour " . $behaviour->name . " has been saved .");
     }
 	
-	public function show($id)
-	{
-		$behaviour = Behaviour::find($id);
-		return view('behaviour/show',compact('behaviour'));
-	}
-
 	private function save($behaviour, $request)
 	{
 		$inputs = $request->all();		
@@ -95,4 +89,10 @@ class BehaviourController extends Controller
 		Behaviour::destroy($behaviour_id);
 		return redirect()->back();
 	}	
+	
+	public function show (Request $request, $story_id, $character_id){
+		$character = Character::find($character_id);
+		$behaviours = $character->behaviours();
+		return view('behaviour/show',compact('behaviours'));
+	}
 }

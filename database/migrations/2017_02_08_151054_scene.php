@@ -17,6 +17,7 @@ class Scene extends Migration
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->text('parameters');
+			$table->Integer('noremove')->default(0);
 			$table->timestamps();
 			
 			$table->BigInteger('story_id')->unsigned();

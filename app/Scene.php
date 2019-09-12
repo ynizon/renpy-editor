@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Action;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Mail;
@@ -23,7 +24,7 @@ class Scene extends Model
     }  
 	
 	public function getParams(){
-		$all_params = ["background_id"=>0,"music_id"=>0,"characters_id"=>[],"things_id"=>[]];
+		$all_params = ["backgrounds_id"=>[],"musics_id"=>[],"characters_id"=>[],"things_id"=>[]];
 		$params = [];
 		if ($this->parameters != ""){
 			$params = json_decode($this->parameters,true);
@@ -36,4 +37,9 @@ class Scene extends Model
 		
 		return $params;
 	}
+	
+	public function actions()
+    {
+        return $this->hasMany('App\Action')->orderBy("num_order")->get();
+    }  
 }

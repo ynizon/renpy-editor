@@ -16,12 +16,16 @@
 								<a href='/scene/<?php echo $scene->id;?>/edit'><?php echo $scene->name;?></a>
 								&nbsp;&nbsp;
 								<a href='/scene/<?php echo $scene->id;?>/edit'><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
-								{!! Form::open(['method' => 'DELETE', "style"=>"display:inline",'route' => ['scene.destroy', $scene->id]]) !!}
-									&nbsp;<a href="#" class="pointer" title="Supprimer" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
-								{!! Form::close() !!}
-								<div style="width:100px;height:100px;" >
-									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $scene->picture;?>" />
-								</div>
+								
+								<?php
+								if ($scene->noremove != 1){
+								?>
+									{!! Form::open(['method' => 'DELETE', "style"=>"display:inline",'route' => ['scene.destroy', $scene->id]]) !!}
+										&nbsp;<a href="#" class="pointer" title="Supprimer" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
+									{!! Form::close() !!}
+								<?php
+								}
+								?>								
 							</li>
 							<?php
 						}

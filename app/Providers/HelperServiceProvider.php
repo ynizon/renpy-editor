@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use DB;
 use Illuminate\Support\ServiceProvider;
 use Request;
+use App\Story;
 abstract class HelperServiceProvider extends ServiceProvider
 {
 	/* Convertit une date de 2016-01-31 a 01/2016 */
@@ -363,6 +365,33 @@ abstract class HelperServiceProvider extends ServiceProvider
 	
 	/* Encode name for python script */
 	public static function encName($s){
-		return  strtolower(str_replace(" ","_",str_replace("'","",$s)));	
+		return  strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",$s))));
 	}
+	
+	/* Checking permissions */
+	public static function checkPermission($story_id){
+		$stories = [];
+		$lst = Story::where("user_id","=",Auth::user()->id)->get();
+		foreach ($lst as $l){
+			$stories[$l->id] = $l;
+		}
+		
+		$r = false;
+		if (isset($stories[$story_id])){
+			$r = true;
+		}else{		
+			//We add hare stories
+			$lst = DB::select ("select * from user_story where email = ? ", array(Auth::user()->email));
+			foreach ($lst as $l){
+				$stories[$l->id]= Story::find($l->id);
+			}
+			
+			if (isset($stories[$story_id])){
+				$r = true;
+			}
+		}
+		return $r;
+	}
+	
+	
 }

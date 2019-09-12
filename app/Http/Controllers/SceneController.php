@@ -30,8 +30,8 @@ class SceneController extends Controller
 	
 	public function create($story_id)
 	{	
-		$scene = new Scene();
-		$story = Story::find($story_id);
+		$scene = new Scene();		
+		$story = Story::find($story_id);		
 		$method = "POST";
 		return view('scene/edit',compact('scene','method','story'));
 	}
@@ -43,12 +43,6 @@ class SceneController extends Controller
 		return redirect('story/'.$scene->story_id.'/scene')->withOk("The scene " . $scene->name . " has been saved .");
     }
 	
-	public function show($id)
-	{
-		$scene = Scene::find($id);
-		return view('scene/show',compact('scene'));
-	}
-
 	private function save($scene, $request)
 	{
 		$inputs = $request->all();		
@@ -62,18 +56,19 @@ class SceneController extends Controller
 		}
 
 		$tab = [];
-		if (isset($inputs["background"])){
-			$tab["background_id"] = $inputs["background"];
+		if (isset($inputs["backgrounds"])){
+			$tab["backgrounds_id"] = $inputs["backgrounds"];
 		}
 		if (isset($inputs["characters"])){
 			$tab["characters_id"] = $inputs["characters"];
 		}
-		if (isset($inputs["music"])){
-			$tab["music_id"] = $inputs["music"];
+		if (isset($inputs["musics"])){
+			$tab["musics_id"] = $inputs["musics"];
 		}
 		if (isset($inputs["things"])){
 			$tab["things_id"] = $inputs["things"];
 		}
+		
 		$scene->parameters = json_encode($tab);
 		
 		$scene->save();
@@ -93,12 +88,13 @@ class SceneController extends Controller
 	{		
 		$scene = Scene::find($id);
 		$scene = $this->save($scene, $request);
-		return redirect('story/'.$scene->story_id.'/scene')->withOk("The scene " . $scene->name . " has been saved .");
+		return redirect('/scene/'.$scene->id.'/edit')->withOk("The scene " . $scene->name . " has been saved .");
 	}
 	
-	public function destroy($scene_id)
+	public function destroy($id)
 	{	
-		Scene::destroy($scene_id);
+		Scene::destroy($id);
 		return redirect()->back();
 	}	
+	
 }

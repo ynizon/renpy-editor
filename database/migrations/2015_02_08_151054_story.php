@@ -16,6 +16,8 @@ class Story extends Migration
 		Schema::create('stories', function(Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->bigInteger('user_id')->unsigned();
+			$table->Integer('width')->unsigned()->default(1280);
+			$table->Integer('height')->unsigned()->default(720);
 			$table->string('name')->default("Story");			
 			$table->timestamps();			
 			$table->foreign('user_id')->references('id')

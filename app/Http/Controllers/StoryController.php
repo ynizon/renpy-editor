@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use View;
 use Auth;
 use DB;
 use App\Story;
 use App\Scene;
+use App\ResizeImage;
 use App\Character;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class StoryController extends Controller
 {
@@ -22,7 +25,9 @@ class StoryController extends Controller
 
 	public function create()
 	{	
-		$story = new Story();
+		$story = new Story();	
+		$story->width = 1280;
+		$story->height = 720;		
 		$method = "POST";
 		return view('story/edit',compact('story','method'));
 	}
@@ -31,6 +36,21 @@ class StoryController extends Controller
     {
 		$story = new Story();
 		$story = $this->save($story, $request);
+		
+		if (0 == count($story->scenes())){
+			$scene = new Scene();
+			$scene->name = "001-Start";
+			$scene->story_id = $story->id;
+			$scene->noremove = 1;
+			$scene->save();
+			
+			$scene = new Scene();
+			$scene->name = "999-End";
+			$scene->story_id = $story->id;
+			$scene->noremove = 1;
+			$scene->save();
+		}
+		
 		return redirect('home')->withOk("The story " . $story->name . " has been saved .");
     }
 	
@@ -44,17 +64,20 @@ class StoryController extends Controller
 		if (!is_dir("stories/".$id)){
 			mkdir ("stories/".$id);
 		}
-		if (!is_dir("stories/".$id."/characters")){
-			mkdir ("stories/".$id."/characters");
+		if (!is_dir("stories/".$id."/images")){
+			mkdir ("stories/".$id."/images");
 		}
 		$characters = $story->characters();
 		foreach ($characters as $character){
+			if (!is_dir("stories/".$id."/images/".Helpers::encName($character->name))){
+				mkdir ("stories/".$id."/images/".Helpers::encName($character->name));
+			}
 			$behaviours = $character->behaviours();
 			foreach ($behaviours as $behaviour){
 				if ($behaviour->picture != ""){
 					try{
 						$s = file_get_contents($behaviour->picture);
-						$file = "stories/".$id."/characters/".$behaviour->name;
+						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
 						file_put_contents($file,$s);
 					}catch(\Exception $e){
 					}
@@ -62,52 +85,57 @@ class StoryController extends Controller
 			}
 		}
 		
-		if (!is_dir("stories/".$id."/things")){
-			mkdir ("stories/".$id."/things");
+		if (!is_dir("stories/".$id."/images/things")){
+			mkdir ("stories/".$id."/images/things");
 		}
 		$things = $story->things();
 		foreach ($things as $thing){
 			if ($thing->picture != ""){
 				try{
 					$s = file_get_contents($thing->picture);
-					$file = "stories/".$id."/things/".$thing->name;
+					$file = "stories/".$id."/images/things/".Helpers::encName(basename($thing->picture));
 					file_put_contents($file,$s);
 				}catch(\Exception $e){
 				}
 			}
 		}
 		
-		if (!is_dir("stories/".$id."/backgrounds")){
-			mkdir ("stories/".$id."/backgrounds");
+		if (!is_dir("stories/".$id."/images")){
+			mkdir ("stories/".$id."/images");
 		}
 		$backgrounds = $story->backgrounds();
 		foreach ($backgrounds as $background){
 			if ($background->picture != ""){
 				try{
 					$s = file_get_contents($background->picture);
-					$file = "stories/".$id."/backgrounds/".$background->name;
+					$file = "stories/".$id."/images/".Helpers::encName(basename($background->picture));
 					file_put_contents($file,$s);
+					
+					$pic = new ResizeImage($file);
+					$pic->resizeTo($story->width,$story->height);
+					$pic->saveImage($file);
 				}catch(\Exception $e){
 				}
 			}
 		}
 		
-		if (!is_dir("stories/".$id."/musics")){
-			mkdir ("stories/".$id."/musics");
-		}
 		$musics = $story->musics();
 		foreach ($musics as $music){
 			if ($music->music != ""){
 				try{
 					$s = file_get_contents($music->music);
-					$file = "stories/".$id."/musics/".$music->name;
+					$file = "stories/".$id."/".Helpers::encName(basename($music->music));
 					file_put_contents($file,$s);
 				}catch(\Exception $e){
 				}
 			}
 		}
 		
-		return view('story/show',compact('story'));
+		define("TAB","    ");
+		$script = View::make('story/script', compact('story','TAB'))->render();
+		file_put_contents("stories/".$id."/script.rpy",$script);
+		
+		return view('story/show',compact('story','TAB'));
 	}
 
 	private function save($story, $request)
@@ -115,6 +143,12 @@ class StoryController extends Controller
 		$inputs = $request->all();
 		if (isset($inputs["name"])){
 			$story->name = $inputs["name"];
+		}
+		if (isset($inputs["width"])){
+			$story->width = $inputs["width"];
+		}
+		if (isset($inputs["height"])){
+			$story->height = $inputs["height"];
 		}
 		$story->user_id = Auth::user()->id;
 		$story->save();
@@ -207,10 +241,17 @@ class StoryController extends Controller
 		foreach ($story->scenes() as $info){
 			$new = $info->replicate();
 			$new->story_id = $new_story->id;
+			
 			if ($info->parameters != ""){
 				$new_json = json_decode($info->parameters,true);
-				$new_json["background_id"] = $redirect["backgrounds"][$new_json["background_id"]];
-				$new_json["music_id"] = $redirect["musics"][$new_json["music_id"]];
+				$new_json["backgrounds_id"] = [];
+				foreach ($new_json["backgrounds_id"] as $id){
+					$new_json["backgrounds_id"][] = $redirect["backgrounds"][$id];
+				}
+				$new_json["musics_id"] = [];
+				foreach ($new_json["musics_id"] as $id){
+					$new_json["musics_id"][] = $redirect["musics"][$id];
+				}
 				$new_json["characters_id"] = [];
 				foreach ($new_json["characters_id"] as $id){
 					$new_json["characters_id"][] = $redirect["characters"][$id];
@@ -222,6 +263,7 @@ class StoryController extends Controller
 				
 				$new->parameters = json_encode($new_json);
 			}
+			
 			$new->save();
 			$redirect["scenes"][$info->id] = $new->id;
 		}
@@ -229,10 +271,13 @@ class StoryController extends Controller
 		foreach ($story->actions() as $info){
 			$new = $info->replicate();
 			$new->story_id = $new_story->id;
+			$new->scene_id = $redirect["scenes"][$info->scene_id];
 			if ($info->parameters != ""){
 				$new_json = json_decode($info->parameters,true);
-				$new_json["behaviour_id"] = $redirect["behaviours"][$new_json["behaviour_id"]];
-				$new_json["scene_id"] = $redirect["scenes"][$new_json["scene_id"]];
+				$element = $new_json["element"];
+				if ($new_json["subject_id"] != 0){
+					$new_json["subject_id"] = $redirect[$element."s"][$new_json["subject_id"]];
+				}
 				
 				$new->parameters = json_encode($new_json);
 			}

@@ -40,7 +40,7 @@ class HomeController extends Controller
 		//We add hare stories
 		$lst = DB::select ("select * from user_story where email = ? ", array(Auth::user()->email));
 		foreach ($lst as $l){
-			$stories[$l->id]= $Story::find($l->id);
+			$stories[$l->id]= Story::find($l->id);
 		}
         return view('story/index', compact("stories"));
     }	
