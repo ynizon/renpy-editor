@@ -16,7 +16,7 @@
 								<a href='/scene/<?php echo $scene->id;?>/edit'><?php echo $scene->name;?></a>
 								&nbsp;&nbsp;
 								<a href='/scene/<?php echo $scene->id;?>/edit'><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
-								
+								<a title="Duplicate the scene" href='/scene/<?php echo $scene->id;?>/duplicate'><i class="fa fa-clone"></i></a>&nbsp;&nbsp;
 								<?php
 								if ($scene->noremove != 1){
 								?>

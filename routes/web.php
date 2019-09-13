@@ -56,6 +56,7 @@ Route::get('/story/{id}/thing/create', 'ThingController@create');
 Route::get('/story/{id}/scene', 'SceneController@index')->name('scene');
 Route::resource('scene', 'SceneController');
 Route::get('/story/{id}/scene/create', 'SceneController@create');
+Route::get('/scene/{id}/duplicate', 'SceneController@duplicate');
 
 
 Route::get('/story/{id}/character/{character_id}/behaviour', 'BehaviourController@index')->name('behaviour');

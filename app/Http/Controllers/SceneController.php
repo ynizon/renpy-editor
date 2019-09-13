@@ -115,7 +115,7 @@ class SceneController extends Controller
 	
 	public function destroy($id)
 	{	
-		$scene = Story::find($id);
+		$scene = Scene::find($id);
 		if (Helpers::checkPermission($scene->story_id) == false){
 			return view('errors/403',  array());
 			exit();		
@@ -124,4 +124,26 @@ class SceneController extends Controller
 		return redirect()->back();
 	}	
 	
+	public function duplicate($id)
+    {	
+		$scene = Scene::find($id);
+		$story = Story::find($scene->story_id);
+		
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
+		$new_scene = $scene->replicate();
+		$new_scene->name = "Copy of ". $new_scene->name. "(".date("Y-m-d H:i:s").")";
+		$new_scene->noremove = 0;
+		$new_scene->save();
+		
+		foreach ($scene->actions() as $action){
+			$new_action = $action->replicate();
+			$new_action->scene_id = $new_scene->id;
+			$new_action->save();
+		}
+        return redirect('/story/'.$scene->story_id.'/scene')->withOk("The scene " . $scene->name . " has been duplicated .");
+    }
 }
