@@ -7,7 +7,7 @@
             <div class="card">
                 <h2 class="card-header">Edit</h2>
                 <div class="card-body">
-					{!! Form::model($behaviour, ['route' => ['behaviour.update', $behaviour->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
+					{!! Form::model($behaviour, ['route' => ['behaviour.update', $behaviour->id], 'files'=>true,'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 						<input type="hidden"  name="story_id" value="{!! $story->id !!}" />
 						<input type="hidden"  name="character_id" value="{!! $character->id !!}" />
@@ -21,6 +21,25 @@
                                 @if ($errors->has('name'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+						
+						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
+                            <label for="picture" class="col-md-4 control-label">Picture (import url)
+								&nbsp;&nbsp;
+								<a target="_blank" href='https://cloudnovel.net/browse/free/character/popular'><i class="fa fa-link"></i></a>
+							</label>
+
+                            <div class="col-md-6">								
+                                <input id="picture" placeholder="https://" type="text" class="form-control" name="picture" value="{!! $behaviour->picture !!}" />
+								<br/>Or a file (.png only)
+								<input id="picture_file"  type="file" class="form-control" name="picture_file"  />
+
+                                @if ($errors->has('picture'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('picture') }}</strong>
                                     </span>
                                 @endif
                             </div>

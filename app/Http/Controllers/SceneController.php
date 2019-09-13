@@ -8,6 +8,7 @@ use App\Character;
 use App\Thing;
 use App\Scene;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class SceneController extends Controller
 {
@@ -24,6 +25,11 @@ class SceneController extends Controller
 	public function index($story_id)
     {		
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+
 		$scenes = $story->scenes();
         return view('scene/index', compact("scenes","story"));
     }
@@ -31,14 +37,18 @@ class SceneController extends Controller
 	public function create($story_id)
 	{	
 		$scene = new Scene();		
-		$story = Story::find($story_id);		
+		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}		
 		$method = "POST";
 		return view('scene/edit',compact('scene','method','story'));
 	}
 	
 	public function store(Request $request)
     {
-		$scene = new Scene();
+		$scene = new Scene();		
 		$scene = $this->save($scene, $request);
 		return redirect('story/'.$scene->story_id.'/scene')->withOk("The scene " . $scene->name . " has been saved .");
     }
@@ -50,9 +60,13 @@ class SceneController extends Controller
 			$scene->name = $inputs["name"];			
 		}
 		
-		//TODO: check permission
 		if (isset($inputs["story_id"])){
 			$scene->story_id = $inputs["story_id"];
+		}
+		
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
 		}
 
 		$tab = [];
@@ -80,6 +94,10 @@ class SceneController extends Controller
 	{	
 		$scene = Scene::find($id);
 		$story = Story::find($scene->story_id);		
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "PUT";
 		return view('scene/edit',compact('scene','story','method'));
 	}
@@ -87,12 +105,21 @@ class SceneController extends Controller
 	public function update(Request $request, $id)
 	{		
 		$scene = Scene::find($id);
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$scene = $this->save($scene, $request);
 		return redirect('/scene/'.$scene->id.'/edit')->withOk("The scene " . $scene->name . " has been saved .");
 	}
 	
 	public function destroy($id)
 	{	
+		$scene = Story::find($id);
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Scene::destroy($id);
 		return redirect()->back();
 	}	

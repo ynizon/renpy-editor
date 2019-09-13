@@ -28,12 +28,12 @@ foreach ($story->things() as $thing){
 echo "\r\n#The game start here\r\nlabel start:\r\n";
 $bStart = false;
 if (count($story->scenes()) == 0){
-	echo TAB."return\r\n";	
+	echo $TAB."return\r\n";	
 }else{
 	foreach ($story->scenes() as $scene){
 		if ($bStart == false){
 			$bStart = true;
-			echo TAB."jump scene_".Helpers::encName($scene->name)."\r\n";
+			echo $TAB."jump scene_".Helpers::encName($scene->name)."\r\n";
 		}
 		
 		echo "\r\n";
@@ -48,20 +48,23 @@ if (count($story->scenes()) == 0){
 				case "game":
 					switch ($action_params["verb"]){
 						case "end":
-							echo TAB."return\r\n";	
+							echo $TAB."return\r\n";	
 							break;
 						case "pause":
-							echo TAB."pause\r\n";	
+							echo $TAB."pause\r\n";	
+							break;
+						case "addscript":
+							echo $action_params["info"]."\r\n";	
 							break;
 					}
 					break;
 				
 				case "background":
+					$background = Background::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
-						case "show":
-							$background = Background::find($action_params["subject_id"]);
+						case "show":							
 							$file = pathinfo(basename($background->picture), PATHINFO_FILENAME);
-							echo TAB."scene ".$file." with fade\r\n";
+							echo $TAB."scene ".$file." with fade\r\n";
 							break;
 					}
 					break;
@@ -70,25 +73,25 @@ if (count($story->scenes()) == 0){
 					$music = Music::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "play":													
-							echo TAB."play music '".Helpers::encName(basename($music->music))."' fadeout 1.0 fadein 1.0\r\n";
+							echo $TAB."play music '".Helpers::encName(basename($music->music))."' fadeout 1.0 fadein 1.0\r\n";
 							break;
 						case "queue":													
-							echo TAB."queue music '".Helpers::encName(basename($music->music))."'\r\n";
+							echo $TAB."queue music '".Helpers::encName(basename($music->music))."'\r\n";
 							break;
 						case "stop":
-							echo TAB."stop music '".Helpers::encName(basename($music->music))."'\r\n";
+							echo $TAB."stop music '".Helpers::encName(basename($music->music))."'\r\n";
 							break;
 					}
 					break;
 					
 				case "thing":
+					$thing = Thing::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
-						case "show":
-							$thing = Thing::find($action_params["subject_id"]);													
-							echo TAB."show ".Helpers::encName($thing->name)." at right with dissolve\r\n";
+						case "show":							
+							echo $TAB."show ".Helpers::encName($thing->name)." at right with dissolve\r\n";
 							break;
 						case "hide":
-							echo TAB."hide ".Helpers::encName($thing->name)."\r\n";	
+							echo $TAB."hide ".Helpers::encName($thing->name)."\r\n";	
 							break;
 					}
 					break;
@@ -97,29 +100,29 @@ if (count($story->scenes()) == 0){
 					$character = Character::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "show":
-							$behaviour = Behaviour::find($action_params["info"]);													
-							echo TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." with dissolve\r\n";
+							$behaviour = Behaviour::find($action_params["info"]);
+							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." with dissolve\r\n";
 							break;
 						case "hide":
-							echo TAB."hide ".Helpers::encName($character->name)." with fade\r\n";	
+							echo $TAB."hide ".Helpers::encName($character->name)." with fade\r\n";	
 							break;
 						case "say":
-							echo TAB.Helpers::encName($character->name) . ' "'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
+							echo $TAB.Helpers::encName($character->name) . ' "'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
 							break;
 						case "move":
-							echo TAB."show ".Helpers::encName($character->name)." at ".$action_params["info"]."\r\n";
+							echo $TAB."show ".Helpers::encName($character->name)." at ".$action_params["info"]."\r\n";
 							break;
 						case "menu":
 							$info = json_decode($action_params["info"],true);
-							echo TAB."menu:\r\n";
+							echo $TAB."menu:\r\n";
 							for ($k=1;$k<=4;$k++){
 								if ($info["menu".$k] !=""){									
 									if ($info["menu".$k."_to"] > 0){
-										echo TAB.TAB."\"".$info["menu".$k]."\":\r\n";
+										echo $TAB.$TAB."\"".$info["menu".$k]."\":\r\n";
 										$goto_scene = Scene::find($info["menu".$k."_to"]);
-										echo TAB.TAB.TAB."jump scene_".Helpers::encName($goto_scene->name)."\r\n";
+										echo $TAB.$TAB.$TAB."jump scene_".Helpers::encName($goto_scene->name)."\r\n";
 									}else{
-										echo TAB.TAB."\"".$info["menu".$k]."\"\r\n";	
+										echo $TAB.$TAB."\"".$info["menu".$k]."\"\r\n";	
 									}
 								}
 							}

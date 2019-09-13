@@ -46,6 +46,48 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+		if ($request->ajax()) {
+			return response()->json(['exception' => $exception]);
+		}
+
+		if($this->isHttpException($exception)) {
+			switch ($exception->getStatusCode()) {
+
+				// not authorized
+				case '403':
+					return \Response::view('errors.403',['exception'=> $exception],403);
+					break;
+
+				// not found
+				case '404':
+					return \Response::view('errors.404',['exception'=> $exception],404);
+					break;
+
+				// internal error
+				case '500':
+					return \Response::view('errors.500',['exception'=> $exception],500);
+					break;
+
+				default:
+					return $this->renderHttpException($exception);
+					break;
+			}
+		}
+		else
+		{
+			if ($exception instanceof TokenMismatchException){
+				return redirect()->back()->withInput($request->except('_token'))
+				->withError('Session expired. Please login again.');
+			}			
+			else{
+				if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
+					return \Response::view('errors.posttoolarge',['exception'=> $exception],500);
+				}else{
+					return parent::render($request, $exception);	
+				}
+			}
+		}
+       // return parent::render($request, $exception);
     }
+	
 }

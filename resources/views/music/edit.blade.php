@@ -7,7 +7,7 @@
             <div class="card">
                 <h2 class="card-header">Edit</h2>
                 <div class="card-body">
-					{!! Form::model($music, ['route' => ['music.update', $music->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
+					{!! Form::model($music, ['route' => ['music.update', $music->id], 'files'=>true,'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 						<input type="hidden"  name="story_id" value="{!! $story->id !!}" />
 
@@ -29,8 +29,9 @@
                             <label for="music" class="col-md-4 control-label">Music&nbsp;&nbsp;<a title="Random music generator" href='http://tones.wolfram.com' target="_blank"><i class="fa fa-link"></i></a></label>
 
                             <div class="col-md-6">								
-                                <input id="music" type="text" class="form-control"  placeholder="https://" name="music" value="{!! $music->music !!}" required />
-
+                                <input id="music" type="text" class="form-control"  placeholder="https://" name="music" value="{!! $music->music !!}"  />
+								<br/>Or a file (.ogg only)
+								<input id="music_file"  type="file" class="form-control" name="music_file"  />
                                 @if ($errors->has('music'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('music') }}</strong>

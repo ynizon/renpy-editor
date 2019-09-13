@@ -6,6 +6,7 @@ use App\Story;
 use App\Scene;
 use App\Music;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class MusicController extends Controller
 {
@@ -22,6 +23,10 @@ class MusicController extends Controller
 	public function index($story_id)
     {		
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$musics = $story->musics();
         return view('music/index', compact("musics","story"));
     }
@@ -29,6 +34,10 @@ class MusicController extends Controller
 	{	
 		$music = new Music();
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "POST";
 		return view('music/edit',compact('music','method','story'));
 	}
@@ -43,6 +52,10 @@ class MusicController extends Controller
 	public function show($id)
 	{
 		$music = Music::find($id);
+		if (Helpers::checkPermission($music->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		return view('music/show',compact('music'));
 	}
 
@@ -53,15 +66,34 @@ class MusicController extends Controller
 			$music->name = $inputs["name"];			
 		}
 		
+		$music->music = "";
 		if (isset($inputs["music"])){
 			$music->music = $inputs["music"];			
 		}
 		
-		//TODO: check permission
 		if (isset($inputs["story_id"])){
 			$music->story_id = $inputs["story_id"];
 		}
 
+		if (Helpers::checkPermission($music->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
+		//Upload file
+		if ($request->file("music_file") != ""){
+			if (substr(strtolower($request->file("music_file")->getClientOriginalName()),-4) == ".ogg"){
+				if (!is_dir("stories")){
+					mkdir ("stories");
+				}
+				if (!is_dir("stories/".$background->story_id)){
+					mkdir ("stories/".$background->story_id);
+				}
+				
+				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).".ogg", file_get_contents($request->file("music_file")));			
+			}
+		}
+		
 		$music->save();
 		
 		return $music;
@@ -71,6 +103,10 @@ class MusicController extends Controller
 	{	
 		$music = Music::find($id);
 		$story = Story::find($music->story_id);
+		if (Helpers::checkPermission($music->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "PUT";
 		return view('music/edit',compact('music','story','method'));
 	}
@@ -78,12 +114,21 @@ class MusicController extends Controller
 	public function update(Request $request, $id)
 	{		
 		$music = Music::find($id);
+		if (Helpers::checkPermission($music->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$music = $this->save($music, $request);
 		return redirect('story/'.$music->story_id.'/music')->withOk("The music " . $music->name . " has been saved .");
 	}
 	
 	public function destroy($music_id)
 	{	
+		$music = Music::find($music_id);
+		if (Helpers::checkPermission($music->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Music::destroy($music_id);
 		return redirect()->back();
 	}	

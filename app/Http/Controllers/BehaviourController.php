@@ -7,6 +7,8 @@ use App\Scene;
 use App\Behaviour;
 use App\Character;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
+use Storage;
 
 class BehaviourController extends Controller
 {
@@ -25,6 +27,10 @@ class BehaviourController extends Controller
     {		
 		$story = Story::find($story_id);
 		$character = Character::find($character_id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$behaviours = $character->behaviours();
         return view('behaviour/index', compact("behaviours","story","character"));
     }
@@ -33,6 +39,10 @@ class BehaviourController extends Controller
 	{
 		$behaviour = new Behaviour();
 		$character = Character::find($character_id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($character->story_id);
 		$method = "POST";
 		return view('behaviour/edit',compact('behaviour','method','story','character'));
@@ -51,11 +61,11 @@ class BehaviourController extends Controller
 		if (isset($inputs["name"])){
 			$behaviour->name = $inputs["name"];			
 		}
+		$behaviour->picture = "";
 		if (isset($inputs["picture"])){
 			$behaviour->picture = $inputs["picture"];
 		}
 		
-		//TODO: check permission
 		if (isset($inputs["story_id"])){
 			$behaviour->story_id = $inputs["story_id"];
 		}
@@ -63,6 +73,33 @@ class BehaviourController extends Controller
 			$behaviour->character_id = $inputs["character_id"];
 		}
 
+		if (Helpers::checkPermission($behaviour->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
+		//Upload file
+		if ($request->file("picture_file") != ""){
+			if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){
+				$character = Character::find($behaviour->character_id);
+				if (!is_dir("stories")){
+					mkdir ("stories");
+				}
+				if (!is_dir("stories/".$behaviour->story_id)){
+					mkdir ("stories/".$behaviour->story_id);
+				}
+				if (!is_dir("stories/".$behaviour->story_id."/images")){
+					mkdir ("stories/".$behaviour->story_id."/images");
+				}
+				
+				if (!is_dir("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name))){
+					mkdir ("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name));
+				}
+				
+				Storage::disk('public')->put("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png", file_get_contents($request->file("picture_file")));			
+			}
+		}
+		
 		$behaviour->save();
 		
 		return $behaviour;
@@ -72,6 +109,10 @@ class BehaviourController extends Controller
 	{	
 		$behaviour = Behaviour::find($id);
 		$character = Character::find($behaviour->character_id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($behaviour->story_id);
 		$method = "PUT";
 		return view('behaviour/edit',compact('behaviour','story','method','character'));
@@ -80,18 +121,31 @@ class BehaviourController extends Controller
 	public function update(Request $request, $id)
 	{		
 		$behaviour = Behaviour::find($id);
+		if (Helpers::checkPermission($behaviour->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$behaviour = $this->save($behaviour, $request);
 		return redirect('story/'.$behaviour->story_id.'/character/'.$behaviour->character_id.'/behaviour')->withOk("The behaviour " . $behaviour->name . " has been saved .");
 	}
 	
 	public function destroy($behaviour_id)
 	{	
+		$behaviour = Behaviour::find($behaviour_id);
+		if (Helpers::checkPermission($behaviour->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Behaviour::destroy($behaviour_id);
 		return redirect()->back();
 	}	
 	
 	public function show (Request $request, $story_id, $character_id){
 		$character = Character::find($character_id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$behaviours = $character->behaviours();
 		return view('behaviour/show',compact('behaviours'));
 	}

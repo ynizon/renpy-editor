@@ -8,6 +8,7 @@ use App\Character;
 use App\Behaviour;
 use Illuminate\Http\Request;
 use Sunra\PhpSimple\HtmlDomParser;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class CharacterController extends Controller
 {
@@ -24,6 +25,10 @@ class CharacterController extends Controller
 	public function index($story_id)
     {		
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$characters = $story->characters();
         return view('character/index', compact("characters","story"));
     }
@@ -31,7 +36,12 @@ class CharacterController extends Controller
 	public function create($story_id)
 	{	
 		$character = new Character();
+		$character->color = "c822c8";
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "POST";
 		return view('character/edit',compact('character','method','story'));
 	}
@@ -40,12 +50,25 @@ class CharacterController extends Controller
     {
 		$character = new Character();
 		$character = $this->save($character, $request);
+		
+		$behaviours = $character->behaviours();
+		if (count($behaviours)==1){
+			$behaviour = $behaviours->first();
+			if ($behaviour->name == "default"){
+				return redirect('behaviour/'.$behaviour->id.'/edit')->withOk("Please, upload a picture for your character.");
+				exit();
+			}
+		}
 		return redirect('story/'.$character->story_id.'/character')->withOk("The character " . $character->name . " has been saved .");
     }
 	
 	public function show($id)
 	{
 		$character = Character::find($id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		return view('character/show',compact('character'));
 	}
 
@@ -64,6 +87,10 @@ class CharacterController extends Controller
 			$character->story_id = $inputs["story_id"];
 		}
 
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$character->save();
 		
 		if (isset($inputs["url_import"])){
@@ -89,7 +116,8 @@ class CharacterController extends Controller
 		}
 		
 		//Default behaviour
-		if(!Behaviour::isExist($character->id,"Default")){
+		$behaviours = $character->behaviours();
+		if(!Behaviour::isExist($character->id,"Default") and count($behaviours)==0){
 			$behaviour = new Behaviour();
 			$behaviour->name = "default";
 			$behaviour->picture = "";
@@ -104,6 +132,10 @@ class CharacterController extends Controller
 	public function edit(Request $request, $id)
 	{	
 		$character = Character::find($id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($character->story_id);
 		$method = "PUT";
 		return view('character/edit',compact('character','story','method'));
@@ -112,12 +144,30 @@ class CharacterController extends Controller
 	public function update(Request $request, $id)
 	{		
 		$character = Character::find($id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$character = $this->save($character, $request);
+		
+		$behaviours = $character->behaviours();
+		if (count($behaviours)==1){
+			$behaviour = $behaviours->first();
+			if ($behaviour->name == "default"){
+				return redirect('behaviour/'.$behaviour->id.'/edit')->withOk("Please, upload a picture for your character.");
+				exit();
+			}
+		}
 		return redirect('story/'.$character->story_id.'/character')->withOk("The character " . $character->name . " has been saved .");
 	}
 	
 	public function destroy($character_id)
 	{	
+		$character = Character::find($character_id);
+		if (Helpers::checkPermission($character->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Character::destroy($character_id);
 		return redirect()->back();
 	}	

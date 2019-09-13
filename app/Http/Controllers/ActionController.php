@@ -11,6 +11,7 @@ use App\Character;
 use App\Music;
 use App\Action;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class ActionController extends Controller
 {
@@ -24,121 +25,22 @@ class ActionController extends Controller
         $this->middleware('auth');
     }
 
-	/*
-	public function index($story_id)
-    {		
-		$story = Story::find($story_id);
-		$actions = $story->actions();
-        return view('action/index', compact("actions","story"));
-    }
-	
-	public function create(Request $request, $story_id)
-	{	
-		$action = new Action();
-		$story = Story::find($story_id);
-		$method = "POST";
-		$scene = new Scene();
-		if ("" != $request->input("scene_id")){
-			$scene = Scene::find($request->input("scene_id"));
-		}
-		
-		return view('action/edit',compact('action','method','story','scene','music'));
-	}
-	
-	public function store(Request $request)
-    {
-		$action = new Action();
-		$action = $this->save($action, $request);
-		return redirect('story/'.$action->story_id.'/action')->withOk("The action " . $action->name . " has been saved .");
-    }
-	
-	public function show($id)
-	{
-		$action = Action::find($id);
-		return view('action/show',compact('action'));
-	}
-
-	private function save($action, $request)
-	{
-		$inputs = $request->all();		
-		if (isset($inputs["name"])){
-			$action->name = $inputs["name"];			
-		}
-		
-		if (isset($inputs["end"])){
-			$action->end = $inputs["end"];
-		}
-		
-		//TODO: check permission
-		if (isset($inputs["story_id"])){
-			$action->story_id = $inputs["story_id"];
-		}
-
-		$tab = [];
-		
-		if (isset($inputs["scene"])){
-			$tab["scene_id"] = $inputs["scene"];
-		}
-		
-		if (isset($inputs["say"])){
-			$tab["say"] = $inputs["say"];
-		}
-		if (isset($inputs["behaviour"])){
-			$tab["behaviour_id"] = $inputs["behaviour"];
-		}
-		
-		for ($k=1;$k<=4;$k++){
-			if (isset($inputs["menu".$k])){
-				$tab["menu".$k] = $inputs["menu".$k];
-			}
-			if (isset($inputs["menu".$k."_to"])){
-				$tab["menu".$k."_to"] = $inputs["menu".$k."_to"];
-			}
-		}
-		$action->parameters = json_encode($tab); 
-		
-		$action->save();
-		
-		return $action;
-	}
-	
-	public function edit(Request $request, $id)
-	{	
-		$action = Action::find($id);
-		$story = Story::find($action->story_id);
-		$scene = new Scene();
-		if ("" != $request->input("scene_id")){
-			$scene = Scene::find($request->input("scene_id"));
-		}
-		
-		$params = $action->getParams();
-		if ($params["scene_id"] != 0){
-			$scene = Scene::find($params["scene_id"]);
-		}
-		
-		$method = "PUT";
-		return view('action/edit',compact('action','story','method','scene'));
-	}
-	
-	public function update(Request $request, $id)
-	{		
-		$action = Action::find($id);
-		$action = $this->save($action, $request);
-		return redirect('story/'.$action->story_id.'/action')->withOk("The action " . $action->name . " has been saved .");
-	}
-	
-	public function destroy($action_id)
-	{	
-		Action::destroy($action_id);
-		return redirect()->back();
-	}	
-	*/
-	
 	public function delete_action($story_id, $scene_id, $action_id, Request $request){		
+		$action = Action::find($action_id);
+		if (Helpers::checkPermission($action->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
 		Action::destroy($action_id);
 	}
 	
 	public function add_action($story_id, $scene_id, Request $request){		
+	
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$data = $request->input("data");
 		$order = ($request->input("order"));
 		
@@ -194,6 +96,10 @@ class ActionController extends Controller
 	public function show($story_id,$id)
 	{
 		$scene = Scene::find($id);
+		if (Helpers::checkPermission($scene->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$actions = Action::where("scene_id","=",$id)->orderBy("num_order")->get();
 		
 		//Reorder
@@ -209,6 +115,10 @@ class ActionController extends Controller
 	
 	public function edit_action($story_id, $scene_id, $action_id, Request $request){		
 		$action = Action::find($action_id);
+		if (Helpers::checkPermission($action->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		return view('action/edit',compact('action'));
 	}
 }

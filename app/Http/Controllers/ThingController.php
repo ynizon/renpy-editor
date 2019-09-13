@@ -6,6 +6,7 @@ use App\Story;
 use App\Scene;
 use App\Thing;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class ThingController extends Controller
 {
@@ -22,6 +23,10 @@ class ThingController extends Controller
 	public function index($story_id)
     {		
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$things = $story->things();
         return view('thing/index', compact("things","story"));
     }
@@ -30,6 +35,10 @@ class ThingController extends Controller
 	{	
 		$thing = new Thing();
 		$story = Story::find($story_id);
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "POST";
 		return view('thing/edit',compact('thing','method','story'));
 	}
@@ -44,6 +53,10 @@ class ThingController extends Controller
 	public function show($id)
 	{
 		$thing = Thing::find($id);
+		if (Helpers::checkPermission($thing->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		return view('thing/show',compact('thing'));
 	}
 
@@ -54,15 +67,34 @@ class ThingController extends Controller
 			$thing->name = $inputs["name"];			
 		}
 		
+		$thing->picture = "";
 		if (isset($inputs["picture"])){
 			$thing->picture = $inputs["picture"];			
 		}
 		
-		//TODO: check permission
 		if (isset($inputs["story_id"])){
 			$thing->story_id = $inputs["story_id"];
 		}
 
+		if (Helpers::checkPermission($thing->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
+		//Upload file
+		if ($request->file("picture_file") != ""){
+			if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){
+				if (!is_dir("stories")){
+					mkdir ("stories");
+				}
+				if (!is_dir("stories/".$thing->story_id)){
+					mkdir ("stories/".$thing->story_id);
+				}
+				
+				Storage::disk('public')->put("stories/".$thing->story_id."/".Helpers::encName($thing->name).".png", file_get_contents($request->file("picture_file")));			
+			}
+		}
+		
 		$thing->save();
 		
 		return $thing;
@@ -72,6 +104,10 @@ class ThingController extends Controller
 	{	
 		$thing = Thing::find($id);
 		$story = Story::find($thing->story_id);
+		if (Helpers::checkPermission($thing->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "PUT";
 		return view('thing/edit',compact('thing','story','method'));
 	}
@@ -79,12 +115,21 @@ class ThingController extends Controller
 	public function update(Request $request, $id)
 	{		
 		$thing = Thing::find($id);
+		if (Helpers::checkPermission($thing->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$thing = $this->save($thing, $request);
 		return redirect('story/'.$thing->story_id.'/thing')->withOk("The thing " . $thing->name . " has been saved .");
 	}
 	
 	public function destroy($thing_id)
 	{	
+		$thing = Thing::find($thing_id);
+		if (Helpers::checkPermission($thing->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Thing::destroy($thing_id);
 		return redirect()->back();
 	}	

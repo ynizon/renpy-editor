@@ -3,15 +3,20 @@ $(document).ready(function() {
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
 	
-	$( "#list_actions" ).dblclick(function() {
-		if (window.confirm("Confirm remove ?")){
-			deleteAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
-		}
-	});
-	
-	$( "#list_actions" ).click(function() {
-		editAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
-	});
+	//Only for scene editor
+	if ($( "#list_actions" ).length >0){
+		loadSceneActions($("#story_id").val(), $("#scene_id").val());
+		
+		$( "#list_actions" ).dblclick(function() {
+			if (window.confirm("Confirm remove ?")){
+				deleteAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
+			}
+		});
+		
+		$( "#list_actions" ).click(function() {
+			editAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
+		});
+	}
 });	
 
 
@@ -35,6 +40,9 @@ function showAction(action){
 	switch (values[2]){
 		case "say":
 			$("#bloc_say").show();			
+			break;
+		case "addscript":
+			$("#bloc_addscript").show();			
 			break;
 		case "menu":
 			$("#bloc_menu").show();
@@ -69,7 +77,9 @@ function addAction(story_id, scene_id){
 			case "say":
 				$("#info").val($("#say").val());
 				break;
-				
+			case "addscript":
+				$("#info").val($("#addscript").val());
+				break;
 			case "move":
 				$("#info").val($("#move").val());
 				break;

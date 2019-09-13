@@ -20,7 +20,13 @@
 									&nbsp;<a href="#" class="pointer" title="Supprimer" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
 								{!! Form::close() !!}
 								<div style="width:100px;height:100px;" >
-									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $background->picture;?>" />
+								<?php
+									$url = $background->picture;
+									if ($url == ""){
+										$url = "/stories/".$story->id."/images/".Helpers::encName($background->name).".png";
+									}
+									?>
+									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $url;?>" />								
 								</div>
 							</li>
 							<?php

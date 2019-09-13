@@ -16,16 +16,26 @@ class DatabaseSeeder extends Seeder
 		// Insert 1 admin
 		DB::table('users')->insert(
 			array(
+				'email' => 'admin@admin.com',
+				'name' => 'Admin',
+				'password'=>bcrypt("admin")
+			)
+		); 
+		
+		DB::table('users')->insert(
+			array(
 				'email' => 'ynizon@gmail.com',
 				'name' => 'Yohann Nizon',
 				'password'=>bcrypt("admin")
 			)
 		); 
 		
+		
 		DB::table('stories')->insert(
 			array(
 				'name' => 'The Story of Ma Baker',
 				'user_id'=>1,
+				'starting_script'=>'',
 				'created_at'=>'2019-09-10'
 			)
 		); 

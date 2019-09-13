@@ -5,6 +5,10 @@ use View;
 use Auth;
 use DB;
 use App\Story;
+use App\Thing;
+use App\Background;
+use App\Behaviour;
+use App\Music;
 use App\Scene;
 use App\ResizeImage;
 use App\Character;
@@ -59,6 +63,10 @@ class StoryController extends Controller
 	public function show($id)
 	{
 		$story = Story::find($id);
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$errors = [];
 		if (!is_dir("stories")){
 			mkdir ("stories");
@@ -77,14 +85,20 @@ class StoryController extends Controller
 			$behaviours = $character->behaviours();
 			foreach ($behaviours as $behaviour){
 				$bOk = false;
+				
 				if ($behaviour->picture != ""){
 					try{
-						$s = file_get_contents($behaviour->picture);
 						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
+						$s = file_get_contents($behaviour->picture);						
 						file_put_contents($file,$s);
 						$bOk = true;
 					}catch(\Exception $e){
 						
+					}
+				}else{
+					$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->name)).".png";
+					if (file_exists($file)){
+						$bOk = true;
 					}
 				}
 				if (!$bOk){
@@ -106,6 +120,11 @@ class StoryController extends Controller
 					file_put_contents($file,$s);
 					$bOk = true;
 				}catch(\Exception $e){
+				}
+			}else{
+				$file = "stories/".$id."/images/things/".Helpers::encName(basename($thing->name)).".png";
+				if (file_exists($file)){
+					$bOk = true;
 				}
 			}
 			if (!$bOk){
@@ -131,6 +150,11 @@ class StoryController extends Controller
 					$bOk = true;
 				}catch(\Exception $e){
 				}
+			}else{
+				$file = "stories/".$id."/images/".Helpers::encName(basename($background->name)).".png";
+				if (file_exists($file)){
+					$bOk = true;
+				}
 			}
 			if (!$bOk){
 				$errors["/background/".$background->id."/edit"] = $background->name ." doesn't have a valid picture.";
@@ -148,23 +172,81 @@ class StoryController extends Controller
 					$bOk = true;
 				}catch(\Exception $e){
 				}
+			}else{
+				$file = "stories/".$id."/".Helpers::encName(basename($music->name)).".ogg";
+				if (file_exists($file)){
+					$bOk = true;
+				}
 			}
 			if (!$bOk){
 				$errors["/music/".$music->id."/edit"] = $music->name ." doesn't have a valid music.";
 			}
 		}
 		
-		define("TAB","    ");
+		//Checking ressources
+		$scenes = $story->scenes();
+		foreach ($scenes as $scene){
+			$actions = $scene->actions();
+			foreach ($actions as $action){
+				$action_params = $action->getParams();
+				switch ($action_params["element"]){
+					case "background":
+						$background = Background::find($action_params["subject_id"]);
+						if ($character == null){
+							$errors["/scene/".$scene->id."/edit?rnd=background".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+						}
+						break;
+						
+					case "thing":
+						$thing = Thing::find($action_params["subject_id"]);
+						if ($thing == null){
+							$errors["/scene/".$scene->id."/edit?rnd=thing".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+						}
+						break;
+						
+					case "music":
+						$music = Music::find($action_params["subject_id"]);
+						if ($music == null){
+							$errors["/scene/".$scene->id."/edit?rnd=music".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+						}
+						break;
+						
+					case "character":
+						$character = Character::find($action_params["subject_id"]);
+						if ($character == null){
+							$errors["/scene/".$scene->id."/edit?rnd=character".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+						}else{
+							switch ($action_params["verb"]){
+								case "show":
+									$behaviour = Behaviour::find($action_params["info"]);
+									if ($behaviour == null){
+										$errors["/scene/".$scene->id."/edit?rnd=behaviour".$action_params["info"]] = $action->name." is not valid (deleted resources).";
+									}
+									break;
+							}
+						}
+					
+				}
+			}
+		}
 		
+		$TAB = "    ";
 		
-		$script = View::make('story/script', compact('story','TAB'))->render();
-		file_put_contents("stories/".$id."/script.rpy",$script);
+		if (count($errors)==0){
+			$script = View::make('story/script', compact('story','TAB'))->render();
+			file_put_contents("stories/".$id."/script.rpy",$script);
+		}
 		
 		return view('story/show',compact('story','TAB','errors'));
 	}
 
 	private function save($story, $request)
-	{
+	{		
+		if ($story->id != 0 and Helpers::checkPermission($story->id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		
 		$inputs = $request->all();
 		if (isset($inputs["name"])){
 			$story->name = $inputs["name"];
@@ -175,6 +257,11 @@ class StoryController extends Controller
 		if (isset($inputs["height"])){
 			$story->height = $inputs["height"];
 		}
+		
+		$story->starting_script = "";
+		if (isset($inputs["starting_script"])){
+			$story->starting_script = $inputs["starting_script"];
+		}
 		$story->user_id = Auth::user()->id;
 		$story->save();
 		
@@ -184,12 +271,20 @@ class StoryController extends Controller
 	public function edit(Request $request, $id)
 	{	
 		$story = Story::find($id);
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$method = "PUT";
 		return view('story/edit',compact('story','method'));
 	}
 	
 	public function update(Request $request, $id)
 	{
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($id);
 		$story = $this->save($story, $request);
 		return redirect('home')->withOk("The story " . $story->name . " has been saved .");
@@ -197,6 +292,10 @@ class StoryController extends Controller
 	
 	public function destroy($id)
 	{	
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		Story::destroy($id);
 		return redirect()->back();
 	}
@@ -204,6 +303,10 @@ class StoryController extends Controller
 	
 	public function share($id, Request $request)
     {		
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($id);
 		if ($request->input("emails") != ""){
 			try{
@@ -221,6 +324,10 @@ class StoryController extends Controller
 	
 	public function duplicate($id)
     {	
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
 		$story = Story::find($id);
 		$new_story = $story->replicate();
 		$new_story->name = "Copy of ". $new_story->name. "(".date("Y-m-d H:i:s").")";

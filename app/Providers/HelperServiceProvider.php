@@ -5,6 +5,7 @@ namespace App\Providers;
 use DB;
 use Illuminate\Support\ServiceProvider;
 use Request;
+use Auth;
 use App\Story;
 abstract class HelperServiceProvider extends ServiceProvider
 {
@@ -390,6 +391,7 @@ abstract class HelperServiceProvider extends ServiceProvider
 				$r = true;
 			}
 		}
+		
 		return $r;
 	}
 	

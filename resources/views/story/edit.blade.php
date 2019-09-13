@@ -52,6 +52,20 @@
                             </div>
                         </div>
 						
+						<div class="form-group{{ $errors->has('starting_script') ? ' has-error' : '' }}">
+                            <label for="starting_script" class="col-md-4 control-label">Starting Script</label>
+
+                            <div class="col-md-6">
+                                <textarea id="starting_script" rows="6" class="form-control" name="starting_script" value="{!! $story->starting_script !!}" ></textarea>
+
+                                @if ($errors->has('starting_script'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('starting_script') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+						
 						<div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">

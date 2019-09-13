@@ -7,7 +7,7 @@
             <div class="card">
                 <h2 class="card-header">Edit</h2>
                 <div class="card-body">
-					{!! Form::model($background, ['route' => ['background.update', $background->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
+					{!! Form::model($background, ['route' => ['background.update', $background->id], 'files'=>true,'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 						<input type="hidden"  name="story_id" value="{!! $story->id !!}" />
 
@@ -29,7 +29,9 @@
                             <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;<a title="Random music generator" href='https://cloudnovel.net/browse/free/background/popular' target="_blank"><i class="fa fa-link"></i></a></label>
 
                             <div class="col-md-6">								
-                                <input id="picture" type="text" class="form-control"  placeholder="https://" name="picture" value="{!! $background->picture !!}" required />
+                                <input id="picture" type="text" class="form-control"  placeholder="https://" name="picture" value="{!! $background->picture !!}"  />
+								<br/>Or a file (.png only)
+								<input id="picture_file"  type="file" class="form-control" name="picture_file"  />
 
                                 @if ($errors->has('picture'))
                                     <span class="help-block">

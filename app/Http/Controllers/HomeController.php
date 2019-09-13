@@ -12,6 +12,7 @@ use App\Character;
 use App\Music;
 use App\Behaviour;
 use Illuminate\Http\Request;
+use App\Providers\HelperServiceProvider as Helpers;
 
 class HomeController extends Controller
 {

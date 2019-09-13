@@ -20,6 +20,12 @@ switch ($params["verb"]){
 		<?php
 		break;
 		
+	case "addscript":
+		?>
+		$("#addscript").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
+		<?php
+		break;
+		
 	case "menu":
 		$infos = json_decode($params["info"],true);
 		?>
