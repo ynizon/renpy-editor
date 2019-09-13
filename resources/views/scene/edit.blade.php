@@ -107,7 +107,7 @@ $params = $scene->getParams();
 									<button type="submit" class="btn btn-primary">
 										Save
 									</button>
-									<br/>
+									<br/><br/>
 									<i class="fa fa-info"></i>&nbsp;&nbsp;The label of the scene is:<br/>scene_<?php echo Helpers::encName($scene->name);?>
 								</div>
 							</div>      
@@ -228,6 +228,8 @@ $params = $scene->getParams();
 
 									<div class="col-md-12">
 										<textarea class="action_info form-control" type="text" name="addscript" id="addscript" rows="10" ></textarea>
+                                                  <br/>
+                                                  <i class="fa fa-info"></i>&nbsp;Informations<br/>Add 5 spaces for indent.<br/>Use $my_var=my_var+1 to affect it<br/>Use [my_var] to use it.
 									</div>
 								</div>
 								

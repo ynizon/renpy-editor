@@ -56,7 +56,7 @@
                             <label for="starting_script" class="col-md-4 control-label">Starting Script</label>
 
                             <div class="col-md-6">
-                                <textarea id="starting_script" rows="6" class="form-control" name="starting_script" value="{!! $story->starting_script !!}" ></textarea>
+                                <textarea placeholder="default my_var = 0" id="starting_script" rows="6" class="form-control" name="starting_script" value="{!! $story->starting_script !!}" ></textarea>
 
                                 @if ($errors->has('starting_script'))
                                     <span class="help-block">

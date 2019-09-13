@@ -57,7 +57,10 @@ if (count($story->scenes()) == 0){
 							echo $TAB."pause\r\n";	
 							break;
 						case "addscript":
-							echo $action_params["info"]."\r\n";	
+                                   $lines = explode("\n",$action_params["info"]);
+                                   foreach ($lines as $line){
+                                        echo $TAB.$line."\r\n";
+                                   }
 							break;
 					}
 					break;
