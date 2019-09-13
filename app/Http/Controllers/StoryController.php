@@ -184,8 +184,14 @@ class StoryController extends Controller
 		}
 		
 		//Checking ressources
+		$tabScenes = [];
 		$scenes = $story->scenes();
 		foreach ($scenes as $scene){
+			if (in_array($scene->name, $tabScenes)){
+				$errors["/story/".$scene->story_id."/scene"] = "Scene name (".$scene->name.") is duplicated.";
+			}else{
+				$tabScenes[] = $scene->name;
+			}
 			$actions = $scene->actions();
 			foreach ($actions as $action){
 				$action_params = $action->getParams();

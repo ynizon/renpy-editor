@@ -7,6 +7,9 @@ use App\Music;
 use App\Thing;
 use App\Background;
 
+//Before
+echo $story->starting_script."\r\n";
+
 //Characters
 foreach ($story->characters() as $character){
 	echo "define ".Helpers::encName($character->name)." = Character('".$character->name."', color='#".$character->color."')\r\n";

@@ -50,7 +50,7 @@ class SceneController extends Controller
     {
 		$scene = new Scene();		
 		$scene = $this->save($scene, $request);
-		return redirect('story/'.$scene->story_id.'/scene')->withOk("The scene " . $scene->name . " has been saved .");
+		return redirect('scene/'.$scene->id.'/edit')->withOk("The scene " . $scene->name . " has been saved .");
     }
 	
 	private function save($scene, $request)
@@ -135,7 +135,7 @@ class SceneController extends Controller
 		}
 		
 		$new_scene = $scene->replicate();
-		$new_scene->name = "Copy of ". $new_scene->name. "(".date("Y-m-d H:i:s").")";
+		$new_scene->name = $new_scene->name. " Copy";
 		$new_scene->noremove = 0;
 		$new_scene->save();
 		

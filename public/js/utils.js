@@ -65,7 +65,8 @@ function deleteAction(story_id, scene_id, action_id){
 		url:"/story/"+story_id+"/scene/"+scene_id+"/delete_action/"+action_id,
 		data:{}, 
 		success:function(data) {
-			loadSceneActions(story_id, scene_id);			
+			loadSceneActions(story_id, scene_id);
+			$("#btn_update").hide();
 		}
 	});	
 }
@@ -126,6 +127,7 @@ function addAction(story_id, scene_id){
 				$("input.action_info").val('');
 				$("textarea.action_info").val('');
 				$("select.action_info").val(0);				
+				$("#btn_update").hide();
 			}
 		});
 	}

@@ -21,7 +21,7 @@ $params = $scene->getParams();
 							<input type="hidden"  name="story_id" value="{!! $story->id !!}" />
 
 							<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-								<label for="name" class="col-md-4 control-label">Name</label>
+								<label for="name" class="col-md-10 control-label">Name</label>
 
 								<div class="col-md-12">								
 									<input id="name" type="text" class="form-control" name="name" value="{!! $scene->name !!}" required autofocus />
@@ -107,7 +107,8 @@ $params = $scene->getParams();
 									<button type="submit" class="btn btn-primary">
 										Save
 									</button>
-
+									<br/>
+									<i class="fa fa-info"></i>&nbsp;&nbsp;The label of the scene is:<br/>scene_<?php echo Helpers::encName($scene->name);?>
 								</div>
 							</div>      
 							
