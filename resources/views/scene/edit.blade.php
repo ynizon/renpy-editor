@@ -168,10 +168,12 @@ $params = $scene->getParams();
 												<optgroup label="Backgrounds">
 													<?php
 													foreach ($story->backgrounds() as $background){
+														if (in_array($background->id,$params["backgrounds_id"])){
 														?>
-														<option value="background_<?php echo $background->id;?>_hide"><?php echo $background->name;?> hide</option>												
-														<option value="background_<?php echo $background->id;?>_show"><?php echo $background->name;?> show</option>
+															<option value="background_<?php echo $background->id;?>_hide"><?php echo $background->name;?> hide</option>												
+															<option value="background_<?php echo $background->id;?>_show"><?php echo $background->name;?> show</option>
 														<?php
+														}
 													}
 													?>											
 												</optgroup>										
@@ -238,6 +240,16 @@ $params = $scene->getParams();
 
 									<div class="col-md-12">
 										<select class="action_info form-control" name="behaviours" id="behaviours">
+											<option value=""></option>
+										</select>									
+									</div>
+								</div>
+								
+								<div id="bloc_different" class="action_type form-group">
+									<label for="different" class="col-md-4 control-label">Different</label>
+
+									<div class="col-md-12">
+										<select class="action_info form-control" name="differents" id="differents">
 											<option value=""></option>
 										</select>									
 									</div>

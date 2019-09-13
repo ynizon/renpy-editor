@@ -39,6 +39,22 @@
                             </div>
                         </div>
 						
+						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
+                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;<a title="Random music generator" href='https://cloudnovel.net/browse/free/character/popular' target="_blank"><i class="fa fa-link"></i></a></label>
+
+                            <div class="col-md-6">
+                                <input id="picture" type="text" class="form-control"  placeholder="https://" name="picture" value=""  />
+								<br/>Or a file (.png only)
+								<input id="picture_file"  type="file" class="form-control" name="picture_file"  />
+
+                                @if ($errors->has('picture'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('picture') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+						
 						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Import Behaviours from&nbsp;&nbsp;
 								<a target="_blank" href='https://cloudnovel.net/browse/free/character/popular'><i class="fa fa-link"></i></a>

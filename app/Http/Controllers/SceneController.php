@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Story;
 use App\Background;
 use App\Character;
+use App\Different;
+use App\Behaviour;
 use App\Thing;
 use App\Scene;
 use Illuminate\Http\Request;

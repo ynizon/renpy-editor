@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Background extends Migration
+class Different extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,19 @@ class Background extends Migration
     public function up()
     {
         //
-		Schema::create('backgrounds', function(Blueprint $table) {
+		Schema::create('differents', function(Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('name')->default("Background");			
+			$table->string('name');
+			$table->string('picture')->default('');
+			$table->timestamps();
+			
 			$table->BigInteger('story_id')->unsigned();
 			$table->foreign('story_id')->references('id')
-				->on('stories')->onDelete('cascade'); 			
-			$table->timestamps();			
+				->on('stories')->onDelete('cascade'); 
+				
+			$table->BigInteger('background_id')->unsigned();
+			$table->foreign('background_id')->references('id')
+				->on('backgrounds')->onDelete('cascade'); 
 		});
     }
 
@@ -31,6 +37,6 @@ class Background extends Migration
     public function down()
     {
         //		
-		Schema::drop('backgrounds'); 
+		Schema::drop('differents'); 
     }
 } 

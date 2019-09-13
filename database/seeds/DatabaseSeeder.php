@@ -59,10 +59,18 @@ class DatabaseSeeder extends Seeder
 		DB::table('backgrounds')->insert(
 			array(
 				'story_id' => '1',
-				'name'=>'Bedroom',
-				'picture'=>'http://bassnovel.com/db/pic/room/53854128.jpg'
+				'name'=>'Bedroom'
 			)
 		); 
+		
+		DB::table('differents')->insert(
+			array(
+				'story_id' => '1',
+				'background_id' => '1',
+				'picture'=>'http://bassnovel.com/db/pic/room/53854128.jpg',
+				'name'=>'Default'
+			)
+		);
 		
 		DB::table('characters')->insert(
 			array(

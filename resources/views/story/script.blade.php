@@ -3,6 +3,7 @@ use App\Scene;
 use App\Action;
 use App\Behaviour;
 use App\Character;
+use App\Different;
 use App\Music;
 use App\Thing;
 use App\Background;
@@ -69,7 +70,8 @@ if (count($story->scenes()) == 0){
 					$background = Background::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "show":							
-							$file = pathinfo(basename($background->picture), PATHINFO_FILENAME);
+							$different = Different::find($action_params["info"]);
+							$file = pathinfo(basename($background->name."-".$different->name), PATHINFO_FILENAME);
 							echo $TAB."scene ".$file." with fade\r\n";
 							break;
 					}

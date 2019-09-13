@@ -395,5 +395,21 @@ abstract class HelperServiceProvider extends ServiceProvider
 		return $r;
 	}
 	
-	
+	public static function zip_r($from, $zip, $base=false) {
+		if (!file_exists($from) OR !extension_loaded('zip')) {return false;}
+		if (!$base) {$base = $from;}
+		$base = trim($base, '/');
+		$zip->addEmptyDir($base);
+		$dir = opendir($from);
+		while (false !== ($file = readdir($dir))) {
+			if ($file == '.' OR $file == '..') {continue;}
+
+			if (is_dir($from . '/' . $file)) {
+				self::zip_r($from . '/' . $file, $zip, $base . '/' . $file);
+			} else {
+				$zip->addFile($from . '/' . $file, $base . '/' . $file);
+			}
+		}
+		return $zip;
+	}
 }

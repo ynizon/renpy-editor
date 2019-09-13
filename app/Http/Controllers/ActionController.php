@@ -6,6 +6,7 @@ use App\Story;
 use App\Background;
 use App\Thing;
 use App\Scene;
+use App\Different;
 use App\Behaviour;
 use App\Character;
 use App\Music;
@@ -69,10 +70,19 @@ class ActionController extends Controller
 		}
 		$action->name = $subject ." ".$data["verb"];
 		if ($data["info"]!= ""){
-			if ($data["element"] == "character"){
+			if ($data["element"] == "character" or $data["element"] == "background"){
 				if ($data["verb"] == "show"){
-					$behaviour = Behaviour::find($data["info"]);
-					$action->name .= ":". $behaviour->name;
+					switch ($data["element"]){
+						case "character":
+							$behaviour = Behaviour::find($data["info"]);
+							$action->name .= ":". $behaviour->name;
+							break;
+						case "background":
+							$different = Different::find($data["info"]);
+							$action->name .= ":". $different->name;
+							break;
+					}
+					
 				}else{
 					$action->name .= ":". substr($data["info"],0,50);
 				}

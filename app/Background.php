@@ -20,5 +20,10 @@ class Background extends Model
 	public function story()
     {
         return $this->belongsTo('App\Story');
+    }
+
+	public function differents()
+    {
+		return $this->hasMany('App\Different')->get();
     }  
 }

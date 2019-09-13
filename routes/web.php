@@ -65,6 +65,12 @@ Route::get('/story/{id}/character/{character_id}/behaviour/create', 'BehaviourCo
 Route::get('/story/{id}/character/{character_id}/behaviours', 'BehaviourController@show');
 
 
+Route::get('/story/{id}/background/{character_id}/different', 'DifferentController@index')->name('different');
+Route::resource('different', 'DifferentController');
+Route::get('/story/{id}/background/{background_id}/different/create', 'DifferentController@create');
+Route::get('/story/{id}/background/{background_id}/differents', 'DifferentController@show');
+
+
 Route::get('/story/{id}/action', 'ActionController@index')->name('action');
 Route::resource('action', 'ActionController');
 Route::get('/story/{id}/action/create', 'ActionController@create');

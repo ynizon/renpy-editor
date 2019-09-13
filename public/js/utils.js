@@ -55,6 +55,10 @@ function showAction(action){
 				$("#behaviours").load("/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours");				
 				$("#bloc_behaviour").show();			
 			}
+			if ($("#element").val() == "background"){
+				$("#differents").load("/story/"+$("#story_id").val()+"/background/"+$("#subject_id").val()+"/differents");				
+				$("#bloc_different").show();			
+			}
 			break;
 	}
 }
@@ -88,6 +92,9 @@ function addAction(story_id, scene_id){
 			case "show":
 				if ($("#element").val() == "character"){
 					$("#info").val($("#behaviours").val());
+				}
+				if ($("#element").val() == "background"){
+					$("#info").val($("#differents").val());
 				}
 				break;
 				

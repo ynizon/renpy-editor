@@ -2,7 +2,7 @@
 
 namespace App;
 
-use APp\Character;
+use App\Character;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Mail;

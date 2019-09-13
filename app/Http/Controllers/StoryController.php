@@ -10,6 +10,7 @@ use App\Background;
 use App\Behaviour;
 use App\Music;
 use App\Scene;
+use App\Different;
 use App\ResizeImage;
 use App\Character;
 use Illuminate\Http\Request;
@@ -137,28 +138,38 @@ class StoryController extends Controller
 		}
 		$backgrounds = $story->backgrounds();
 		foreach ($backgrounds as $background){
-			$bOk = false;
-			if ($background->picture != ""){
-				try{
-					$s = file_get_contents($background->picture);
-					$file = "stories/".$id."/images/".Helpers::encName(basename($background->picture));
-					file_put_contents($file,$s);
-					
+			$differents = $background->differents();
+			foreach ($differents as $different){
+				$bOk = false;
+				
+				if ($different->picture != ""){
+					try{
+						$file = "stories/".$id."/images/".Helpers::encName($background->name)."-".Helpers::encName(basename($different->picture));
+						$s = file_get_contents($different->picture);						
+						file_put_contents($file,$s);
+						
+						$pic = new ResizeImage($file);
+						$pic->resizeTo($story->width,$story->height);
+						$pic->saveImage($file);
+						$bOk = true;
+						$bOk = true;
+					}catch(\Exception $e){
+						
+					}
+				}else{
+					$file = "stories/".$id."/images/".Helpers::encName($background->name)."-".Helpers::encName(basename($different->name)).".png";
 					$pic = new ResizeImage($file);
 					$pic->resizeTo($story->width,$story->height);
 					$pic->saveImage($file);
 					$bOk = true;
-				}catch(\Exception $e){
+					if (file_exists($file)){
+						$bOk = true;
+					}
 				}
-			}else{
-				$file = "stories/".$id."/images/".Helpers::encName(basename($background->name)).".png";
-				if (file_exists($file)){
-					$bOk = true;
+				if (!$bOk){
+					$errors["/story/".$background->story_id."/background/".$background->id."/different"] =  $background->name. ">".$different->name ." doesn't have a valid picture.";
 				}
-			}
-			if (!$bOk){
-				$errors["/background/".$background->id."/edit"] = $background->name ." doesn't have a valid picture.";
-			}
+			}			
 		}
 		
 		$musics = $story->musics();
@@ -198,8 +209,17 @@ class StoryController extends Controller
 				switch ($action_params["element"]){
 					case "background":
 						$background = Background::find($action_params["subject_id"]);
-						if ($character == null){
+						if ($background == null){
 							$errors["/scene/".$scene->id."/edit?rnd=background".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+						}else{
+							switch ($action_params["verb"]){
+								case "show":
+									$different = Different::find($action_params["info"]);
+									if ($different == null){
+										$errors["/scene/".$scene->id."/edit?rnd=different".$action_params["info"]] = $action->name." is not valid (deleted resources).";
+									}
+									break;
+							}
 						}
 						break;
 						
@@ -241,6 +261,11 @@ class StoryController extends Controller
 		if (count($errors)==0){
 			$script = View::make('story/script', compact('story','TAB'))->render();
 			file_put_contents("stories/".$id."/script.rpy",$script);
+			
+			$zip = new \ZipArchive();
+			$zip->open("stories/".$story->id.".zip", \ZIPARCHIVE::CREATE);
+			$zip = Helpers::zip_r("stories/".$story->id, $zip,"story-".$story->id);
+			$zip->close();
 		}
 		
 		return view('story/show',compact('story','TAB','errors'));
@@ -339,12 +364,20 @@ class StoryController extends Controller
 		$new_story->name = "Copy of ". $new_story->name. "(".date("Y-m-d H:i:s").")";
 		$new_story->save();
 		
-		$redirect = ["backgrounds"=>[],"musics"=>[],"things"=>[], "characters"=>[],"behaviours"=>[],"scenes"=>[]];
+		$redirect = ["backgrounds"=>[],"differents"=>[],"musics"=>[],"things"=>[], "characters"=>[],"behaviours"=>[],"scenes"=>[]];
 		foreach ($story->backgrounds() as $info){
 			$new = $info->replicate();
 			$new->story_id = $new_story->id;
 			$new->save();
 			$redirect["backgrounds"][$info->id] = $new->id;
+			
+			foreach ($info->differents() as $different){
+				$new_different = $different->replicate();
+				$new_different->story_id = $new_story->id;
+				$new_different->character_id = $new->id;
+				$new_different->save();
+				$redirect["differents"][$different->id] = $new_different->id;
+			}
 		}
 		
 		foreach ($story->musics() as $info){

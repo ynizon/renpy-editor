@@ -25,8 +25,9 @@
 						<?php
 					}else{
 					?>
-						All resources have been downloaded into the public/stories/<?php echo $story->id;?> folder.
-						Copy them into your novel ren'py folder, then run the game
+						All resources have been downloaded into the public/stories/<?php echo $story->id;?> folder.<br/>
+						<a href='/stories/<?php echo $story->id;?>.zip'>You can download all here</a>, and copy them into your novel ren'py folder, then run the game.<br/>
+						Below, you can see the details:
 						<ul>
 							<?php
 							//Root

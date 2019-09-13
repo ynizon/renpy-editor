@@ -22,6 +22,19 @@
 									&nbsp;<a href="#" class="pointer" title="Supprimer" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
 								{!! Form::close() !!}
 								<a href='/story/<?php echo $character->story_id;?>/character/<?php echo $character->id;?>/behaviour'><i class="fa fa-sitemap"></i>(<?php echo count($character->behaviours());?>)</a>&nbsp;&nbsp;
+								<div style="width:100px;height:100px;" >
+								<?php
+									$behaviours = $character->behaviours();
+									$url = "";
+									if ($behaviours->first() != null){
+										$url = $behaviours->first()->picture;	
+										if ($url == ""){
+											$url = "/stories/".$story->id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviours->first()->name).".png";
+										}
+									}
+									?>
+									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $url;?>" />								
+								</div>
 							</li>
 							<?php
 						}

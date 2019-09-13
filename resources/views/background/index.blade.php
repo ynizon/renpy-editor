@@ -19,11 +19,16 @@
 								{!! Form::open(['method' => 'DELETE', "style"=>"display:inline",'route' => ['background.destroy', $background->id]]) !!}
 									&nbsp;<a href="#" class="pointer" title="Supprimer" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
 								{!! Form::close() !!}
+								<a href='/story/<?php echo $background->story_id;?>/background/<?php echo $background->id;?>/different'><i class="fa fa-sitemap"></i>(<?php echo count($background->differents());?>)</a>&nbsp;&nbsp;
 								<div style="width:100px;height:100px;" >
 								<?php
-									$url = $background->picture;
-									if ($url == ""){
-										$url = "/stories/".$story->id."/images/".Helpers::encName($background->name).".png";
+									$differents = $background->differents();
+									$url = "";
+									if ($differents->first() != null){
+										$url = $differents->first()->picture;	
+										if ($url == ""){
+											$url = "/stories/".$story->id."/images/".Helpers::encName($background->name)."-".Helpers::encName($differents->first()->name).".png";
+										}
 									}
 									?>
 									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $url;?>" />								

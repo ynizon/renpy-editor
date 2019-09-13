@@ -82,7 +82,6 @@ class CharacterController extends Controller
 			$character->color = str_replace("#","",$inputs["color"]);
 		}
 		
-		//TODO: check permission
 		if (isset($inputs["story_id"])){
 			$character->story_id = $inputs["story_id"];
 		}
@@ -121,6 +120,30 @@ class CharacterController extends Controller
 			$behaviour = new Behaviour();
 			$behaviour->name = "default";
 			$behaviour->picture = "";
+			if (isset($inputs["picture"])){
+				$behaviour->picture = $inputs["picture"];
+			}
+			
+			//Upload file
+			if ($request->file("picture_file") != ""){
+				if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){					
+					if (!is_dir("stories")){
+						mkdir ("stories");
+					}
+					if (!is_dir("stories/".$behaviour->story_id)){
+						mkdir ("stories/".$behaviour->story_id);
+					}
+					if (!is_dir("stories/".$behaviour->story_id."/images")){
+						mkdir ("stories/".$behaviour->story_id."/images");
+					}
+					
+					if (!is_dir("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name))){
+						mkdir ("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name));
+					}
+					
+					Storage::disk('public')->put("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png", file_get_contents($request->file("picture_file")));			
+				}
+			}
 			$behaviour->character_id = $character->id;
 			$behaviour->story_id = $character->story_id;
 			$behaviour->save();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Story;
 use App\Scene;
 use App\Background;
+use App\Different;
 use Illuminate\Http\Request;
 use App\Providers\HelperServiceProvider as Helpers;
 
@@ -67,11 +68,6 @@ class BackgroundController extends Controller
 			$background->name = $inputs["name"];			
 		}
 		
-		$background->picture = "";
-		if (isset($inputs["picture"])){
-			$background->picture = $inputs["picture"];			
-		}
-				
 		if (isset($inputs["story_id"])){
 			$background->story_id = $inputs["story_id"];
 		}
@@ -81,21 +77,64 @@ class BackgroundController extends Controller
 			exit();		
 		}
 		
-		//Upload file
-		if ($request->file("picture_file") != ""){
-			if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){
-				if (!is_dir("stories")){
-					mkdir ("stories");
+		$background->save();
+		
+		if (isset($inputs["url_import"])){
+			if ("" != $inputs["url_import"]){
+				if (substr($inputs["url_import"],0,22) == "https://cloudnovel.net"){
+					$str =  file_get_contents($inputs["url_import"]);
+					$dom = HtmlDomParser::str_get_html($str);
+					$elems = $dom->find("ul[id='responsive'] li img");
+					foreach ($elems as $elem){
+						$name = strtolower(basename($elem->src));
+						
+						if(!Different::isExist($background->id,$name)){
+							$different = new Different();
+							$different->name = $name;
+							$different->picture = $elem->src;
+							$different->character_id = $background->id;
+							$different->story_id = $background->story_id;
+							$different->save();
+						}
+					}
 				}
-				if (!is_dir("stories/".$background->story_id)){
-					mkdir ("stories/".$background->story_id);
-				}
-				
-				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).".png", file_get_contents($request->file("picture_file")));			
 			}
 		}
 		
-		$background->save();
+		//Default different
+		$differents = $background->differents();
+		if(!Different::isExist($background->id,"Default") and count($differents)==0){
+			$different = new Different();
+			$different->name = "default";
+			$different->picture = "";
+			if (isset($inputs["picture"])){
+				$different->picture = $inputs["picture"];
+			}
+			
+			//Upload file
+			if ($request->file("picture_file") != ""){
+				if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){					
+					if (!is_dir("stories")){
+						mkdir ("stories");
+					}
+					if (!is_dir("stories/".$different->story_id)){
+						mkdir ("stories/".$different->story_id);
+					}
+					if (!is_dir("stories/".$different->story_id."/images")){
+						mkdir ("stories/".$different->story_id."/images");
+					}
+					
+					if (!is_dir("stories/".$different->story_id."/images/".Helpers::encName($character->name))){
+						mkdir ("stories/".$different->story_id."/images/".Helpers::encName($character->name));
+					}
+					
+					Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."-".Helpers::encName($different->name).".png", file_get_contents($request->file("picture_file")));			
+				}
+			}
+			$different->background_id = $background->id;
+			$different->story_id = $different->story_id;
+			$different->save();
+		}
 		
 		return $background;
 	}
