@@ -41,6 +41,9 @@ function showAction(action){
 		case "say":
 			$("#bloc_say").show();			
 			break;
+		case "jump":
+			$("#bloc_jump").show();			
+			break;
 		case "addscript":
 			$("#bloc_addscript").show();			
 			break;
@@ -82,9 +85,15 @@ function addAction(story_id, scene_id){
 			case "say":
 				$("#info").val($("#say").val());
 				break;
+			
+			case "jump":
+				$("#info").val($("#jump").val());
+				break;
+							
 			case "addscript":
 				$("#info").val($("#addscript").val());
 				break;
+				
 			case "move":
 				$("#info").val($("#move").val());
 				break;
@@ -100,6 +109,7 @@ function addAction(story_id, scene_id){
 				
 			case "menu":
 				var info = {
+					"menu_title":$("#menu_title").val(),
 					"menu1":$("#menu1").val(),
 					"menu1_to":$("#menu1_to").val(),
 					"menu2":$("#menu2").val(),

@@ -88,6 +88,7 @@ class BackgroundController extends Controller
 					$elems = $dom->find("ul[id='responsive'] li img");
 					foreach ($elems as $elem){
 						$name = strtolower(basename($elem->src));
+						$name = str_replace(".png","",$name);
 						
 						if(!Different::isExist($background->id,$name)){
 							$different = new Different();

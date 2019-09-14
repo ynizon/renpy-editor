@@ -57,6 +57,10 @@ if (count($story->scenes()) == 0){
 						case "pause":
 							echo $TAB."pause\r\n";	
 							break;
+						case "jump":
+							$goto_scene = Scene::find($action_params["info"]);
+							echo $TAB."jump scene_".Helpers::encName($goto_scene->name)."\r\n";
+							break;
 						case "addscript":
                                    $lines = explode("\n",$action_params["info"]);
                                    foreach ($lines as $line){
@@ -123,14 +127,13 @@ if (count($story->scenes()) == 0){
 						case "menu":
 							$info = json_decode($action_params["info"],true);
 							echo $TAB."menu:\r\n";
+							echo $TAB.$TAB."\"".$info["menu_title"]."\"\r\n";	
 							for ($k=1;$k<=4;$k++){
 								if ($info["menu".$k] !=""){									
 									if ($info["menu".$k."_to"] > 0){
 										echo $TAB.$TAB."\"".$info["menu".$k]."\":\r\n";
 										$goto_scene = Scene::find($info["menu".$k."_to"]);
 										echo $TAB.$TAB.$TAB."jump scene_".Helpers::encName($goto_scene->name)."\r\n";
-									}else{
-										echo $TAB.$TAB."\"".$info["menu".$k]."\"\r\n";	
 									}
 								}
 							}

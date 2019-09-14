@@ -19,6 +19,12 @@ switch ($params["verb"]){
 		$("#say").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
 		<?php
 		break;
+	
+	case "jump":
+		?>
+		$("#jump").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
+		<?php
+		break;
 		
 	case "addscript":
 		?>
@@ -29,6 +35,7 @@ switch ($params["verb"]){
 	case "menu":
 		$infos = json_decode($params["info"],true);
 		?>
+		$("#menu_title").val(decodeURIComponent("<?php echo rawurlencode($infos["menu_title"]);?>"));
 		$("#menu1").val(decodeURIComponent("<?php echo rawurlencode($infos["menu1"]);?>"));
 		$("#menu2").val(decodeURIComponent("<?php echo rawurlencode($infos["menu2"]);?>"));
 		$("#menu3").val(decodeURIComponent("<?php echo rawurlencode($infos["menu3"]);?>"));

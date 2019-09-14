@@ -70,25 +70,36 @@ class ActionController extends Controller
 		}
 		$action->name = $subject ." ".$data["verb"];
 		if ($data["info"]!= ""){
-			if ($data["element"] == "character" or $data["element"] == "background"){
-				if ($data["verb"] == "show"){
-					switch ($data["element"]){
-						case "character":
-							$behaviour = Behaviour::find($data["info"]);
-							$action->name .= ":". $behaviour->name;
-							break;
-						case "background":
-							$different = Different::find($data["info"]);
-							$action->name .= ":". $different->name;
-							break;
-					}
-					
-				}else{
+			switch ($data["element"]){
+				default:
 					$action->name .= ":". substr($data["info"],0,50);
-				}
-			}else{
-				$action->name .= ":". substr($data["info"],0,50);
-			}
+					break;
+				case "game":
+					if ($data["verb"] == "jump"){
+						$scene = Scene::find($data["info"]);
+						$action->name .= ":". $scene->name;
+					}else{
+						$action->name .= ":". substr($data["info"],0,50);
+					}
+					break;
+				case "character":
+					if ($data["verb"] == "show"){
+						$behaviour = Behaviour::find($data["info"]);
+						$action->name .= ":". $behaviour->name;
+					}else{
+						$action->name .= ":". substr($data["info"],0,50);
+					}
+					break;
+					
+				case "background":
+					if ($data["verb"] == "show"){
+						$different = Different::find($data["info"]);
+						$action->name .= ":". $different->name;
+					}else{
+						$action->name .= ":". substr($data["info"],0,50);
+					}
+					break;
+			}			
 		}
 		$action->parameters = json_encode($data);		
 		$action->story_id = $story_id;

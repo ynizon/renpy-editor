@@ -11,6 +11,7 @@ use App\Behaviour;
 use App\Music;
 use App\Scene;
 use App\Different;
+use App\Action;
 use App\ResizeImage;
 use App\Character;
 use Illuminate\Http\Request;
@@ -44,18 +45,31 @@ class StoryController extends Controller
 		
 		if (0 == count($story->scenes())){
 			$scene = new Scene();
+			$params = $scene->getParams();
+			foreach ($params as $param=>$tab){
+				$params[$param][] = 0;
+			}
+			
 			$scene->name = "001-Start";
+			$scene->parameters = json_encode($params);
 			$scene->story_id = $story->id;
-			$scene->noremove = 1;
-			$scene->parameters = json_encode($scene->getParams());
+			$scene->noremove = 1;			
 			$scene->save();
 			
 			$scene = new Scene();
 			$scene->name = "999-End";
 			$scene->story_id = $story->id;
 			$scene->noremove = 1;
-			$scene->parameters = json_encode($scene->getParams());
+			$scene->parameters = json_encode($params);
 			$scene->save();
+			
+			$action = new Action();
+			$action->story_id = $story->id;
+			$action->scene_id = $scene->id;
+			$action->name = "game end";
+			$action->num_order = 1;
+			$action->parameters = '{"element":"game","subject_id":"0","verb":"end","info":null,"action_id":"0"}';
+			$action->save();
 		}
 		
 		return redirect('home')->withOk("The story " . $story->name . " has been saved .");
@@ -90,8 +104,10 @@ class StoryController extends Controller
 				if ($behaviour->picture != ""){
 					try{
 						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
-						$s = file_get_contents($behaviour->picture);						
-						file_put_contents($file,$s);
+						if (!file_exists($file)){
+							$s = file_get_contents($behaviour->picture);						
+							file_put_contents($file,$s);
+						}
 						$bOk = true;
 					}catch(\Exception $e){
 						
@@ -116,9 +132,11 @@ class StoryController extends Controller
 			$bOk = false;
 			if ($thing->picture != ""){
 				try{
-					$s = file_get_contents($thing->picture);
 					$file = "stories/".$id."/images/things/".Helpers::encName(basename($thing->picture));
-					file_put_contents($file,$s);
+					if (!file_exists($file)){
+						$s = file_get_contents($thing->picture);					
+						file_put_contents($file,$s);
+					}					
 					$bOk = true;
 				}catch(\Exception $e){
 				}
@@ -145,8 +163,10 @@ class StoryController extends Controller
 				if ($different->picture != ""){
 					try{
 						$file = "stories/".$id."/images/".Helpers::encName($background->name)."-".Helpers::encName(basename($different->picture));
-						$s = file_get_contents($different->picture);						
-						file_put_contents($file,$s);
+						if (!file_exists($file)){
+							$s = file_get_contents($different->picture);						
+							file_put_contents($file,$s);
+						}
 						
 						$pic = new ResizeImage($file);
 						$pic->resizeTo($story->width,$story->height);
@@ -176,10 +196,12 @@ class StoryController extends Controller
 		foreach ($musics as $music){
 			$bOk = false;
 			if ($music->music != ""){
-				try{
-					$s = file_get_contents($music->music);
+				try{					
 					$file = "stories/".$id."/".Helpers::encName(basename($music->music));
-					file_put_contents($file,$s);
+					if (!file_exists($file)){
+						$s = file_get_contents($music->music);
+						file_put_contents($file,$s);
+					}
 					$bOk = true;
 				}catch(\Exception $e){
 				}

@@ -140,6 +140,7 @@ $params = $scene->getParams();
 												<option value="game_0_addscript">add script</option>
 												<option value="game_0_end">end</option>
 												<option value="game_0_pause">pause</option>
+												<option value="game_0_jump">go to</option>
 											</optgroup>
 											
 											<?php
@@ -260,11 +261,14 @@ $params = $scene->getParams();
 
 									<div class="col-md-12">
 										<ul>
+											<li>
+												<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu_title" value="" id="menu_title" placeholder="Sentence" />
+											</li>
 											<?php
 											for ($k=1;$k<=4;$k++){
-												?>										
+												?>
 												<li>
-													<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu<?php echo $k;?>" value="" id="menu<?php echo $k;?>" />
+													<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu<?php echo $k;?>" value="" id="menu<?php echo $k;?>" placeHolder="Choice <?php echo $k;?>" />
 													<div>
 														<select style="width:90%;display:inline-block;" class="action_info menus form-control" name="menu<?php echo $k;?>_to" id="menu<?php echo $k;?>_to">
 															<option value="0">-</option>
@@ -283,6 +287,31 @@ $params = $scene->getParams();
 												<?php
 											}
 											?>		
+										</ul>
+									</div>
+								</div>
+								
+								<div id="bloc_jump" class="action_type form-group">
+									<label for="jump" class="col-md-4 control-label">Go to scene</label>
+
+									<div class="col-md-12">
+										<ul>
+											<li>
+												<div>
+													<select style="width:90%;display:inline-block;" class="action_info menus form-control" name="jump" id="jump">
+														<option value="0">-</option>
+														<?php
+														foreach ($story->scenes() as $scen){
+															?>
+															<option value="<?php echo $scen->id;?>">Go to <?php echo $scen->name;?></option>
+															<?php
+														}
+														?>									
+													</select>
+													&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>)"></i>
+												</div>
+												<br/>
+											</li>												
 										</ul>
 									</div>
 								</div>
