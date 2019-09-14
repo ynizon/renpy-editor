@@ -280,7 +280,7 @@ $params = $scene->getParams();
 															}
 															?>									
 														</select>
-														&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>)"></i>
+														&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>,'menu<?php echo $k;?>_to')"></i>
 													</div>
 													<br/>
 												</li>
@@ -308,7 +308,7 @@ $params = $scene->getParams();
 														}
 														?>									
 													</select>
-													&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>)"></i>
+													&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>,'jump')"></i>
 												</div>
 												<br/>
 											</li>												

@@ -16,7 +16,13 @@ foreach ($story->characters() as $character){
 	echo "define ".Helpers::encName($character->name)." = Character('".$character->name."', color='#".$character->color."')\r\n";
 	
 	foreach ($character->behaviours() as $behaviour){
-		echo "image ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name) ." = \"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture)."\"\r\n");
+		$image = Helpers::encName($behaviour->name);
+		$image = str_replace(".gif","",$image);
+		$image = str_replace(".png","",$image);
+		$image = str_replace(".jpeg","",$image);
+		$image = str_replace(".jpg","",$image);
+		
+		echo "image ".Helpers::encName($character->name)." ".$image ." = \"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture)."\"\r\n");
 	}
 	echo "\r\n";
 }

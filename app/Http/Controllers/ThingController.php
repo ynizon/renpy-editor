@@ -67,6 +67,12 @@ class ThingController extends Controller
 			$thing->name = $inputs["name"];			
 		}
 		
+		$name = str_replace(".png","",$thing->name);
+		$name = str_replace(".gif","",$name);
+		$name = str_replace(".jpg","",$name);
+		$name = str_replace(".jpeg","",$name);
+		$thing->name = $name;
+		
 		$thing->picture = "";
 		if (isset($inputs["picture"])){
 			$thing->picture = $inputs["picture"];			
@@ -92,6 +98,7 @@ class ThingController extends Controller
 				}
 				
 				Storage::disk('public')->put("stories/".$thing->story_id."/".Helpers::encName($thing->name).".png", file_get_contents($request->file("picture_file")));			
+				$thing->picture = env("APP_URL")."/stories/".$thing->story_id."/".Helpers::encName($thing->name).".png";
 			}
 		}
 		

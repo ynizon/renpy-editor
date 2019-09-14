@@ -65,6 +65,11 @@ class MusicController extends Controller
 		if (isset($inputs["name"])){
 			$music->name = $inputs["name"];			
 		}
+		$name = str_replace(".png","",$music->name);
+		$name = str_replace(".gif","",$name);
+		$name = str_replace(".jpg","",$name);
+		$name = str_replace(".jpeg","",$name);
+		$music->name = $name;
 		
 		$music->music = "";
 		if (isset($inputs["music"])){
@@ -91,6 +96,7 @@ class MusicController extends Controller
 				}
 				
 				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).".ogg", file_get_contents($request->file("music_file")));			
+				$music->music = env("APP_URL")."/stories/".$background->story_id."/".Helpers::encName($background->name).".ogg";
 			}
 		}
 		

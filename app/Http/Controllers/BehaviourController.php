@@ -61,6 +61,13 @@ class BehaviourController extends Controller
 		if (isset($inputs["name"])){
 			$behaviour->name = $inputs["name"];			
 		}
+		
+		$name = str_replace(".png","",$behaviour->name);
+		$name = str_replace(".gif","",$name);
+		$name = str_replace(".jpg","",$name);
+		$name = str_replace(".jpeg","",$name);
+		$behaviour->name = $name;
+				
 		$behaviour->picture = "";
 		if (isset($inputs["picture"])){
 			$behaviour->picture = $inputs["picture"];
@@ -97,6 +104,7 @@ class BehaviourController extends Controller
 				}
 				
 				Storage::disk('public')->put("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png", file_get_contents($request->file("picture_file")));			
+				$behaviour->picture = env("APP_URL")."/stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png";
 			}
 		}
 		

@@ -101,6 +101,9 @@ class CharacterController extends Controller
 					foreach ($elems as $elem){
 						$name = strtolower(basename($elem->src));
 						$name = str_replace(".png","",$name);
+						$name = str_replace(".gif","",$name);
+						$name = str_replace(".jpg","",$name);
+						$name = str_replace(".jpeg","",$name);
 						
 						if(!Behaviour::isExist($character->id,$name)){
 							$behaviour = new Behaviour();

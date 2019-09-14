@@ -69,6 +69,12 @@ class BackgroundController extends Controller
 			$background->name = $inputs["name"];			
 		}
 		
+		$name = str_replace(".png","",$background->name);
+		$name = str_replace(".gif","",$name);
+		$name = str_replace(".jpg","",$name);
+		$name = str_replace(".jpeg","",$name);
+		$background->name = $name;
+		
 		if (isset($inputs["story_id"])){
 			$background->story_id = $inputs["story_id"];
 		}

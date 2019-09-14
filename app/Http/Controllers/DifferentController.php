@@ -61,6 +61,13 @@ class DifferentController extends Controller
 		if (isset($inputs["name"])){
 			$different->name = $inputs["name"];			
 		}
+		
+		$name = str_replace(".png","",$different->name);
+		$name = str_replace(".gif","",$name);
+		$name = str_replace(".jpg","",$name);
+		$name = str_replace(".jpeg","",$name);
+		$different->name = $name;
+		
 		$different->picture = "";
 		if (isset($inputs["picture"])){
 			$different->picture = $inputs["picture"];
@@ -97,6 +104,7 @@ class DifferentController extends Controller
 				}
 				
 				Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).".png", file_get_contents($request->file("picture_file")));			
+				$behaviour->picture = env("APP_URL")."/stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).".png";
 			}
 		}
 		
