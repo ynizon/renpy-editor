@@ -146,3 +146,15 @@ function editAction(story_id, scene_id, action_id){
 		eval(data);
 	});
 }
+/* Add one scene */
+function addScene(story_id){
+	var name = window.prompt("Name of the scene");
+	if (name != ""){
+		$.get("/story/"+story_id+"/scene/addone?name="+name, function(data){
+			data = JSON.parse(data);
+			$(".menus").each(function( index ) {
+				$( this ).append(new Option("Go to "+data.name, data.id));
+			});
+		});
+	}
+}

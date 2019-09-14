@@ -100,6 +100,7 @@ class CharacterController extends Controller
 					$elems = $dom->find("ul[id='responsive'] li img");
 					foreach ($elems as $elem){
 						$name = strtolower(basename($elem->src));
+						$name = str_replace(".png","",$name);
 						
 						if(!Behaviour::isExist($character->id,$name)){
 							$behaviour = new Behaviour();

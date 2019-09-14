@@ -23,7 +23,7 @@ class Action extends Model
     }  
 	
 	public function getParams(){
-		$all_params = ["behaviour_id"=>0,"scene_id"=>0,"say"=>"","menu1"=>"","menu1_to"=>"","menu2"=>"","menu2_to"=>"","menu3"=>"","menu3_to"=>"","menu4"=>"","menu4_to"=>""];
+		$all_params = ["different_id"=>0,"behaviour_id"=>0,"scene_id"=>0,"say"=>"","menu1"=>"","menu1_to"=>"","menu2"=>"","menu2_to"=>"","menu3"=>"","menu3_to"=>"","menu4"=>"","menu4_to"=>""];
 		$params = [];
 		if ($this->parameters != ""){
 			$params = array_merge(json_decode($this->parameters,true),$params);

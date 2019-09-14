@@ -126,6 +126,21 @@ class SceneController extends Controller
 		return redirect()->back();
 	}	
 	
+	public function addone($story_id, Request $request)
+	{			
+		if (Helpers::checkPermission($story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+		$scene = new Scene();
+		$scene->story_id = $story_id;
+		$scene->name = $request->input("name");
+		$scene->parameters = json_encode($scene->getParams());
+		$scene->save();
+		
+		echo json_encode(["name"=>$scene->name, "id"=>$scene->id]);
+	}	
+	
 	public function duplicate($id)
     {	
 		$scene = Scene::find($id);

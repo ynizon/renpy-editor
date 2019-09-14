@@ -366,9 +366,21 @@ abstract class HelperServiceProvider extends ServiceProvider
 	
 	/* Encode name for python script */
 	public static function encName($s){
-		return  strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",$s))));
+		
+		return  strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",self::skip_accents($s)))));
 	}
 	
+	public static function skip_accents( $str, $charset='utf-8' ) {
+ 
+		$str = htmlentities( $str, ENT_NOQUOTES, $charset );
+		
+		$str = preg_replace( '#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $str );
+		$str = preg_replace( '#&([A-za-z]{2})(?:lig);#', '\1', $str );
+		$str = preg_replace( '#&[^;]+;#', '', $str );
+		
+		return $str;
+	}
+
 	/* Checking permissions */
 	public static function checkPermission($story_id){
 		$stories = [];

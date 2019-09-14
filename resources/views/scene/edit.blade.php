@@ -265,16 +265,20 @@ $params = $scene->getParams();
 												?>										
 												<li>
 													<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu<?php echo $k;?>" value="" id="menu<?php echo $k;?>" />
-													<select class="action_info form-control" name="menu<?php echo $k;?>_to" id="menu<?php echo $k;?>_to">
-														<option value="0">-</option>
-														<?php
-														foreach ($story->scenes() as $scen){
-															?>
-															<option value="<?php echo $scen->id;?>">Go to <?php echo $scen->name;?></option>
+													<div>
+														<select style="width:90%;display:inline-block;" class="action_info menus form-control" name="menu<?php echo $k;?>_to" id="menu<?php echo $k;?>_to">
+															<option value="0">-</option>
 															<?php
-														}
-														?>									
-													</select><br/>
+															foreach ($story->scenes() as $scen){
+																?>
+																<option value="<?php echo $scen->id;?>">Go to <?php echo $scen->name;?></option>
+																<?php
+															}
+															?>									
+														</select>
+														&nbsp;<i title="Add scene" class="fa fa-plus" onclick="addScene(<?php echo $story->id;?>)"></i>
+													</div>
+													<br/>
 												</li>
 												<?php
 											}

@@ -71,7 +71,7 @@ if (count($story->scenes()) == 0){
 					switch ($action_params["verb"]){
 						case "show":							
 							$different = Different::find($action_params["info"]);
-							$file = pathinfo(basename($background->name."-".$different->name), PATHINFO_FILENAME);
+							$file = pathinfo(Helpers::encName($background->name)."-".Helpers::encName($different->name), PATHINFO_FILENAME);
 							echo $TAB."scene ".$file." with fade\r\n";
 							break;
 					}

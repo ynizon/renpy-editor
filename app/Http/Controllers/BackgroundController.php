@@ -7,6 +7,7 @@ use App\Scene;
 use App\Background;
 use App\Different;
 use Illuminate\Http\Request;
+use Sunra\PhpSimple\HtmlDomParser;
 use App\Providers\HelperServiceProvider as Helpers;
 
 class BackgroundController extends Controller
@@ -92,7 +93,7 @@ class BackgroundController extends Controller
 							$different = new Different();
 							$different->name = $name;
 							$different->picture = $elem->src;
-							$different->character_id = $background->id;
+							$different->background_id = $background->id;
 							$different->story_id = $background->story_id;
 							$different->save();
 						}
@@ -122,10 +123,6 @@ class BackgroundController extends Controller
 					}
 					if (!is_dir("stories/".$different->story_id."/images")){
 						mkdir ("stories/".$different->story_id."/images");
-					}
-					
-					if (!is_dir("stories/".$different->story_id."/images/".Helpers::encName($character->name))){
-						mkdir ("stories/".$different->story_id."/images/".Helpers::encName($character->name));
 					}
 					
 					Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."-".Helpers::encName($different->name).".png", file_get_contents($request->file("picture_file")));			

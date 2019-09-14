@@ -10,7 +10,7 @@
 					{!! Form::model($different, ['route' => ['different.update', $different->id], 'files'=>true,'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 						<input type="hidden"  name="story_id" value="{!! $story->id !!}" />
-						<input type="hidden"  name="character_id" value="{!! $character->id !!}" />
+						<input type="hidden"  name="background_id" value="{!! $background->id !!}" />
 
 						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Name</label>

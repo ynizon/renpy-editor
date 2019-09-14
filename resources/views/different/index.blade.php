@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/character'>Characters</a>&nbsp;&nbsp;>&nbsp;&nbsp;Behaviour&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/character/<?php echo $character->id;?>/different/create'><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</div>
+                <div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/background'>Backgrounds</a>&nbsp;&nbsp;>&nbsp;&nbsp;Different&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/background/<?php echo $background->id;?>/different/create'><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</div>
 
                 <div class="card-body">                   
                     <ul>
