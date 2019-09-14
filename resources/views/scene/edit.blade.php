@@ -261,7 +261,7 @@ $params = $scene->getParams();
 
 									<div class="col-md-12">
 										<ul>
-											<li>
+											<li style="list-style-type:none">
 												<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu_title" value="" id="menu_title" placeholder="Sentence" />
 											</li>
 											<?php
