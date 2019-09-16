@@ -26,6 +26,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('story', 'StoryController');
 Route::get('/story/{id}/duplicate', 'StoryController@duplicate');
 Route::get('/story/{id}/share', 'StoryController@share')->name("share");
+Route::get('/story/{id}/tree', 'StoryController@tree')->name("tree");
 Route::post('/story/{id}/share', 'StoryController@share');
 
 

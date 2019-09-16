@@ -165,7 +165,35 @@ class SceneController extends Controller
 		$scene = new Scene();
 		$scene->story_id = $story_id;
 		$scene->name = $request->input("name");
-		$scene->parameters = json_encode($scene->getParams());
+		
+          $params = $scene->getParams();
+          
+          //On prend tout par defaut
+          foreach ($params as $key=>$value){
+               switch ($key){
+                    case "backgrounds_id":
+                         foreach (Background::where("story_id","=",$story_id)->get() as $info){                              
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+                    case "musics_id":
+                         foreach (Music::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                    case "characters_id":
+                         foreach (Character::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+                    case "things_id":
+                         foreach (Thing::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+               }               
+          } 
+          $scene->parameters = json_encode($params);
+          
 		$scene->save();
 		
 		echo json_encode(["name"=>$scene->name, "id"=>$scene->id]);

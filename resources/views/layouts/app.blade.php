@@ -10,9 +10,20 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <?php
+     if (isset($highcharts)){
+     ?>
+          <script src="/js/highcharts/highcharts.js"></script>
+          <script src="/js/highcharts/modules/sankey.js"></script>
+          <script src="/js/highcharts/modules/organization.js"></script>
+          <script src="/js/highcharts/modules/exporting.js"></script>
+     <?php
+     }
+     ?>
+    
 	<script src="{{ asset('js/jquery.min.js') }}" ></script>
 	<script src="{{ asset('js/utils.js') }}" defer></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

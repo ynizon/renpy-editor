@@ -17,6 +17,7 @@
 								<a title="Edit" href='/story/<?php echo $story->id;?>/edit'><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
 								<a title="Duplicate the story (for backup)" href='/story/<?php echo $story->id;?>/duplicate'><i class="fa fa-clone"></i></a>&nbsp;&nbsp;
 								<a title="Share for working with friends on a same project" href='/story/<?php echo $story->id;?>/share'><i class="fa fa-share-alt"></i></a>&nbsp;&nbsp;
+                                        <a title="View the decision tree" href='/story/<?php echo $story->id;?>/tree'><i class="fa fa-tree"></i></a>&nbsp;&nbsp;
 								{!! Form::open(['method' => 'DELETE', "style"=>"display:inline",'route' => ['story.destroy', $story->id]]) !!}
 									&nbsp;<a href="#" class="pointer" title="Remove" onclick="if (confirm('Confirm delete... ?')){$(this).parent().submit();}"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
 								{!! Form::close() !!}

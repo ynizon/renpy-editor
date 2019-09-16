@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Action;
+use App\Different;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Mail;
@@ -42,4 +43,23 @@ class Scene extends Model
     {
         return $this->hasMany('App\Action')->orderBy("num_order")->get();
     }  
+    
+    public function getThumbnail(){
+         $image = "";
+         $actions = $this->actions();
+          foreach ($actions as $action){
+               if ($action->parameters != ""){
+                    $action_params = json_decode($action->parameters,true);
+                    switch ($action_params["verb"]){
+                         case "show":                            
+                              if ($action_params["element"] == "background"){
+                                   $different = Different::find($action_params["info"]);
+                                   $image = $different->picture;
+                              }
+                              break; 
+                    }
+               }   
+          }
+          return $image;
+    }
 }

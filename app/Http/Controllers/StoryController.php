@@ -483,4 +483,79 @@ class StoryController extends Controller
         return redirect('home')->withOk("The story " . $story->name . " has been duplicated .");
     }
 	
+     /* Show decision making tree */
+     public function tree(Request $request, $id)
+	{
+		if (Helpers::checkPermission($id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+          
+          $from_to = [];
+		$story = Story::find($id);
+		
+          //Init
+          $scenesTmp = $story->scenes();
+          foreach ($scenesTmp as $scene){
+               $image = "";
+               $scenes[$scene->id] = ["done"=>0,"id"=>"scene_".$scene->id,"name"=>$scene->name,"image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
+          }
+          
+          foreach ($scenesTmp as $scene){
+               $done = 0;
+               if (isset($scenes[$scene->id])){
+                    $done = $scenes[$scene->id]["done"];
+               }
+               $actions = $scene->actions();
+               foreach ($actions as $action){
+                    if ($action->parameters != ""){
+                         $action_params = json_decode($action->parameters,true);
+                         switch ($action_params["verb"]){
+                              case "jump":
+                                   $goto_scene = Scene::find($action_params["info"]);
+                                   $from_to[] =["scene_".$scene->id,"scene_".$goto_scene->id];
+                                   $scenes[$goto_scene->id]["done"] = 1;
+                                   break;
+                                   
+                              case "menu":
+                                   $actions_params = json_decode($action_params["info"],true);
+                                   if ($scenes[$scene->id]["description"] != ""){
+                                        $scenes[$scene->id]["description"] .= " - ";
+                                   }
+                                   $scenes[$scene->id]["description"] .= $actions_params["menu_title"]. "?";
+                                   for ($k=1;$k<=4; $k++){                                        
+                                        if ($actions_params["menu".$k."_to"] != 0){
+                                             $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
+                                             $goto_id = $goto_scene->id;
+                                             if ($done == 1){
+                                                  //Add new scene (same block)
+                                                  $goto_id = $goto_scene->id."-".uniqid();
+                                                 
+                                                  $scenes[$goto_id] = $scenes[$goto_scene->id];
+                                                  $scenes[$goto_id]["id"] = "scene_".$goto_id;
+                                             }
+                                             
+                                             if ($scenes[$goto_id]["description"] != ""){
+                                                  $scenes[$goto_id]["description"] .= " - ";
+                                             }
+                                             $scenes[$goto_id]["description"] = $scenes[$goto_id]["description"].$actions_params["menu".$k];
+                                             $scenes[$goto_scene->id]["done"] = 1;
+                                             $from_to[] =["scene_".$scene->id,"scene_".$goto_id];
+                                        }
+                                   }
+                                   break;
+                         }
+                    }
+               }
+               
+          }
+          
+          foreach ($scenes as $scene_id =>$scene){
+               $scenes_data[] = $scene;
+          }
+          //echo var_dump($scenes);exit();
+          
+          $highcharts = true;
+		return view('story/tree',compact('story','from_to','scenes_data','highcharts'));
+	}
 }
