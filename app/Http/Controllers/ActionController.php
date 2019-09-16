@@ -142,4 +142,37 @@ class ActionController extends Controller
 		}
 		return view('action/edit',compact('action'));
 	}
+     
+     public function order_action($story_id, $scene_id, $action_id, Request $request){		
+		$action = Action::find($action_id);
+		if (Helpers::checkPermission($action->story_id) == false){
+			return view('errors/403',  array());
+			exit();		
+		}
+          $scene = Scene::find($scene_id);
+          if ($request->input("order") != ""){
+               switch ($request->input("order")){
+                    case "down":
+                         foreach ($scene->actions() as $ac){
+                              if ($ac->num_order == ($action->num_order+1)){
+                                   $ac->num_order = ($ac->num_order-1);
+                                   $ac->save();
+                              }
+                         }
+                         $action->num_order = ($action->num_order+1); 
+                         break;
+                    case "up":
+                         foreach ($scene->actions() as $ac){
+                              if ($ac->num_order == ($action->num_order-1)){
+                                   $ac->num_order = ($ac->num_order+1);
+                                   $ac->save();
+                              }
+                         }
+                         $action->num_order = ($action->num_order-1); 
+                         break;
+               }
+          }
+          $action->save();
+		return view('action/order',compact('action'));
+	}
 }

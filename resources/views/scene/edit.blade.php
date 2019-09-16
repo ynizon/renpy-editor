@@ -105,7 +105,7 @@ $params = $scene->getParams();
 							<div class="form-group">
 								<div class="col-md-8 col-md-offset-4">
 									<button type="submit" class="btn btn-primary">
-										Save
+										<i class="fa fa-save"></i>
 									</button>
 									<br/><br/>
 									<i class="fa fa-info"></i>&nbsp;&nbsp;The label of the scene is:<br/>scene_<?php echo Helpers::encName($scene->name);?>
@@ -340,11 +340,11 @@ $params = $scene->getParams();
 										<input type="hidden" id="info" name="info" value=""/>
 										
 										<button id="btn_add" class="btn btn-primary" onclick="$('#action_id').val(0);addAction(<?php echo $scene->story_id;?>,<?php echo $scene->id;?>)">
-											Add
+											<i class="fa fa-plus"></i>
 										</button>
 										
 										<button id="btn_update" style="display:none" class="btn btn-primary" onclick="addAction(<?php echo $scene->story_id;?>,<?php echo $scene->id;?>)">
-											Update
+											<i class="fa fa-pencil"></i>
 										</button>	
 									</div>
 								</div>
@@ -364,8 +364,16 @@ $params = $scene->getParams();
 							</div>
 							
 							<div class="form-group">
-								<button class="btn btn-primary" onclick="deleteAction(<?php echo $scene->story_id;?>,<?php echo $scene->id;?>, $('#list_actions').val())">
-									Delete
+								<button title = "Delete the action" class="btn btn-primary" onclick="deleteAction(<?php echo $scene->story_id;?>,<?php echo $scene->id;?>, $('#list_actions').val())">
+									<i class="fa fa-trash-o"></i>
+								</button>
+                                        
+                                        <button title = "Move up the action" class="btn btn-primary" onclick="orderAction('up',<?php echo $scene->story_id;?>,<?php echo $scene->id;?>, $('#list_actions').val())">
+									<i class="fa fa-arrow-up"></i>
+								</button>
+                                        
+                                        <button title = "Move down the action" class="btn btn-primary" onclick="orderAction('down',<?php echo $scene->story_id;?>,<?php echo $scene->id;?>, $('#list_actions').val())">
+									<i class="fa fa-arrow-down"></i>
 								</button>
 							</div>
 						</div>

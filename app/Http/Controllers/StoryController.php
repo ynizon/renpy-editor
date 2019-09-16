@@ -350,6 +350,8 @@ class StoryController extends Controller
 			return view('errors/403',  array());
 			exit();		
 		}
+          Helpers::deleteAll("stories/".$id);
+          
 		Story::destroy($id);
 		return redirect()->back();
 	}

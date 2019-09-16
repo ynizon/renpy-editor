@@ -150,6 +150,13 @@ function addAction(story_id, scene_id){
 	}
 }
 
+/* Change order action */
+function orderAction(upOrDown, story_id, scene_id, action_id){
+	$.get("/story/"+story_id+"/scene/"+scene_id+"/order_action/"+action_id+"?order="+upOrDown, function(data){
+		eval(data);
+	});
+}
+
 /* Edit action */
 function editAction(story_id, scene_id, action_id){
 	$.get("/story/"+story_id+"/scene/"+scene_id+"/edit_action/"+action_id, function(data){

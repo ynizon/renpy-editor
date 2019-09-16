@@ -79,3 +79,4 @@ Route::post('/story/{story_id}/scene/{scene_id}/add_action', 'ActionController@a
 Route::get('/story/{story_id}/scene/{scene_id}', 'ActionController@show');
 Route::post('/story/{story_id}/scene/{scene_id}/delete_action/{action_id}', 'ActionController@delete_action');
 Route::get('/story/{story_id}/scene/{scene_id}/edit_action/{action_id}', 'ActionController@edit_action');
+Route::get('/story/{story_id}/scene/{scene_id}/order_action/{action_id}', 'ActionController@order_action');
