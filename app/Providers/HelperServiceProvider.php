@@ -367,7 +367,12 @@ abstract class HelperServiceProvider extends ServiceProvider
 	/* Encode name for python script */
 	public static function encName($s){
 		
-		return  strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",self::skip_accents($s)))));
+		$r = strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",self::skip_accents($s)))));
+          $k = strpos($r,"?");
+          if ($k !== false){
+               $r = substr($r,0,$k);
+          }
+          return $r;
 	}
 	
 	public static function skip_accents( $str, $charset='utf-8' ) {

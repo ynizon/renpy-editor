@@ -104,6 +104,7 @@ class StoryController extends Controller
 				if ($behaviour->picture != ""){
 					try{
 						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
+                              
 						if (!file_exists($file)){
 							$s = file_get_contents($behaviour->picture);						
 							file_put_contents($file,$s);

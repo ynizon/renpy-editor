@@ -65,10 +65,9 @@ class MusicController extends Controller
 		if (isset($inputs["name"])){
 			$music->name = $inputs["name"];			
 		}
-		$name = str_replace(".png","",$music->name);
-		$name = str_replace(".gif","",$name);
-		$name = str_replace(".jpg","",$name);
-		$name = str_replace(".jpeg","",$name);
+		$name = str_replace(".ogg","",$music->name);
+		$name = str_replace(".mp3","",$name);
+		
 		$music->name = $name;
 		
 		$music->music = "";
@@ -87,7 +86,8 @@ class MusicController extends Controller
 		
 		//Upload file
 		if ($request->file("music_file") != ""){
-			if (substr(strtolower($request->file("music_file")->getClientOriginalName()),-4) == ".ogg"){
+			$extension = substr(strtolower($request->file("music_file")->getClientOriginalName()),-4);
+			if (in_array($extension, [".ogg",".mp3"])){
 				if (!is_dir("stories")){
 					mkdir ("stories");
 				}
@@ -95,8 +95,10 @@ class MusicController extends Controller
 					mkdir ("stories/".$background->story_id);
 				}
 				
-				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).".ogg", file_get_contents($request->file("music_file")));			
-				$music->music = env("APP_URL")."/stories/".$background->story_id."/".Helpers::encName($background->name).".ogg";
+				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).$extension, file_get_contents($request->file("music_file")));			
+				$music->music = env("APP_URL")."/stories/".$background->story_id."/".Helpers::encName($background->name).$extension;
+               }else{
+                    $music->music = "";
 			}
 		}
 		

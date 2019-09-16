@@ -27,14 +27,14 @@
                         </div>
 						
 						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
-                            <label for="picture" class="col-md-4 control-label">Picture (import url)
+                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;(import from a url)
 								&nbsp;&nbsp;
 								<a target="_blank" href='https://cloudnovel.net/browse/free/background/popular'><i class="fa fa-link"></i></a>
 							</label>
 
                             <div class="col-md-6">								
                                 <input id="picture" placeholder="https://" type="text" class="form-control" name="picture" value="{!! $different->picture !!}" />
-								<br/>Or a file (.png only)
+								<br/>Or upload a file (.png, .jpg, .gif)
 								<input id="picture_file"  type="file" class="form-control" name="picture_file"  />
 
                                 @if ($errors->has('picture'))

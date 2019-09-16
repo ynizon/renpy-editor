@@ -7,6 +7,7 @@ use App\Background;
 use App\Character;
 use App\Different;
 use App\Behaviour;
+use App\Music;
 use App\Thing;
 use App\Scene;
 use Illuminate\Http\Request;
@@ -38,7 +39,36 @@ class SceneController extends Controller
 	
 	public function create($story_id)
 	{	
-		$scene = new Scene();		
+		$scene = new Scene();
+          $params = $scene->getParams();
+          
+          //On prend tout par defaut
+          foreach ($params as $key=>$value){
+               switch ($key){
+                    case "backgrounds_id":
+                         foreach (Background::where("story_id","=",$story_id)->get() as $info){                              
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+                    case "musics_id":
+                         foreach (Music::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                    case "characters_id":
+                         foreach (Character::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+                    case "things_id":
+                         foreach (Thing::where("story_id","=",$story_id)->get() as $info){
+                              $params[$key][] = $info->id;
+                         }
+                         break;
+               }
+               
+          }          
+          
+          $scene->parameters = json_encode($params);
 		$story = Story::find($story_id);
 		if (Helpers::checkPermission($story_id) == false){
 			return view('errors/403',  array());

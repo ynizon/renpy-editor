@@ -87,7 +87,8 @@ class BehaviourController extends Controller
 		
 		//Upload file
 		if ($request->file("picture_file") != ""){
-			if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){
+			$extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
+               if (in_array($extension, [".gif",".jpg",".png"])){
 				$character = Character::find($behaviour->character_id);
 				if (!is_dir("stories")){
 					mkdir ("stories");
@@ -103,9 +104,11 @@ class BehaviourController extends Controller
 					mkdir ("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name));
 				}
 				
-				Storage::disk('public')->put("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png", file_get_contents($request->file("picture_file")));			
-				$behaviour->picture = env("APP_URL")."/stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).".png";
-			}
+				Storage::disk('public')->put("stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).$extension, file_get_contents($request->file("picture_file")));			
+				$behaviour->picture = env("APP_URL")."/stories/".$behaviour->story_id."/images/".Helpers::encName($character->name)."/".Helpers::encName($behaviour->name).$extension;
+			}else{
+                    $behaviour->picture = "";
+               }
 		}
 		
 		$behaviour->save();

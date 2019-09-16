@@ -87,7 +87,8 @@ class DifferentController extends Controller
 		
 		//Upload file
 		if ($request->file("picture_file") != ""){
-			if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){
+			$extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
+               if (in_array($extension, [".gif",".jpg",".png"])){
 				$background = Background::find($different->background_id);
 				if (!is_dir("stories")){
 					mkdir ("stories");
@@ -103,9 +104,11 @@ class DifferentController extends Controller
 					mkdir ("stories/".$different->story_id."/images/".Helpers::encName($background->name));
 				}
 				
-				Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).".png", file_get_contents($request->file("picture_file")));			
-				$behaviour->picture = env("APP_URL")."/stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).".png";
-			}
+				Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).$extension, file_get_contents($request->file("picture_file")));			
+				$behaviour->picture = env("APP_URL")."/stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).$extension;
+			}else{
+                    $behaviour->picture = "";
+               }
 		}
 		
 		$different->save();

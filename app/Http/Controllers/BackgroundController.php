@@ -121,7 +121,8 @@ class BackgroundController extends Controller
 			
 			//Upload file
 			if ($request->file("picture_file") != ""){
-				if (substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4) == ".png"){					
+                    $extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
+				if (in_array($extension, [".gif",".jpg",".png"])){
 					if (!is_dir("stories")){
 						mkdir ("stories");
 					}
@@ -132,8 +133,11 @@ class BackgroundController extends Controller
 						mkdir ("stories/".$different->story_id."/images");
 					}
 					
-					Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."-".Helpers::encName($different->name).".png", file_get_contents($request->file("picture_file")));			
-				}
+					Storage::disk('public')->put("stories/".$different->story_id."/images/".Helpers::encName($background->name)."-".Helpers::encName($different->name).$extension, file_get_contents($request->file("picture_file")));
+                         $different->picture = env("APP_URL")."/stories/".$different->story_id."/images/".Helpers::encName($background->name)."/".Helpers::encName($different->name).$extension;
+				}else{
+                         $different->picture = "";
+                    }
 			}
 			$different->background_id = $background->id;
 			$different->story_id = $different->story_id;

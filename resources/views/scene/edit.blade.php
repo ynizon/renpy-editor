@@ -117,7 +117,7 @@ $params = $scene->getParams();
 						<div class="col-md-4">
 							<h3>Actions</h3>
 							<?php
-							if (count($params["characters_id"])==0 and count($params["backgrounds_id"])==0 and count($params["things_id"])==0 and count($params["musics_id"])==0){
+							if ($scene->id == 0 or (count($params["characters_id"])==0 and count($params["backgrounds_id"])==0 and count($params["things_id"])==0 and count($params["musics_id"])==0)){
 							?>
 								<div class="form-group{{ $errors->has('actions') ? ' has-error' : '' }}">
 									<p>

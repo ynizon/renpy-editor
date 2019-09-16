@@ -40,11 +40,11 @@
                         </div>
 						
 						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
-                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;<a title="Random music generator" href='https://cloudnovel.net/browse/free/character/popular' target="_blank"><i class="fa fa-link"></i></a></label>
+                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;(import from a url)&nbsp;&nbsp;<a title="Random music generator" href='https://cloudnovel.net/browse/free/character/popular' target="_blank"><i class="fa fa-link"></i></a></label>
 
                             <div class="col-md-6">
                                 <input id="picture" type="text" class="form-control"  placeholder="https://" name="picture" value=""  />
-								<br/>Or a file (.png only)
+								<br/>Or upload a file (.png, .jpg, .gif)
 								<input id="picture_file"  type="file" class="form-control" name="picture_file"  />
 
                                 @if ($errors->has('picture'))
@@ -56,7 +56,7 @@
                         </div>
 						
 						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Import Behaviours from&nbsp;&nbsp;
+                            <label for="name" class="col-md-4 control-label">Import a lot from&nbsp;&nbsp;
 								<a target="_blank" href='https://cloudnovel.net/browse/free/character/popular'><i class="fa fa-link"></i></a>
 							</label>
 
