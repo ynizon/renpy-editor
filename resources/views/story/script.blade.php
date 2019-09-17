@@ -81,7 +81,7 @@ if (count($story->scenes()) == 0){
 					switch ($action_params["verb"]){
 						case "show":							
 							$different = Different::find($action_params["info"]);
-							$file = pathinfo(Helpers::encName($background->name)."-".Helpers::encName($different->name), PATHINFO_FILENAME);
+							$file = pathinfo(Helpers::encName($background->name)."-".Helpers::encName(basename($different->picture)), PATHINFO_FILENAME);
 							echo $TAB."scene ".$file." with fade\r\n";
 							break;
 					}
@@ -115,17 +115,21 @@ if (count($story->scenes()) == 0){
 					break;
 					
 				case "character":
-					$character = Character::find($action_params["subject_id"]);
+                         $character = Character::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "show":
 							$behaviour = Behaviour::find($action_params["info"]);
 							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." with dissolve\r\n";
 							break;
 						case "hide":
-							echo $TAB."hide ".Helpers::encName($character->name)." with fade\r\n";	
+							echo $TAB."hide ".Helpers::encName($character->name)."\r\n";	
 							break;
 						case "say":
-							echo $TAB.Helpers::encName($character->name) . ' "'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
+                                   if ($action_params["subject_id"] != 0){
+                                        echo $TAB.Helpers::encName($character->name) . ' "'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
+                                   }else{
+                                        echo $TAB. '"'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
+                                   }
 							break;
 						case "move":
 							echo $TAB."show ".Helpers::encName($character->name)." at ".$action_params["info"]."\r\n";
@@ -133,7 +137,9 @@ if (count($story->scenes()) == 0){
 						case "menu":
 							$info = json_decode($action_params["info"],true);
 							echo $TAB."menu:\r\n";
-							echo $TAB.$TAB."\"".$info["menu_title"]."\"\r\n";	
+							if ($info["menu_title"] != ""){
+                                        echo $TAB.$TAB."\"".$info["menu_title"]."\"\r\n";	
+                                   }
 							for ($k=1;$k<=4;$k++){
 								if ($info["menu".$k] !=""){									
 									if ($info["menu".$k."_to"] > 0){

@@ -22,6 +22,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/screenshots', function(){    
+     return view('screenshots');	
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('story', 'StoryController');
 Route::get('/story/{id}/duplicate', 'StoryController@duplicate');

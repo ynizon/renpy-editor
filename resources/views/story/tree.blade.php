@@ -6,9 +6,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-			<div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;Decision Tree</div>
+			<div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;Decision Tree (reload for new colors)</div>
 
                <div class="card-body">
+                    <div class="col-md-12">							
+                         @include('story/part_line', ['story' => $story])
+                        <hr/>
+                    </div>
 				<div id="tree"></div>                    
                     <script>
                          $(document).ready(function() {

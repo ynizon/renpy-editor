@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Story;
+use App\Action;
 use App\Scene;
 use App\Different;
 use App\Background;
@@ -158,6 +159,14 @@ class DifferentController extends Controller
 			exit();		
 		}
 		$differents = $background->differents();
-		return view('different/show',compact('differents'));
+          $different_id = "0";
+          if ($request->input("action_id") != "0"){
+               $action = Action::find($request->input("action_id"));
+               if ($action->parameters != ""){
+                    $params = json_decode($action->parameters,true);
+                    $different_id = $params["info"];
+               }
+          }
+		return view('different/show',compact('differents','different_id'));
 	}
 }

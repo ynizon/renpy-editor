@@ -10,7 +10,7 @@
 					{!! Form::model($story, ['route' => ['story.update', $story->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 
-						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+					<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Name</label>
 
                             <div class="col-md-6">
@@ -23,8 +23,22 @@
                                 @endif
                             </div>
                         </div>
+                        
+                        <div class="form-group{{ $errors->has('lang') ? ' has-error' : '' }}">
+                            <label for="lang" class="col-md-4 control-label">Lang</label>
+
+                            <div class="col-md-6">
+                                <input type="text" id="country"  value="{!! $story->lang !!}" name="lang" required />
+
+                                @if ($errors->has('lang'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('lang') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 						
-						<div class="form-group{{ $errors->has('width') ? ' has-error' : '' }}">
+					<div class="form-group{{ $errors->has('width') ? ' has-error' : '' }}">
                             <label for="width" class="col-md-4 control-label">Width (for picture resizing)</label>
 
                             <div class="col-md-6">
@@ -38,7 +52,7 @@
                             </div>
                         </div>
 						
-						<div class="form-group{{ $errors->has('height') ? ' has-error' : '' }}">
+					<div class="form-group{{ $errors->has('height') ? ' has-error' : '' }}">
                             <label for="height" class="col-md-4 control-label">Height (for picture resizing)</label>
 
                             <div class="col-md-6">
@@ -52,7 +66,7 @@
                             </div>
                         </div>
 						
-						<div class="form-group{{ $errors->has('starting_script') ? ' has-error' : '' }}">
+					<div class="form-group{{ $errors->has('starting_script') ? ' has-error' : '' }}">
                             <label for="starting_script" class="col-md-4 control-label">Starting Script</label>
 
                             <div class="col-md-6">
@@ -66,7 +80,7 @@
                             </div>
                         </div>
 						
-						<div class="form-group">
+					<div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Save

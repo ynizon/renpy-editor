@@ -14,9 +14,7 @@
 //Tree
 #tree {
     min-width: 300px;
-    max-width: 800px;
     margin: 1em auto;
-    border: 1px solid silver;
 }
 
 #tree h4 {
@@ -25,6 +23,7 @@
     font-weight: normal;
 }
 #tree p {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 16px;
+    max-height: 31px;
 }

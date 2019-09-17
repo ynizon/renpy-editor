@@ -19,6 +19,7 @@ class Story extends Migration
 			$table->Integer('width')->unsigned()->default(1280);
 			$table->Integer('height')->unsigned()->default(720);
 			$table->string('name')->default("Story");			
+               $table->string('lang')->default("United Kingdom");			
 			$table->text('starting_script');
 			$table->timestamps();			
 			$table->foreign('user_id')->references('id')

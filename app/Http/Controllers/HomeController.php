@@ -45,4 +45,5 @@ class HomeController extends Controller
 		}
         return view('story/index', compact("stories"));
     }	
+    
 }

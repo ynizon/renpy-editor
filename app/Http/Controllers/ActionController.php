@@ -59,7 +59,11 @@ class ActionController extends Controller
 				$subject = Background::find($data["subject_id"])->name;
 				break;
 			case "character":
-				$subject = Character::find($data["subject_id"])->name;
+				if ($data["subject_id"] != 0){
+                         $subject = Character::find($data["subject_id"])->name;
+                    }else{
+                         $subject = "Me";
+                    }
 				break;
 			case "music":
 				$subject = Music::find($data["subject_id"])->name;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Action;
 use App\Story;
 use App\Scene;
 use App\Behaviour;
@@ -157,7 +158,15 @@ class BehaviourController extends Controller
 			return view('errors/403',  array());
 			exit();		
 		}
+          $behaviour_id = 0;
+          if ($request->input("action_id") != "0"){
+               $action = Action::find($request->input("action_id"));
+               if ($action->parameters != ""){
+                    $params = json_decode($action->parameters,true);
+                    $behaviour_id = $params["info"];
+               }
+          }
 		$behaviours = $character->behaviours();
-		return view('behaviour/show',compact('behaviours'));
+		return view('behaviour/show',compact('behaviours','behaviour_id'));
 	}
 }

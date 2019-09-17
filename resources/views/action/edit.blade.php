@@ -10,8 +10,6 @@ switch ($params["verb"]){
 		break;
 		
 	case "show":
-		?>
-		<?php
 		break;
 		
 	case "say":

@@ -88,24 +88,48 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <br/><br/><?php echo env("APP_NAME");?>
+                    <?php echo env("APP_NAME");?>
                 </div>
 
-				<p style="color:#ee2222">
-					<b>You want to create a visual novel with Ren'Py but you don't want to code.
-					This tool is for you !</b>
-				</p>
 				
-                <div class="links links2">
+				<div class="screenshots">
+                         <h6><a href='/'>Back to home</a></h6>
+					<h2>Features</h2>
+					<ul >
+						<li>
+							<h3>Import automatically characters and behaviours</h3>
+							<img src="/images/import_auto.jpg" /><br/>
+							<br/>
+						</li>
+						<li>
+							<h3>Manage all your scenes components</h3>
+							<img src="/images/backgrounds.png" /><br/>
+							<br/>
+						</li>
+						<li>
+							<h3>Add your scene components and manage your actions</h3>
+							<img src="/images/ui.png" /><br/>
+							<br/>
+						</li>
+						<li>
+							<h3>Generate your python script and download your ressources (they are automatically resized)</h3>
+							<img src="/images/script.png" /><br/>
+							<br/>
+						</li>
+                              <li>
+							<h3>View the decisions tree</h3>
+							<img src="/images/decision.png" /><br/>
+							<br/>
+						</li>
+						<li>
+							<h3>Share your project with your friends</h3>
+						</li>
+					</ul>
 					<br/>
-                    <a href="/screenshots">Screenshots</a>
-                    <a href="https://www.renpy.org/">Ren'py</a>
-                    <a href="https://games.renpy.org/">Ren'Py Games List</a>
-                    <a href="http://fr.renpy.org/">Ren'py French</a>     
-					<a href="https://www.renpy.org/doc/html/">Ren'py Doc</a>
-					<br/>					<br/>					
-                </div>
-				<br/>					<br/>					<br/>					<br/>					
+                         <h3 style="text-align:center;font-weight:bold;color:#f00">Enjoy - it's free and open source</h3>
+					<br/>
+				</div>
+				
 				<footer >
 					<div class="container">
 						<div class="row">

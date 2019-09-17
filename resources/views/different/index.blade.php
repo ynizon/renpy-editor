@@ -7,7 +7,10 @@
             <div class="card">
                 <div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/background'>Backgrounds</a>&nbsp;&nbsp;>&nbsp;&nbsp;Different&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/background/<?php echo $background->id;?>/different/create'><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</div>
 
-                <div class="card-body">                   
+                <div class="card-body">  
+                    <div>
+                         <button type="button" class="btn btn-primary" onclick="zoom()"><i class="fa fa-search-plus"></i></button>
+                    </div>
                     <ul>
 						<?php
 						foreach ($differents as $different){
@@ -26,7 +29,7 @@
 										$url = "/stories/".$story->id."/images/".Helpers::encName($different->background->name)."-".Helpers::encName($different->name).".png";
 									}
 									?>
-									<img style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $url;?>" />
+									<img class="pic" style="max-width: 100%;max-height: 100%;margin: auto;display: block" src="<?php echo $url;?>" />
 								</div>
 							</li>
 							<?php

@@ -10,10 +10,12 @@ $params = $scene->getParams();
         <div class="col-md-12">
             <div class="card">
                 <h2 class="card-header">Edit</h2>
-                <div class="card-body">					
-					<div class="row">
-						<div class="col-md-12">							
-						</div>
+                <div class="card-body">
+				<div class="row">
+                         <div class="col-md-12">							
+                              @include('story/part_line', ['story' => $story])
+                             <hr/>
+					</div>
                         <div class="col-md-4">							
 							{!! Form::model($scene, ['route' => ['scene.update', $scene->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
 							<h3>Design</h3>
@@ -143,27 +145,26 @@ $params = $scene->getParams();
 												<option value="game_0_jump">go to</option>
 											</optgroup>
 											
-											<?php
-											if (count($story->characters())>0){
-											?>
-												<optgroup label="Characters">
-													<?php
-													foreach ($story->characters() as $character){
-														if (in_array($character->id,$params["characters_id"])){
-														?>
-															<option value="character_<?php echo $character->id;?>_hide"><?php echo $character->name;?> hide</option>
-															<option value="character_<?php echo $character->id;?>_menu"><?php echo $character->name;?> menu</option>
-															<option value="character_<?php echo $character->id;?>_move"><?php echo $character->name;?> move</option>
-															<option value="character_<?php echo $character->id;?>_say"><?php echo $character->name;?> say</option>
-															<option value="character_<?php echo $character->id;?>_show"><?php echo $character->name;?> show</option>
-														<?php
-														}
-													}
-													?>											
-												</optgroup>										
-											<?php
-											}
+
+                                                       <optgroup label="Characters">
+                                                            <option value="character_0_say">>Me say</option>
+                                                            <option value="character_0_menu">>Me menu</option>
+                                                            <?php
+                                                            foreach ($story->characters() as $character){
+                                                                 if (in_array($character->id,$params["characters_id"])){
+                                                                 ?>
+                                                                      <option value="character_<?php echo $character->id;?>_hide"><?php echo $character->name;?> hide</option>
+                                                                      <option value="character_<?php echo $character->id;?>_menu"><?php echo $character->name;?> menu</option>
+                                                                      <option value="character_<?php echo $character->id;?>_move"><?php echo $character->name;?> move</option>
+                                                                      <option value="character_<?php echo $character->id;?>_say"><?php echo $character->name;?> say</option>
+                                                                      <option value="character_<?php echo $character->id;?>_show"><?php echo $character->name;?> show</option>
+                                                                 <?php
+                                                                 }
+                                                            }
+                                                            ?>											
+                                                       </optgroup>										
 											
+                                                       <?php
 											if (count($story->backgrounds())>0){
 											?>
 												<optgroup label="Backgrounds">

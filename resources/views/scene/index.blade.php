@@ -7,7 +7,12 @@
             <div class="card">
                 <div class="card-header"><a href='/home'><?php echo $story->name;?></a>&nbsp;&nbsp;>&nbsp;&nbsp;Scene&nbsp;&nbsp;<a href='/story/<?php echo $story->id;?>/scene/create'><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</div>
 
+               
                 <div class="card-body">                   
+                    <div class="col-md-12">							
+                         @include('story/part_line', ['story' => $story])
+                        <hr/>
+                   </div>
                     <ul>
 						<?php
 						foreach ($scenes as $scene){

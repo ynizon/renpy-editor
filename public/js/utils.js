@@ -17,6 +17,12 @@ $(document).ready(function() {
 			editAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
 		});
 	}
+     
+     $("#country").countrySelect({
+		defaultCountry: "United Kingdom",
+		preferredCountries: [],
+		responsiveDropdown: true
+	});	
 });	
 
 
@@ -54,12 +60,12 @@ function showAction(action){
 			$("#bloc_move").show();
 			break;
 		case "show":
-			if ($("#element").val() == "character"){
-				$("#behaviours").load("/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours");				
+			if ($("#element").val() == "character"){                    
+				$("#behaviours").load("/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours?action_id="+$("#action_id").val());
 				$("#bloc_behaviour").show();			
 			}
 			if ($("#element").val() == "background"){
-				$("#differents").load("/story/"+$("#story_id").val()+"/background/"+$("#subject_id").val()+"/differents");				
+				$("#differents").load("/story/"+$("#story_id").val()+"/background/"+$("#subject_id").val()+"/differents?action_id="+$("#action_id").val());				
 				$("#bloc_different").show();			
 			}
 			break;
@@ -175,4 +181,12 @@ function addScene(story_id, select_to){
 			});
 		});
 	}
+}
+
+/* Zoom pictures */
+function zoom(){
+     $(".pic").each(function( index ) {
+          $(this).parent().css("width","500px");
+          $(this).parent().css("height","500px");
+     });
 }

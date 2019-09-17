@@ -32,6 +32,7 @@ class StoryController extends Controller
 	public function create()
 	{	
 		$story = new Story();	
+          $story->lang = 'United Kingdom';
 		$story->width = 1280;
 		$story->height = 720;		
 		$method = "POST";
@@ -113,11 +114,6 @@ class StoryController extends Controller
 					}catch(\Exception $e){
 						
 					}
-				}else{
-					$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->name)).".png";
-					if (file_exists($file)){
-						$bOk = true;
-					}
 				}
 				if (!$bOk){
 					$errors["/story/".$character->story_id."/character/".$character->id."/behaviour"] =  $character->name. ">".$behaviour->name ." doesn't have a valid picture.";
@@ -176,15 +172,6 @@ class StoryController extends Controller
 						$bOk = true;
 					}catch(\Exception $e){
 						
-					}
-				}else{
-					$file = "stories/".$id."/images/".Helpers::encName($background->name)."-".Helpers::encName(basename($different->name)).".png";
-					$pic = new ResizeImage($file);
-					$pic->resizeTo($story->width,$story->height);
-					$pic->saveImage($file);
-					$bOk = true;
-					if (file_exists($file)){
-						$bOk = true;
 					}
 				}
 				if (!$bOk){
@@ -261,20 +248,21 @@ class StoryController extends Controller
 						break;
 						
 					case "character":
-						$character = Character::find($action_params["subject_id"]);
-						if ($character == null){
-							$errors["/scene/".$scene->id."/edit?rnd=character".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
-						}else{
-							switch ($action_params["verb"]){
-								case "show":
-									$behaviour = Behaviour::find($action_params["info"]);
-									if ($behaviour == null){
-										$errors["/scene/".$scene->id."/edit?rnd=behaviour".$action_params["info"]] = $action->name." is not valid (deleted resources).";
-									}
-									break;
-							}
-						}
-					
+                              if ($action_params["subject_id"] != 0){
+                                   $character = Character::find($action_params["subject_id"]);
+                                   if ($character == null){
+                                        $errors["/scene/".$scene->id."/edit?rnd=character".$action_params["subject_id"]] = $action->name." is not valid (deleted resources).";
+                                   }else{
+                                        switch ($action_params["verb"]){
+                                             case "show":
+                                                  $behaviour = Behaviour::find($action_params["info"]);
+                                                  if ($behaviour == null){
+                                                       $errors["/scene/".$scene->id."/edit?rnd=behaviour".$action_params["info"]] = $action->name." is not valid (deleted resources).";
+                                                  }
+                                                  break;
+                                        }
+                                   }
+                              }
 				}
 			}
 		}
@@ -305,7 +293,10 @@ class StoryController extends Controller
 		if (isset($inputs["name"])){
 			$story->name = $inputs["name"];
 		}
-		if (isset($inputs["width"])){
+		if (isset($inputs["lang"])){
+			$story->lang = $inputs["lang"];
+		}
+          if (isset($inputs["width"])){
 			$story->width = $inputs["width"];
 		}
 		if (isset($inputs["height"])){
