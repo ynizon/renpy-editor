@@ -158,6 +158,7 @@ $params = $scene->getParams();
                                                                       <option value="character_<?php echo $character->id;?>_move"><?php echo $character->name;?> move</option>
                                                                       <option value="character_<?php echo $character->id;?>_say"><?php echo $character->name;?> say</option>
                                                                       <option value="character_<?php echo $character->id;?>_show"><?php echo $character->name;?> show</option>
+                                                                      <option value="character_<?php echo $character->id;?>_showflip"><?php echo $character->name;?> show flip</option>
                                                                  <?php
                                                                  }
                                                             }

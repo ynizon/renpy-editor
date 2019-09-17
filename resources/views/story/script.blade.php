@@ -23,6 +23,7 @@ foreach ($story->characters() as $character){
 		$image = str_replace(".jpg","",$image);
 		
 		echo "image ".Helpers::encName($character->name)." ".$image ." = \"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture)."\"\r\n");
+          echo "image ".Helpers::encName($character->name)." flip_".$image ." = im.Flip(\"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture))."\", horizontal=True)\r\n";
 	}
 	echo "\r\n";
 }
@@ -120,6 +121,10 @@ if (count($story->scenes()) == 0){
 						case "show":
 							$behaviour = Behaviour::find($action_params["info"]);
 							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." with dissolve\r\n";
+							break;
+                              case "showflip":
+							$behaviour = Behaviour::find($action_params["info"]);
+							echo $TAB."show ".Helpers::encName($character->name)." flip_".Helpers::encName($behaviour->name)." with dissolve\r\n";
 							break;
 						case "hide":
 							echo $TAB."hide ".Helpers::encName($character->name)."\r\n";	

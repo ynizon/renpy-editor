@@ -87,7 +87,7 @@ class ActionController extends Controller
 					}
 					break;
 				case "character":
-					if ($data["verb"] == "show"){
+					if ($data["verb"] ==  "show" or $data["verb"] == "showflip"){
 						$behaviour = Behaviour::find($data["info"]);
 						$action->name .= ":". $behaviour->name;
 					}else{

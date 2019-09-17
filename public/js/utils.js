@@ -16,6 +16,12 @@ $(document).ready(function() {
 		$( "#list_actions" ).click(function() {
 			editAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
 		});
+          
+          $( "#list_actions" ).keyup(function(event) {
+               if(event.which == 38 || event.which == 40){
+                    editAction($("#story_id").val(), $("#scene_id").val(), $(this).val());
+               }
+		});
 	}
      
      $("#country").countrySelect({
@@ -60,6 +66,7 @@ function showAction(action){
 			$("#bloc_move").show();
 			break;
 		case "show":
+          case "showflip":
 			if ($("#element").val() == "character"){                    
 				$("#behaviours").load("/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours?action_id="+$("#action_id").val());
 				$("#bloc_behaviour").show();			
@@ -105,6 +112,7 @@ function addAction(story_id, scene_id){
 				break;
 			
 			case "show":
+               case "showflip":
 				if ($("#element").val() == "character"){
 					$("#info").val($("#behaviours").val());
 				}
