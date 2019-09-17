@@ -30,8 +30,8 @@ $(document).ready(function() {
 function loadSceneActions(story_id, scene_id){
 	var old_index = document.getElementById("list_actions").selectedIndex;
 	$("#list_actions").load("/story/"+story_id+"/scene/"+scene_id, function(){
-		document.getElementById("list_actions").selectedIndex = old_index;	
-	});	
+		document.getElementById("list_actions").selectedIndex = old_index;
+	});
 }
 	
 /* show Action parameters into the scene form */

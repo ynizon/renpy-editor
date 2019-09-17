@@ -154,7 +154,9 @@ class ActionController extends Controller
 			exit();		
 		}
           $scene = Scene::find($scene_id);
+          $order = "";
           if ($request->input("order") != ""){
+               $order = $request->input("order");
                switch ($request->input("order")){
                     case "down":
                          foreach ($scene->actions() as $ac){
@@ -177,6 +179,6 @@ class ActionController extends Controller
                }
           }
           $action->save();
-		return view('action/order',compact('action'));
+		return view('action/order',compact('action','order'));
 	}
 }
