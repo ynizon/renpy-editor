@@ -13,7 +13,9 @@
                          @include('story/part_line', ['story' => $story])
                         <hr/>
                     </div>
-				<div id="tree"></div>                    
+                    
+                    
+                    <div class="tree" id="tree"></div>                    
                     <script>
                          $(document).ready(function() {
                               Highcharts.chart('tree', {
@@ -22,8 +24,8 @@
                                       inverted: true
                                   },
                                    credits: {
-								  enabled: false
-							},	
+                                          enabled: false
+                                   },	
                                   title: {
                                       text: <?php echo json_encode($story->name);?>
                                   },
@@ -47,7 +49,8 @@
                                       nodeWidth: 65
                                   }],
                                   tooltip: {
-                                      outside: true
+                                      outside: true,
+                                      enabled: false 
                                   },
                                   exporting: {
                                       allowHTML: true,
@@ -57,7 +60,7 @@
 
                               });
                          });
-                    </script>
+                    </script>                    		
                </div>
             </div>
         </div>

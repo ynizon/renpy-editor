@@ -16,8 +16,9 @@
           <script src="/js/highcharts/highcharts.js"></script>
           <script src="/js/highcharts/modules/sankey.js"></script>
           <script src="/js/highcharts/modules/organization.js"></script>
-          <script src="/js/highcharts/modules/exporting.js"></script>
+          
      <?php
+          //<script src="/js/highcharts/modules/exporting.js"></script>
      }
      ?>
     

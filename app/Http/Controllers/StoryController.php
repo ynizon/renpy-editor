@@ -474,6 +474,52 @@ class StoryController extends Controller
         return redirect('home')->withOk("The story " . $story->name . " has been duplicated .");
     }
 	
+     private function getRecursAction($iLevel, $scene, &$all, &$scenes_dones){
+          $to_do = [];
+          
+          $actions = $scene->actions();
+          foreach ($actions as $action){
+               if ($action->parameters != ""){
+                    $action_params = json_decode($action->parameters,true);
+                    switch ($action_params["verb"]){
+                         case "jump":
+                              $goto_scene = Scene::find($action_params["info"]);                                                                 
+                              $to_do[$goto_scene->id] = $goto_scene;
+                              $all[$iLevel][$scene->id]["from_to"][] = ["scene_".$scene->id,"scene_".$goto_scene->id];                                   
+                              $all[$iLevel][$scene->id]["scenes"][$goto_scene->id] = $goto_scene->id;
+                              break;
+                              
+                         case "menu":
+                              $actions_params = json_decode($action_params["info"],true);
+                              /*
+                              if ($scenes[$scene->id]["description"] != ""){
+                                   $scenes[$scene->id]["description"] .= " - ";
+                              }
+                              $scenes[$scene->id]["description"] .= $actions_params["menu_title"]. "?";
+                              */
+                              for ($k=1;$k<=4; $k++){                                        
+                                   if ($actions_params["menu".$k."_to"] != 0){
+                                        $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
+                                        $goto_id = $goto_scene->id;
+                                        /*
+                                        if ($scenes[$goto_id]["description"] != ""){
+                                             $scenes[$goto_id]["description"] .= " - ";
+                                        }
+                                        $scenes[$goto_id]["description"] = $scenes[$goto_id]["description"].$actions_params["menu".$k];
+                                        */
+                                        $to_do[$goto_scene->id] = $goto_scene;                                        
+                                        $all[$iLevel][$scene->id]["from_to"][] = ["scene_".$scene->id,"scene_".$goto_id];
+                                        $all[$iLevel][$scene->id]["scenes"][$goto_id] = $goto_id;
+                                   }
+                              }
+                              break;
+                    }
+               }
+          }
+
+          return $to_do;               
+     }
+     
      /* Show decision making tree */
      public function tree(Request $request, $id)
 	{
@@ -482,71 +528,99 @@ class StoryController extends Controller
 			exit();		
 		}
           
-          $from_to = [];
+         
 		$story = Story::find($id);
 		
           //Init
           $scenesTmp = $story->scenes();
-          foreach ($scenesTmp as $scene){
-               $image = "";
-               $scenes[$scene->id] = ["done"=>0,"id"=>"scene_".$scene->id,"name"=>$scene->name,"image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
+          
+          
+          
+          $iLevel = 1;
+          $scenes = [];
+          $all = [];
+          $scenes_dones = [];
+          $scene = $scenesTmp->first();
+          //$all[0][$scene->id] = ["scenes"=>[$scene],"from_to"=>[]];
+          $to_do = $this->getRecursAction($iLevel, $scene, $all, $scenes_dones);
+          $scenes_dones[] = $scene->id;
+          
+          while (isset($all[$iLevel])){
+               $iLevel++;
+               foreach ($to_do as $scene_id=>$scene){
+                    $to_do = $this->getRecursAction($iLevel, $scene, $all, $scenes_dones);
+               }          
+               foreach ($all[($iLevel-1)] as $scene_id=>$scene){
+                    foreach ($scene["scenes"] as $x_id){
+                         $scenes_dones[] = $x_id;
+                    }
+               }
           }
           
-          foreach ($scenesTmp as $scene){
-               $done = 0;
-               if (isset($scenes[$scene->id])){
-                    $done = $scenes[$scene->id]["done"];
-               }
-               $actions = $scene->actions();
-               foreach ($actions as $action){
-                    if ($action->parameters != ""){
-                         $action_params = json_decode($action->parameters,true);
-                         switch ($action_params["verb"]){
-                              case "jump":
-                                   $goto_scene = Scene::find($action_params["info"]);
-                                   $from_to[] =["scene_".$scene->id,"scene_".$goto_scene->id];
-                                   $scenes[$goto_scene->id]["done"] = 1;
-                                   break;
-                                   
-                              case "menu":
-                                   $actions_params = json_decode($action_params["info"],true);
-                                   if ($scenes[$scene->id]["description"] != ""){
-                                        $scenes[$scene->id]["description"] .= " - ";
-                                   }
-                                   $scenes[$scene->id]["description"] .= $actions_params["menu_title"]. "?";
-                                   for ($k=1;$k<=4; $k++){                                        
-                                        if ($actions_params["menu".$k."_to"] != 0){
-                                             $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
-                                             $goto_id = $goto_scene->id;
-                                             if ($done == 1){
-                                                  //Add new scene (same block)
-                                                  $goto_id = $goto_scene->id."-".uniqid();
-                                                 
-                                                  $scenes[$goto_id] = $scenes[$goto_scene->id];
-                                                  $scenes[$goto_id]["id"] = "scene_".$goto_id;
-                                             }
-                                             
-                                             if ($scenes[$goto_id]["description"] != ""){
-                                                  $scenes[$goto_id]["description"] .= " - ";
-                                             }
-                                             $scenes[$goto_id]["description"] = $scenes[$goto_id]["description"].$actions_params["menu".$k];
-                                             $scenes[$goto_scene->id]["done"] = 1;
-                                             $from_to[] =["scene_".$scene->id,"scene_".$goto_id];
-                                        }
-                                   }
-                                   break;
+
+          $iMaxLevel = $iLevel;
+          $trees = [];
+          $b = true;
+          $from_to = [];
+          $scenes = [];
+          $iLevel=0;
+          while ($iLevel < $iMaxLevel){               
+               $iLevel++;
+               if (isset($all[$iLevel])){
+                    foreach ($all[$iLevel] as $scene_id => $info){
+                         $scene = Scene::find($scene_id);
+                         $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a id='#tree_".$scene->id."'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>count($info["from_to"]),"color"=>"#".Helpers::random_color()];
+                         foreach ($info["from_to"] as $from){
+                              $from_to[] = $from;
+                         }
+                         
+                         foreach ($info["scenes"] as $scene_id){
+                              $scene = Scene::find($scene_id);
+                              $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a  id='#tree_".$scene->id."'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
                          }
                     }
                }
-               
           }
           
-          foreach ($scenes as $scene_id =>$scene){
-               $scenes_data[] = $scene;
+          $scenes_data = [];
+          foreach ($scenes as $scene_id=>$sceneTmp){               
+               if ($sceneTmp["description"] > 0){
+                    $sceneTmp["description"] = "";
+               }else{
+                    $sceneTmp["description"] = "";
+                    $scene = Scene::find($scene_id);
+                    $actions = $scene->actions();
+                    foreach ($actions as $action){
+                         if ($action->parameters != ""){
+                              $action_params = json_decode($action->parameters,true);
+                              switch ($action_params["verb"]){
+                                   case "jump":
+                                        $goto_scene = Scene::find($action_params["info"]);
+                                        $sceneTmp["description"] .= "<li><a style='color:#000;' href='#".$goto_scene->id."'>".$goto_scene->name."</a></li>";
+                                        break;
+                                        
+                                   case "menu":
+                                        $actions_params = json_decode($action_params["info"],true);
+
+                                        for ($k=1;$k<=4; $k++){                                        
+                                             if ($actions_params["menu".$k."_to"] != 0){
+                                                  $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
+                                                  $sceneTmp["description"] .= "<li><a style='color:#000;' href='#".$goto_scene->id."'>".$goto_scene->name."</a></li>";
+                                             }
+                                        }
+                                        break;
+                              }
+                         }                         
+                    }
+                    if ($sceneTmp["description"] != ""){
+                         $sceneTmp["description"] = "<ul>".$sceneTmp["description"] . "</ul>";
+                    }
+                    
+               }
+               $scenes_data[] = $sceneTmp;
           }
-          //echo var_dump($scenes);exit();
-          
+         
           $highcharts = true;
-		return view('story/tree',compact('story','from_to','scenes_data','highcharts'));
+		return view('story/tree',compact('story','highcharts','from_to','scenes_data'));
 	}
 }
