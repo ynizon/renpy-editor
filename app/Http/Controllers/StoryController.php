@@ -562,14 +562,14 @@ class StoryController extends Controller
                if (isset($all[$iLevel])){
                     foreach ($all[$iLevel] as $scene_id => $info){
                          $scene = Scene::find($scene_id);
-                         $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a id='#tree_".$scene->id."'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>count($info["from_to"]),"color"=>"#".Helpers::random_color()];
+                         $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>count($info["from_to"]),"color"=>"#".Helpers::random_color()];
                          foreach ($info["from_to"] as $from){
                               $from_to[] = $from;
                          }
                          
                          foreach ($info["scenes"] as $scene_id){
                               $scene = Scene::find($scene_id);
-                              $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a  id='#tree_".$scene->id."'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
+                              $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
                          }
                     }
                }
@@ -590,7 +590,7 @@ class StoryController extends Controller
                               switch ($action_params["verb"]){
                                    case "jump":
                                         $goto_scene = Scene::find($action_params["info"]);
-                                        $sceneTmp["description"] .= "<li><a style='color:#000;' href='#".$goto_scene->id."'>".$goto_scene->name."</a></li>";
+                                        $sceneTmp["description"] .= "<li><a target='_blank' style='color:#000;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
                                         break;
                                         
                                    case "menu":
@@ -599,7 +599,7 @@ class StoryController extends Controller
                                         for ($k=1;$k<=4; $k++){                                        
                                              if ($actions_params["menu".$k."_to"] != 0){
                                                   $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
-                                                  $sceneTmp["description"] .= "<li><a style='color:#000;' href='#".$goto_scene->id."'>".$goto_scene->name."</a></li>";
+                                                  $sceneTmp["description"] .= "<li><a target='_blank' style='color:#000;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
                                              }
                                         }
                                         break;

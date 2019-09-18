@@ -4,3 +4,4 @@
 <a title="Manage musics" href='/story/<?php echo $story->id;?>/music'><i class="fa fa-music"></i> (<?php echo count($story->musics());?>)</a>&nbsp;&nbsp;
 <a title="Manage scenes and actions" href='/story/<?php echo $story->id;?>/scene'><i class="fa fa-tasks"></i> (<?php echo count($story->scenes());?>)</a>&nbsp;&nbsp;
 <a title="View the decision tree" href='/story/<?php echo $story->id;?>/tree'><i class="fa fa-tree"></i></a>&nbsp;&nbsp;
+<a title="Refresh the script" href='/story/<?php echo $story->id;?>'><i class="fa fa-refresh"></i></a>&nbsp;&nbsp;

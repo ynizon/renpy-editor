@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Storage;
 use App\Story;
 use App\Scene;
 use App\Music;
@@ -91,12 +92,12 @@ class MusicController extends Controller
 				if (!is_dir("stories")){
 					mkdir ("stories");
 				}
-				if (!is_dir("stories/".$background->story_id)){
-					mkdir ("stories/".$background->story_id);
+				if (!is_dir("stories/".$music->story_id)){
+					mkdir ("stories/".$music->story_id);
 				}
 				
-				Storage::disk('public')->put("stories/".$background->story_id."/".Helpers::encName($background->name).$extension, file_get_contents($request->file("music_file")));			
-				$music->music = env("APP_URL")."/stories/".$background->story_id."/".Helpers::encName($background->name).$extension;
+				Storage::disk('public')->put("stories/".$music->story_id."/".Helpers::encName($music->name).$extension, file_get_contents($request->file("music_file")));			
+				$music->music = env("APP_URL")."/stories/".$music->story_id."/".Helpers::encName($music->name).$extension;
                }else{
                     $music->music = "";
 			}

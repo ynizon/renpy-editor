@@ -91,7 +91,7 @@ if (count($story->scenes()) == 0){
 				case "music":
 					$music = Music::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
-						case "play":													
+						case "play":						
 							echo $TAB."play music '".Helpers::encName(basename($music->music))."' fadeout 1.0 fadein 1.0\r\n";
 							break;
 						case "queue":													
