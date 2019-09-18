@@ -474,6 +474,7 @@ class StoryController extends Controller
         return redirect('home')->withOk("The story " . $story->name . " has been duplicated .");
     }
 	
+     /* Use for tree only */
      private function getRecursAction($iLevel, $scene, &$all, &$scenes_dones){
           $to_do = [];
           
@@ -491,22 +492,12 @@ class StoryController extends Controller
                               
                          case "menu":
                               $actions_params = json_decode($action_params["info"],true);
-                              /*
-                              if ($scenes[$scene->id]["description"] != ""){
-                                   $scenes[$scene->id]["description"] .= " - ";
-                              }
-                              $scenes[$scene->id]["description"] .= $actions_params["menu_title"]. "?";
-                              */
+                              
                               for ($k=1;$k<=4; $k++){                                        
                                    if ($actions_params["menu".$k."_to"] != 0){
                                         $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
                                         $goto_id = $goto_scene->id;
-                                        /*
-                                        if ($scenes[$goto_id]["description"] != ""){
-                                             $scenes[$goto_id]["description"] .= " - ";
-                                        }
-                                        $scenes[$goto_id]["description"] = $scenes[$goto_id]["description"].$actions_params["menu".$k];
-                                        */
+                                        
                                         $to_do[$goto_scene->id] = $goto_scene;                                        
                                         $all[$iLevel][$scene->id]["from_to"][] = ["scene_".$scene->id,"scene_".$goto_id];
                                         $all[$iLevel][$scene->id]["scenes"][$goto_id] = $goto_id;
@@ -536,15 +527,17 @@ class StoryController extends Controller
           
           
           
+          //Get the starting scene
           $iLevel = 1;
           $scenes = [];
           $all = [];
           $scenes_dones = [];
           $scene = $scenesTmp->first();
-          //$all[0][$scene->id] = ["scenes"=>[$scene],"from_to"=>[]];
+          
           $to_do = $this->getRecursAction($iLevel, $scene, $all, $scenes_dones);
           $scenes_dones[] = $scene->id;
           
+          //Get jump and menu actions (go to)
           while (isset($all[$iLevel])){
                $iLevel++;
                foreach ($to_do as $scene_id=>$scene){
@@ -557,7 +550,7 @@ class StoryController extends Controller
                }
           }
           
-
+          //Create scenes and from_to links
           $iMaxLevel = $iLevel;
           $trees = [];
           $b = true;
@@ -582,6 +575,7 @@ class StoryController extends Controller
                }
           }
           
+          //Complete description with links for scenes which have been already created
           $scenes_data = [];
           foreach ($scenes as $scene_id=>$sceneTmp){               
                if ($sceneTmp["description"] > 0){
