@@ -76,14 +76,14 @@ class ActionController extends Controller
 		if ($data["info"]!= ""){
 			switch ($data["element"]){
 				default:
-					$action->name .= ":". substr($data["info"],0,50);
+					$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					break;
 				case "game":
 					if ($data["verb"] == "jump"){
 						$scene = Scene::find($data["info"]);
 						$action->name .= ":". $scene->name;
 					}else{
-						$action->name .= ":". substr($data["info"],0,50);
+						$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					}
 					break;
 				case "character":
@@ -91,7 +91,7 @@ class ActionController extends Controller
 						$behaviour = Behaviour::find($data["info"]);
 						$action->name .= ":". $behaviour->name;
 					}else{
-						$action->name .= ":". substr($data["info"],0,50);
+						$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					}
 					break;
 					
@@ -100,7 +100,7 @@ class ActionController extends Controller
 						$different = Different::find($data["info"]);
 						$action->name .= ":". $different->name;
 					}else{
-						$action->name .= ":". substr($data["info"],0,50);
+						$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					}
 					break;
 			}			
@@ -108,7 +108,7 @@ class ActionController extends Controller
 		$action->parameters = json_encode($data);		
 		$action->story_id = $story_id;
 		$action->scene_id = $scene_id;
-		
+				
 		$nb = Action::where("scene_id","=",$scene_id)->count();
 		if ($order == -1){
 			$action->num_order = ($nb+1);

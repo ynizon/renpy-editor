@@ -98,7 +98,7 @@ if (count($story->scenes()) == 0){
 							echo $TAB."queue music '".Helpers::encName(basename($music->music))."'\r\n";
 							break;
 						case "stop":
-							echo $TAB."stop music '".Helpers::encName(basename($music->music))."'\r\n";
+							echo $TAB."stop music fadeout 1.0\r\n";
 							break;
 					}
 					break;

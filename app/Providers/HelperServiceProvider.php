@@ -365,9 +365,12 @@ abstract class HelperServiceProvider extends ServiceProvider
 	}
 	
 	/* Encode name for python script */
-	public static function encName($s){
+	public static function encName($s, $bSpace = true){
 		
-		$r = strtolower(str_replace(" ","_",str_replace("-","_",str_replace("'","",self::skip_accents($s)))));
+		  $r = strtolower(str_replace("\r","",str_replace("\n","_",str_replace("-","_",str_replace("'","",self::skip_accents($s))))));
+		  if ($bSpace) {
+			  $r = str_replace(" ","_",$r);
+		  }
           $k = strpos($r,"?");
           if ($k !== false){
                $r = substr($r,0,$k);
