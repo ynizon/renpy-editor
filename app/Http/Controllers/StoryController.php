@@ -351,21 +351,18 @@ class StoryController extends Controller
 				if (!is_dir("stories/".$story->id)){
 					mkdir ("stories/".$story->id);
 				}
-				if (!is_dir("stories/".$story->id."/images")){
-					mkdir ("stories/".$story->id."/images");
+				
+				if (!is_dir("stories/".$story->id."/gui")){
+					mkdir ("stories/".$story->id."/gui");
 				}
 				
-				if (!is_dir("stories/".$story->id."/images/gui")){
-					mkdir ("stories/".$story->id."/images/gui");
-				}
-				
-                    $file = "stories/".$story->id."/images/gui/main_menu.jpg";
+                $file = "stories/".$story->id."/gui/main_menu.jpg";
 				Storage::disk('public')->put($file, file_get_contents($request->file("picture_file")));			
-				$story->picture = env("APP_URL")."/stories/".$story->id."/images/gui/main_menu.jpg";
+				$story->picture = env("APP_URL")."/stories/".$story->id."/gui/main_menu.jpg";
 
-                    $pic = new ResizeImage($file);
-                    $pic->resizeTo($story->width,$story->height);
-                    $pic->saveImage($file);
+				$pic = new ResizeImage($file);
+				$pic->resizeTo($story->width,$story->height);
+				$pic->saveImage($file);
                     
 			}else{
                     $story->picture = "";
