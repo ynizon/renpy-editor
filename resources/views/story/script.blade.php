@@ -22,15 +22,15 @@ foreach ($story->characters() as $character){
 		$image = str_replace(".jpeg","",$image);
 		$image = str_replace(".jpg","",$image);
 		
-		echo "image ".Helpers::encName($character->name)." ".$image ." = \"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture)."\"\r\n");
-          echo "image ".Helpers::encName($character->name)." flip_".$image ." = im.Flip(\"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture))."\", horizontal=True)\r\n";
+		echo "image ".Helpers::encName($character->name)." ".$image ." = \"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture))."\"\r\n";
+        echo "image ".Helpers::encName($character->name)." flip_".$image ." = im.Flip(\"".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture))."\", horizontal=True)\r\n";
 	}
 	echo "\r\n";
 }
 
 //Things
 foreach ($story->things() as $thing){
-	echo "image ".Helpers::encName($thing->name) ." = \"things/".Helpers::encName(basename($thing->picture)."\"\r\n");	
+	echo "image ".Helpers::encName($thing->name) ." = \"things/".Helpers::encName(basename($thing->picture))."\"\r\n";	
 	echo "\r\n";
 }
 
