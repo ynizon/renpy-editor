@@ -653,7 +653,7 @@ class StoryController extends Controller
                               switch ($action_params["verb"]){
                                    case "jump":
                                         $goto_scene = Scene::find($action_params["info"]);
-                                        $sceneTmp["description"] .= "<li><a target='_blank' style='color:#000;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
+                                        $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
                                         break;
                                         
                                    case "menu":
@@ -662,7 +662,7 @@ class StoryController extends Controller
                                         for ($k=1;$k<=4; $k++){                                        
                                              if ($actions_params["menu".$k."_to"] != 0){
                                                   $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
-                                                  $sceneTmp["description"] .= "<li><a target='_blank' style='color:#000;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
+                                                  $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
                                              }
                                         }
                                         break;
