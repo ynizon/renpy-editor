@@ -26,7 +26,7 @@
                         </div>
 						
 						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
-                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;(import from a url)<a title="Random music generator" href='https://cloudnovel.net/browse/free/object/popular' target="_blank"><i class="fa fa-link"></i></a></label>
+                            <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;(import from a url)<a href='https://cloudnovel.net/browse/free/object/popular' target="_blank"><i class="fa fa-link"></i></a></label>
 
                             <div class="col-md-6">								
                                 <input id="picture" type="text" class="form-control"  placeholder="https://" name="picture" value="{!! $thing->picture !!}"  />

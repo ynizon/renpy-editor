@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use View;
 use Auth;
 use DB;
+use Storage;
 use App\Story;
 use App\Thing;
 use App\Background;
@@ -93,6 +94,11 @@ class StoryController extends Controller
 		if (!is_dir("stories/".$id."/images")){
 			mkdir ("stories/".$id."/images");
 		}
+          
+          //For resize
+          $height_max = $story->height*69/100;
+          $height_max_thing = $story->height*28/100;
+          
 		$characters = $story->characters();
 		foreach ($characters as $character){
 			if (!is_dir("stories/".$id."/images/".Helpers::encName($character->name))){
@@ -107,8 +113,18 @@ class StoryController extends Controller
 						$file = "stories/".$id."/images/".Helpers::encName($character->name)."/".Helpers::encName(basename($behaviour->picture));
                               
 						if (!file_exists($file)){
-							$s = file_get_contents($behaviour->picture);						
+							$s = file_get_contents($behaviour->picture);
 							file_put_contents($file,$s);
+                                   $image_info = getimagesize($file);    
+                                   $image_info["height"] = $image_info[1];
+                                   $image_info["width"] = $image_info[0];
+                                   if ($image_info["height"]>($height_max)){
+                                        $new_height = $height_max;
+                                        $new_width = $height_max/$image_info["height"]*$image_info["width"];
+                                        $pic = new ResizeImage($file);
+                                        $pic->resizeTo($new_width,$new_height);
+                                        $pic->saveImage($file);
+                                   }
 						}
 						$bOk = true;
 					}catch(\Exception $e){
@@ -133,6 +149,17 @@ class StoryController extends Controller
 					if (!file_exists($file)){
 						$s = file_get_contents($thing->picture);					
 						file_put_contents($file,$s);
+                              
+                              $image_info = getimagesize($file);                                   
+                              $image_info["height"] = $image_info[1];
+                              $image_info["width"] = $image_info[0];
+                              if ($image_info["height"]>($height_max)){
+                                   $new_height = $height_max_thing;
+                                   $new_width = $height_max_thing/$image_info["height"]*$image_info["width"];
+                                   $pic = new ResizeImage($file);
+                                   $pic->resizeTo($new_width,$new_height);
+                                   $pic->saveImage($file);
+                              }
 					}					
 					$bOk = true;
 				}catch(\Exception $e){
@@ -167,8 +194,7 @@ class StoryController extends Controller
 						
 						$pic = new ResizeImage($file);
 						$pic->resizeTo($story->width,$story->height);
-						$pic->saveImage($file);
-						$bOk = true;
+						$pic->saveImage($file);						
 						$bOk = true;
 					}catch(\Exception $e){
 						
@@ -302,7 +328,12 @@ class StoryController extends Controller
 		if (isset($inputs["height"])){
 			$story->height = $inputs["height"];
 		}
-		
+          
+          $story->picture = "";
+		if (isset($inputs["picture"])){
+			$story->picture = $inputs["picture"];
+		}
+          
 		$story->starting_script = "";
 		if (isset($inputs["starting_script"])){
 			$story->starting_script = $inputs["starting_script"];
@@ -310,6 +341,38 @@ class StoryController extends Controller
 		$story->user_id = Auth::user()->id;
 		$story->save();
 		
+          //Upload file
+		if ($request->file("picture_file") != ""){
+			$extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
+               if (in_array($extension, [".jpg"])){
+				if (!is_dir("stories")){
+					mkdir ("stories");
+				}
+				if (!is_dir("stories/".$story->id)){
+					mkdir ("stories/".$story->id);
+				}
+				if (!is_dir("stories/".$story->id."/images")){
+					mkdir ("stories/".$story->id."/images");
+				}
+				
+				if (!is_dir("stories/".$story->id."/images/gui")){
+					mkdir ("stories/".$story->id."/images/gui");
+				}
+				
+                    $file = "stories/".$story->id."/images/gui/main_menu.jpg";
+				Storage::disk('public')->put($file, file_get_contents($request->file("picture_file")));			
+				$story->picture = env("APP_URL")."/stories/".$story->id."/images/gui/main_menu.jpg";
+
+                    $pic = new ResizeImage($file);
+                    $pic->resizeTo($story->width,$story->height);
+                    $pic->saveImage($file);
+                    
+			}else{
+                    $story->picture = "";
+               }
+               $story->save();
+		}
+          
 		return $story;
 	}
 	
@@ -562,14 +625,14 @@ class StoryController extends Controller
                if (isset($all[$iLevel])){
                     foreach ($all[$iLevel] as $scene_id => $info){
                          $scene = Scene::find($scene_id);
-                         $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>count($info["from_to"]),"color"=>"#".Helpers::random_color()];
+                         $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a style='color:#fff' target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>count($info["from_to"]),"color"=>"#".Helpers::random_color(false)];
                          foreach ($info["from_to"] as $from){
                               $from_to[] = $from;
                          }
                          
                          foreach ($info["scenes"] as $scene_id){
                               $scene = Scene::find($scene_id);
-                              $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color()];
+                              $scenes[$scene_id] = ["id"=>"scene_".$scene->id,"name"=>"<a style='color:#fff' target='_blank' href='/scene/".$scene->id."/edit'>".$scene->name."</a>","image"=>$scene->getThumbnail(),"description"=>"","color"=>"#".Helpers::random_color(false)];
                          }
                     }
                }

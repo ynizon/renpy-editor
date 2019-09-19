@@ -7,7 +7,7 @@
             <div class="card">
                 <h2 class="card-header">Edit</h2>
                 <div class="card-body">
-					{!! Form::model($story, ['route' => ['story.update', $story->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
+					{!! Form::model($story, ['route' => ['story.update', $story->id],'files'=>true, 'method' => $method, 'class' => 'form-horizontal panel']) !!}
                         {{ csrf_field() }}
 
 					<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -24,6 +24,23 @@
                             </div>
                         </div>
                         
+                        <div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
+                            <label for="picture" class="col-md-4 control-label">Cover&nbsp;&nbsp;(import from a url)								
+							</label>
+
+                            <div class="col-md-6">								
+                                <input id="picture" placeholder="https://" type="text" class="form-control" name="picture" value="{!! $story->picture !!}" />
+                                   <br/>Or upload a file (.jpg)
+                                   <input id="picture_file"  type="file" class="form-control" name="picture_file"  />
+
+                                @if ($errors->has('picture'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('picture') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                         </div>
+                         
                         <div class="form-group{{ $errors->has('lang') ? ' has-error' : '' }}">
                             <label for="lang" class="col-md-4 control-label">Lang</label>
 

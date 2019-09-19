@@ -16,7 +16,7 @@
                     
                     
                     <div class="tree" id="tree"></div>                    
-                    <script>
+                    <script type="application/javascript">
                          $(document).ready(function() {
                               Highcharts.chart('tree', {
                                   chart: {
