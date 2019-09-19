@@ -344,7 +344,7 @@ class StoryController extends Controller
           //Upload file
 		if ($request->file("picture_file") != ""){
 			$extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
-               if (in_array($extension, [".jpg"])){
+               if (in_array($extension, [".png"])){
 				if (!is_dir("stories")){
 					mkdir ("stories");
 				}
@@ -356,9 +356,9 @@ class StoryController extends Controller
 					mkdir ("stories/".$story->id."/gui");
 				}
 				
-                $file = "stories/".$story->id."/gui/main_menu.jpg";
+                $file = "stories/".$story->id."/gui/main_menu.png";
 				Storage::disk('public')->put($file, file_get_contents($request->file("picture_file")));			
-				$story->picture = env("APP_URL")."/stories/".$story->id."/gui/main_menu.jpg";
+				$story->picture = env("APP_URL")."/stories/".$story->id."/gui/main_menu.png";
 
 				$pic = new ResizeImage($file);
 				$pic->resizeTo($story->width,$story->height);

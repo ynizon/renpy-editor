@@ -30,7 +30,7 @@
 
                             <div class="col-md-6">								
                                 <input id="picture" placeholder="https://" type="text" class="form-control" name="picture" value="{!! $story->picture !!}" />
-                                   <br/>Or upload a file (.jpg)
+                                   <br/>Or upload a file (.png)
                                    <input id="picture_file"  type="file" class="form-control" name="picture_file"  />
 
                                 @if ($errors->has('picture'))
