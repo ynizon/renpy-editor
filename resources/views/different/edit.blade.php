@@ -26,7 +26,7 @@
                             </div>
                         </div>
 						
-						<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
+					<div class="form-group{{ $errors->has('picture') ? ' has-error' : '' }}">
                             <label for="picture" class="col-md-4 control-label">Picture&nbsp;&nbsp;(import from a url)
 								&nbsp;&nbsp;
 								<a target="_blank" href='https://cloudnovel.net/browse/free/background/popular'><i class="fa fa-link"></i></a>
@@ -43,9 +43,9 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
+                         </div>
 						
-						<div class="form-group">
+					<div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Save

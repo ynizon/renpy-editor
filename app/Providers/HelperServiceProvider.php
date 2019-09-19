@@ -469,7 +469,14 @@ abstract class HelperServiceProvider extends ServiceProvider
      }
 
      /* Generate Hexa Code */
-     public static function random_color() {
-         return self::random_color_part() . self::random_color_part() . self::random_color_part();
+     public static function random_color($bCompletelyRandom = true) {
+         if ($bCompletelyRandom){
+               return self::random_color_part() . self::random_color_part() . self::random_color_part();
+         }else{
+              $defines = ["2f7fd0","074482","de295b","92304b","6c9230","629a0a","9a6e0a","5f4306","e25930","259ca9","1d3c1c","8f9041","d20808",
+              "7073cc","252bd2","8a8de2","e28adf","a53ea1","ea1fe3","7b0477","ab1a3c","d07a8e","e09cac","164e0c"];
+              $randIndex = array_rand($defines);
+              return $defines[$randIndex];
+         }
      }
 }

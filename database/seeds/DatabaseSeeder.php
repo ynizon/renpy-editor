@@ -36,8 +36,9 @@ class DatabaseSeeder extends Seeder
 				'name' => 'The Story of Ma Baker',
 				'user_id'=>1,
 				'starting_script'=>'',
-                    'lang'=>'en',
-				'created_at'=>'2019-09-10'
+                    'lang'=>'United Kingdom',
+				'created_at'=>'2019-09-10',
+                    'picture'=>''
 			)
 		); 
 		
