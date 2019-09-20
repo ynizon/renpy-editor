@@ -143,8 +143,8 @@ class DatabaseSeeder extends Seeder
 				'story_id' => '1',				
 				'scene_id' => '1',				
 				'num_order'=>'1',
-				'name'=>'Bedroom show',
-				'parameters'=>'{"element":"background","subject_id":"1","verb":"show","info":null}'
+				'name'=>'Bedroom show: Default',
+				'parameters'=>'{"element":"background","subject_id":"1","verb":"show","info":1}'
 			)
 		); 
 		
@@ -224,7 +224,7 @@ class DatabaseSeeder extends Seeder
 				'scene_id' => '1',				
 				'num_order'=>'9',
 				'name'=>'Ma Baker menu',
-				'parameters'=>'{"element":"character","subject_id":"1","verb":"menu","info":"{\"menu1\":\"Yes\",\"menu1_to\":\"1\",\"menu2\":\"No\",\"menu2_to\":\"2\",\"menu3\":\"\",\"menu3_to\":\"0\",\"menu4\":\"\",\"menu4_to\":\"0\"}"}'
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"menu","info":"{\"menu_title\":\"Your Choice ?\",\"menu1\":\"Yes\",\"menu1_to\":\"1\",\"menu2\":\"No\",\"menu2_to\":\"2\",\"menu3\":\"\",\"menu3_to\":\"0\",\"menu4\":\"\",\"menu4_to\":\"0\"}"}'
 			)
 		); 
 		
