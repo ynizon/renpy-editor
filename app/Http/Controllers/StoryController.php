@@ -543,6 +543,7 @@ class StoryController extends Controller
                if ($action->parameters != ""){
                     $action_params = json_decode($action->parameters,true);
                     switch ($action_params["verb"]){
+                         case "iftrue":
                          case "jump":
                               $goto_scene = Scene::find($action_params["info"]);                                                                 
                               $to_do[$goto_scene->id] = $goto_scene;
@@ -649,6 +650,7 @@ class StoryController extends Controller
                               $action_params = json_decode($action->parameters,true);
                               switch ($action_params["verb"]){
                                    case "jump":
+                                   case "iftrue":
                                         $goto_scene = Scene::find($action_params["info"]);
                                         $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
                                         break;

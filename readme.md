@@ -23,5 +23,13 @@ When you have finished your story, export the script to Ren'Py and enjoy your vi
 - $pattern = "/([\w:\*]*)(?:\#([\w]+)|\.([\w]+))?(?:\[@?(!?[\w:]+)(?:([!*^$]?=)[\"']?(.*?)[\"']?)?\])?([\/, ]+)/is";
 - Line 1378
 - if (!preg_match("/^[\w:]+$/", $tag)) {
+
+## Actions (modify this files to add a new action)
+- js/utils.js (addAction, showAction)
+- scene/edit.blade.php
+- story/script.blade.php
+- action/edit.blade.php
+- app/http/controllers/StoryControllers.php (show, getRecursAction, tree)
+- app/http/controllers/ActionControllers.php(add_action)
 		
 ## Licence free for non commercial use only

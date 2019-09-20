@@ -192,6 +192,8 @@ $params = $scene->getParams();
 														?>
 															<option value="thing_<?php echo $thing->id;?>_hide"><?php echo $thing->name;?> hide</option>
 															<option value="thing_<?php echo $thing->id;?>_show"><?php echo $thing->name;?> show</option>
+                                                                           <option value="thing_<?php echo $thing->id;?>_set"><?php echo $thing->name;?> set</option>
+                                                                           <option value="thing_<?php echo $thing->id;?>_iftrue"><?php echo $thing->name;?> if True goto</option>
 														<?php
 														}
 													}
@@ -244,6 +246,17 @@ $params = $scene->getParams();
 									<div class="col-md-12">
 										<select class="action_info form-control" name="behaviours" id="behaviours">
 											<option value=""></option>
+										</select>									
+									</div>
+								</div>
+                                        
+                                        <div id="bloc_setthing" class="action_type form-group">
+									<label for="setthing" class="col-md-4 control-label">Set</label>
+
+									<div class="col-md-12">
+										<select class="action_info form-control" name="setthings" id="setthings">
+											<option value="True">True</option>
+                                                       <option value="False">False</option>
 										</select>									
 									</div>
 								</div>

@@ -94,6 +94,27 @@ class ActionController extends Controller
 						$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					}
 					break;
+                         
+                    case "thing":
+					switch($data["verb"]){
+                              default:
+                                   $action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
+                                   break;
+                                   
+                              case "set":
+                                   if ($data["info"] ==  "True"){
+                                        $action->name .= ": True" ;
+                                   }else{
+                                        $action->name .= ": False" ;
+                                   }
+                                   break;
+                                   
+                              case "iftrue":
+                                   $scene = Scene::find($data["info"]);
+                                   $action->name .= ":". $scene->name;                              
+                                   break;
+					}
+					break;
 					
 				case "background":
 					if ($data["verb"] == "show"){

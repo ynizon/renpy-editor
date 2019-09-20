@@ -53,6 +53,7 @@ function showAction(action){
 		case "say":
 			$("#bloc_say").show();			
 			break;
+          case "iftrue":
 		case "jump":
 			$("#bloc_jump").show();			
 			break;
@@ -65,6 +66,9 @@ function showAction(action){
 		case "move":
 			$("#bloc_move").show();
 			break;
+          case "set":
+               $("#bloc_setthing").show();
+               break;
 		case "show":
           case "showflip":
 			if ($("#element").val() == "character"){                    
@@ -100,6 +104,7 @@ function addAction(story_id, scene_id){
 				break;
 			
 			case "jump":
+               case "iftrue":
 				$("#info").val($("#jump").val());
 				break;
 							
@@ -110,7 +115,10 @@ function addAction(story_id, scene_id){
 			case "move":
 				$("#info").val($("#move").val());
 				break;
-			
+                    
+			case "set":
+                    $("#info").val($("#setthings").val());
+                    break;
 			case "show":
                case "showflip":
 				if ($("#element").val() == "character"){

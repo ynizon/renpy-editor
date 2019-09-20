@@ -8,6 +8,12 @@ switch ($params["verb"]){
 		$("#move").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
 		<?php
 		break;
+          
+     case "set":
+		?>
+		$("#setthings").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
+		<?php
+		break;
 		
 	case "show":
 		break;
@@ -18,6 +24,7 @@ switch ($params["verb"]){
 		<?php
 		break;
 	
+     case "iftrue":
 	case "jump":
 		?>
 		$("#jump").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));

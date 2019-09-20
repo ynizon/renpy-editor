@@ -30,7 +30,8 @@ foreach ($story->characters() as $character){
 
 //Things
 foreach ($story->things() as $thing){
-	echo "image ".Helpers::encName($thing->name) ." = \"things/".Helpers::encName(basename($thing->picture))."\"\r\n";	
+	echo "image ".Helpers::encName($thing->name) ." = \"things/".Helpers::encName(basename($thing->picture))."\"\r\n";
+     echo "default ".Helpers::encName($thing->name)." = False\r\n";
 	echo "\r\n";
 }
 
@@ -112,6 +113,14 @@ if (count($story->scenes()) == 0){
 						case "hide":
 							echo $TAB."hide ".Helpers::encName($thing->name)."\r\n";	
 							break;
+                              case "set":
+                                   echo $TAB."$ ".Helpers::encName($thing->name)." = ".$action_params["info"]."\r\n";
+                                   break;
+                              case "iftrue":
+                                   $goto_scene = Scene::find($action_params["info"]);
+							echo $TAB."if (".Helpers::encName($thing->name).") :\r\n";
+                                   echo $TAB.$TAB."jump scene_".Helpers::encName($goto_scene->name)."\r\n";
+                                   break;
 					}
 					break;
 					
