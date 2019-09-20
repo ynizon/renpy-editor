@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'max_menu_choice'=>5,
     /*
     |--------------------------------------------------------------------------
     | Application Environment

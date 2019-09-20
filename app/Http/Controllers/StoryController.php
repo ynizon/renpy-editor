@@ -554,7 +554,7 @@ class StoryController extends Controller
                          case "menu":
                               $actions_params = json_decode($action_params["info"],true);
                               
-                              for ($k=1;$k<=4; $k++){                                        
+                              for ($k=1;$k<=config("app.max_menu_choice"); $k++){                                        
                                    if ($actions_params["menu".$k."_to"] != 0){
                                         $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
                                         $goto_id = $goto_scene->id;
@@ -658,7 +658,7 @@ class StoryController extends Controller
                                    case "menu":
                                         $actions_params = json_decode($action_params["info"],true);
 
-                                        for ($k=1;$k<=4; $k++){                                        
+                                        for ($k=1;$k<=config("app.max_menu_choice"); $k++){                                        
                                              if ($actions_params["menu".$k."_to"] != 0){
                                                   $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
                                                   $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";

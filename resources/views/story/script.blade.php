@@ -154,7 +154,7 @@ if (count($story->scenes()) == 0){
 							if ($info["menu_title"] != ""){
                                         echo $TAB.$TAB."\"".$info["menu_title"]."\"\r\n";	
                                    }
-							for ($k=1;$k<=4;$k++){
+							for ($k=1;$k<=config("app.max_menu_choice");$k++){
 								if ($info["menu".$k] !=""){									
 									if ($info["menu".$k."_to"] > 0){
 										echo $TAB.$TAB."\"".$info["menu".$k]."\":\r\n";

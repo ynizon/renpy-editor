@@ -16,7 +16,8 @@ $params = $scene->getParams();
                               @include('story/part_line', ['story' => $story])
                              <hr/>
 					</div>
-                        <div class="col-md-4">							
+                         <input type="hidden" id="max_menu_choice" value="<?php echo config("app.max_menu_choice");?>" />
+                         <div class="col-md-4">							
 							{!! Form::model($scene, ['route' => ['scene.update', $scene->id], 'method' => $method, 'class' => 'form-horizontal panel']) !!}
 							<h3>Design</h3>
 							{{ csrf_field() }}
@@ -280,7 +281,7 @@ $params = $scene->getParams();
 												<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu_title" value="" id="menu_title" placeholder="Sentence" />
 											</li>
 											<?php
-											for ($k=1;$k<=4;$k++){
+											for ($k=1;$k<=config("app.max_menu_choice");$k++){
 												?>
 												<li>
 													<input style="margin-bottom:5px;" class="action_info form-control" type="text" name="menu<?php echo $k;?>" value="" id="menu<?php echo $k;?>" placeHolder="Choice <?php echo $k;?>" />

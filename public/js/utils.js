@@ -131,16 +131,15 @@ function addAction(story_id, scene_id){
 				
 			case "menu":
 				var info = {
-					"menu_title":$("#menu_title").val(),
-					"menu1":$("#menu1").val(),
-					"menu1_to":$("#menu1_to").val(),
-					"menu2":$("#menu2").val(),
-					"menu2_to":$("#menu2_to").val(),
-					"menu3":$("#menu3").val(),
-					"menu3_to":$("#menu3_to").val(),
-					"menu4":$("#menu4").val(),
-					"menu4_to":$("#menu4_to").val()
-				}
+					"menu_title":$("#menu_title").val()
+                    };
+                    for (var k=1;k<=$("#max_menu_choice").val();k++){
+                         var mymenu = "info.menu" + k+"=$('#menu"+k+"').val();";
+                         eval(mymenu);
+                         var mymenu = "info.menu" + k+"_to=$('#menu"+k+"_to').val();";
+					eval(mymenu);
+                    }
+				
 				$("#info").val(JSON.stringify(info));
 				break;		
 		}

@@ -41,16 +41,14 @@ switch ($params["verb"]){
 		$infos = json_decode($params["info"],true);
 		?>
 		$("#menu_title").val(decodeURIComponent("<?php echo rawurlencode($infos["menu_title"]);?>"));
-		$("#menu1").val(decodeURIComponent("<?php echo rawurlencode($infos["menu1"]);?>"));
-		$("#menu2").val(decodeURIComponent("<?php echo rawurlencode($infos["menu2"]);?>"));
-		$("#menu3").val(decodeURIComponent("<?php echo rawurlencode($infos["menu3"]);?>"));
-		$("#menu4").val(decodeURIComponent("<?php echo rawurlencode($infos["menu4"]);?>"));
-		$("#menu1_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu1_to"]);?>"));
-		$("#menu2_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu2_to"]);?>"));
-		$("#menu3_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu3_to"]);?>"));
-		$("#menu4_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu4_to"]);?>"));
-		
-		<?php
+          <?php
+          for ($k=1;$k<=config("app.max_menu_choice");$k++){
+               ?>
+               $("#menu<?php echo $k;?>").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k]);?>"));
+               $("#menu<?php echo $k;?>_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k."_to"]);?>"));
+               <?php
+          }
+          
 		break;
 }
 ?>
