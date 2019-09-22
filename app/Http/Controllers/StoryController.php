@@ -555,13 +555,15 @@ class StoryController extends Controller
                               $actions_params = json_decode($action_params["info"],true);
                               
                               for ($k=1;$k<=config("app.max_menu_choice"); $k++){                                        
-                                   if ($actions_params["menu".$k."_to"] != 0){
-                                        $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
-                                        $goto_id = $goto_scene->id;
-                                        
-                                        $to_do[$goto_scene->id] = $goto_scene;                                        
-                                        $all[$iLevel][$scene->id]["from_to"][] = ["scene_".$scene->id,"scene_".$goto_id];
-                                        $all[$iLevel][$scene->id]["scenes"][$goto_id] = $goto_id;
+                                   if (isset($actions_params["menu".$k."_to"])){
+									   if ($actions_params["menu".$k."_to"] != 0){
+											$goto_scene = Scene::find($actions_params["menu".$k."_to"]);
+											$goto_id = $goto_scene->id;
+											
+											$to_do[$goto_scene->id] = $goto_scene;                                        
+											$all[$iLevel][$scene->id]["from_to"][] = ["scene_".$scene->id,"scene_".$goto_id];
+											$all[$iLevel][$scene->id]["scenes"][$goto_id] = $goto_id;
+									   }
                                    }
                               }
                               break;
@@ -659,9 +661,11 @@ class StoryController extends Controller
                                         $actions_params = json_decode($action_params["info"],true);
 
                                         for ($k=1;$k<=config("app.max_menu_choice"); $k++){                                        
-                                             if ($actions_params["menu".$k."_to"] != 0){
-                                                  $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
-                                                  $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
+                                             if (isset($actions_params["menu".$k."_to"])){
+												 if ($actions_params["menu".$k."_to"] != 0){
+													  $goto_scene = Scene::find($actions_params["menu".$k."_to"]);
+													  $sceneTmp["description"] .= "<li><a target='_blank' style='color:#ddd;' href='/scene/".$goto_scene->id."/edit'>".$goto_scene->name."</a></li>";
+												 }
                                              }
                                         }
                                         break;

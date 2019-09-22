@@ -43,10 +43,12 @@ switch ($params["verb"]){
 		$("#menu_title").val(decodeURIComponent("<?php echo rawurlencode($infos["menu_title"]);?>"));
           <?php
           for ($k=1;$k<=config("app.max_menu_choice");$k++){
-               ?>
-               $("#menu<?php echo $k;?>").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k]);?>"));
-               $("#menu<?php echo $k;?>_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k."_to"]);?>"));
+               if (isset($infos["menu".$k])){
+			   ?>
+				$("#menu<?php echo $k;?>").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k]);?>"));
+				$("#menu<?php echo $k;?>_to").val(decodeURIComponent("<?php echo rawurlencode($infos["menu".$k."_to"]);?>"));
                <?php
+			   }
           }
           
 		break;
