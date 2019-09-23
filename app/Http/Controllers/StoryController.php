@@ -681,6 +681,6 @@ class StoryController extends Controller
           }
          
           $highcharts = true;
-		return view('story/tree',compact('story','highcharts','from_to','scenes_data'));
+		return view('story/tree',compact('story','highcharts','from_to','scenes_data','iMaxLevel'));
 	}
 }

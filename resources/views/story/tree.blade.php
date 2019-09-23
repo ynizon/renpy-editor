@@ -20,7 +20,7 @@
                          $(document).ready(function() {
                               Highcharts.chart('tree', {
                                   chart: {
-                                      height: 600,
+                                      height: <?php echo $iMaxLevel*100;?>,
                                       inverted: true
                                   },
                                    credits: {
