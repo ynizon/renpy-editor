@@ -163,8 +163,8 @@ class DatabaseSeeder extends Seeder
 				'story_id' => '1',				
 				'scene_id' => '1',				
 				'num_order'=>'3',
-				'name'=>'Ma Baker show:Smile',
-				'parameters'=>'{"element":"character","subject_id":"1","verb":"show","info":"1"}'
+				'name'=>'Ma Baker show:Smile truecenter',
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"show","info":{"behaviours":"1","move":"truecenter"}}'
 			)
 		); 
 		
@@ -175,16 +175,6 @@ class DatabaseSeeder extends Seeder
 				'num_order'=>'4',
 				'name'=>'Ma Baker say:hello',
 				'parameters'=>'{"element":"character","subject_id":"1","verb":"say","info":"hello"}'
-			)
-		); 
-		
-		DB::table('actions')->insert(
-			array(
-				'story_id' => '1',				
-				'scene_id' => '1',				
-				'num_order'=>'5',
-				'name'=>'Ma Baker move:left',
-				'parameters'=>'{"element":"character","subject_id":"1","verb":"move","info":"left"}'
 			)
 		); 
 		
