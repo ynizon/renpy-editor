@@ -3,12 +3,6 @@ $params = json_decode($action->parameters,true);
 $key = $params["element"]."_".$params["subject_id"]."_".$params["verb"];
 
 switch ($params["verb"]){
-	case "move":
-		?>
-		$("#move").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
-		<?php
-		break;
-          
      case "set":
 		?>
 		$("#setthings").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));

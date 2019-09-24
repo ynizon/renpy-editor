@@ -128,12 +128,14 @@ if (count($story->scenes()) == 0){
                          $character = Character::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "show":
-							$behaviour = Behaviour::find($action_params["info"]);
-							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." with dissolve\r\n";
+                                   $data = json_decode($action_params["info"],true);
+							$behaviour = Behaviour::find($data["behaviours"]);
+							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
 							break;
                               case "showflip":
-							$behaviour = Behaviour::find($action_params["info"]);
-							echo $TAB."show ".Helpers::encName($character->name)." flip_".Helpers::encName($behaviour->name)." with dissolve\r\n";
+                                   $data = json_decode($action_params["info"],true);
+							$behaviour = Behaviour::find($data["behaviours");
+							echo $TAB."show ".Helpers::encName($character->name)." flip_".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
 							break;
 						case "hide":
 							echo $TAB."hide ".Helpers::encName($character->name)."\r\n";	
@@ -144,9 +146,6 @@ if (count($story->scenes()) == 0){
                                    }else{
                                         echo $TAB. '"'.str_replace("\n",'\n',$action_params["info"])."\"\r\n";
                                    }
-							break;
-						case "move":
-							echo $TAB."show ".Helpers::encName($character->name)." at ".$action_params["info"]."\r\n";
 							break;
 						case "menu":
 							$info = json_decode($action_params["info"],true);

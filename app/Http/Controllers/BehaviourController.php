@@ -159,14 +159,19 @@ class BehaviourController extends Controller
 			exit();		
 		}
           $behaviour_id = 0;
+          $sMove = "truecenter";
+          
           if ($request->input("action_id") != "0"){
                $action = Action::find($request->input("action_id"));
                if ($action->parameters != ""){
                     $params = json_decode($action->parameters,true);
-                    $behaviour_id = $params["info"];
+                    $data = json_decode($params["info"],true);
+                    $behaviour_id = $data["behaviours"];
+                    $sMove = $data["move"];
                }
           }
 		$behaviours = $character->behaviours();
-		return view('behaviour/show',compact('behaviours','behaviour_id'));
+          
+		return view('behaviour/show',compact('behaviours','behaviour_id','sMove'));
 	}
 }

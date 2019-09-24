@@ -156,7 +156,6 @@ $params = $scene->getParams();
                                                                  ?>
                                                                       <option value="character_<?php echo $character->id;?>_hide"><?php echo $character->name;?> hide</option>
                                                                       <option value="character_<?php echo $character->id;?>_menu"><?php echo $character->name;?> menu</option>
-                                                                      <option value="character_<?php echo $character->id;?>_move"><?php echo $character->name;?> move</option>
                                                                       <option value="character_<?php echo $character->id;?>_say"><?php echo $character->name;?> say</option>
                                                                       <option value="character_<?php echo $character->id;?>_show"><?php echo $character->name;?> show</option>
                                                                       <option value="character_<?php echo $character->id;?>_showflip"><?php echo $character->name;?> show flip</option>
@@ -333,14 +332,16 @@ $params = $scene->getParams();
 								</div>
 								
 								<div id="bloc_move" class="action_type form-group">
-									<label for="say" class="col-md-4 control-label">Move</label>
+									<label for="say" class="col-md-4 control-label">Where</label>
 
 									<div class="col-md-12">
 										<select class="action_info form-control" name="move" id="move">
-											<option value="left"><-</option>
-											<option value="right">-></option>
-											<option value="center"><-></option>
 											<option value="truecenter">^</option>
+                                                       <option value="center"><-></option>
+                                                       <option value="left"><-</option>
+                                                       <option value="topleft"><^</option>
+											<option value="right">-></option>
+                                                       <option value="topright">^></option>
 										</select>
 									</div>
 								</div>

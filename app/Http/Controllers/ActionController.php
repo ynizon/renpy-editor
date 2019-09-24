@@ -88,8 +88,9 @@ class ActionController extends Controller
 					break;
 				case "character":
 					if ($data["verb"] ==  "show" or $data["verb"] == "showflip"){
-						$behaviour = Behaviour::find($data["info"]);
-						$action->name .= ":". $behaviour->name;
+						$info = json_decode($data["info"],true);                              
+                              $behaviour = Behaviour::find($info["behaviours"]);
+						$action->name .= ":". $behaviour->name. " ".$info["move"];
 					}else{
 						$action->name .= ":". substr(Helpers::encName($data["info"],false),0,50);
 					}

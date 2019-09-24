@@ -62,18 +62,25 @@ function showAction(action){
 			break;
 		case "menu":
 			$("#bloc_menu").show();
-			break;
-		case "move":
-			$("#bloc_move").show();
-			break;
+			break;		
           case "set":
                $("#bloc_setthing").show();
                break;
 		case "show":
-          case "showflip":
+          case "showflip":               
 			if ($("#element").val() == "character"){                    
-				$("#behaviours").load("/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours?action_id="+$("#action_id").val());
-				$("#bloc_behaviour").show();			
+                    $.ajax({
+                         type: "GET",
+                         format: "json",
+                         url:"/story/"+$("#story_id").val()+"/character/"+$("#subject_id").val()+"/behaviours?action_id="+$("#action_id").val(),
+                         success:function(data) {
+                              var data = JSON.parse(data);
+                              $("#behaviours").html(data.behaviours);
+                              $("#move").val(data.move);
+                              $("#bloc_behaviour").show();
+                              $("#bloc_move").show();
+                         }
+                    });                    
 			}
 			if ($("#element").val() == "background"){
 				$("#differents").load("/story/"+$("#story_id").val()+"/background/"+$("#subject_id").val()+"/differents?action_id="+$("#action_id").val());				
@@ -107,22 +114,22 @@ function addAction(story_id, scene_id){
                case "iftrue":
 				$("#info").val($("#jump").val());
 				break;
-							
+
 			case "addscript":
 				$("#info").val($("#addscript").val());
 				break;
 				
-			case "move":
-				$("#info").val($("#move").val());
-				break;
-                    
 			case "set":
                     $("#info").val($("#setthings").val());
                     break;
 			case "show":
                case "showflip":
 				if ($("#element").val() == "character"){
-					$("#info").val($("#behaviours").val());
+					var info = {
+                              "behaviours":$("#behaviours").val(),
+                              "move":$("#move").val(),
+                         };
+                         $("#info").val(JSON.stringify(info));
 				}
 				if ($("#element").val() == "background"){
 					$("#info").val($("#differents").val());
