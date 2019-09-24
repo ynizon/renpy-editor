@@ -281,9 +281,11 @@ class StoryController extends Controller
                                    }else{
                                         switch ($action_params["verb"]){
                                              case "show":
-                                                  $behaviour = Behaviour::find($action_params["info"]);
+											 case "showflip":
+												  $data = json_decode($action_params["info"],true);
+                                                  $behaviour = Behaviour::find($data["behaviours"]);
                                                   if ($behaviour == null){
-                                                       $errors["/scene/".$scene->id."/edit?rnd=behaviour".$action_params["info"]] = $action->name." is not valid (deleted resources).";
+                                                       $errors["/scene/".$scene->id."/edit?rnd=behaviour".$data["behaviours"]] = $action->name." is not valid (deleted resources).";
                                                   }
                                                   break;
                                         }

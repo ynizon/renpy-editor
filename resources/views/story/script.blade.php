@@ -128,14 +128,14 @@ if (count($story->scenes()) == 0){
                          $character = Character::find($action_params["subject_id"]);
 					switch ($action_params["verb"]){
 						case "show":
-                                   $data = json_decode($action_params["info"],true);
-							$behaviour = Behaviour::find($data["behaviours"]);
-							echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
+									$data = json_decode($action_params["info"],true);
+									$behaviour = Behaviour::find($data["behaviours"]);
+									echo $TAB."show ".Helpers::encName($character->name)." ".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
 							break;
-                              case "showflip":
+                        case "showflip":
                                    $data = json_decode($action_params["info"],true);
-							$behaviour = Behaviour::find($data["behaviours");
-							echo $TAB."show ".Helpers::encName($character->name)." flip_".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
+									$behaviour = Behaviour::find($data["behaviours"]);
+									echo $TAB."show ".Helpers::encName($character->name)." flip_".Helpers::encName($behaviour->name)." at ".$data["move"]." with dissolve\r\n";
 							break;
 						case "hide":
 							echo $TAB."hide ".Helpers::encName($character->name)."\r\n";	
