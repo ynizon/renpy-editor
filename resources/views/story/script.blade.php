@@ -10,6 +10,15 @@ use App\Background;
 
 //Before
 include_once(storage_path()."/inventory.py");
+echo "\r\ninit -1 python:\r\n";
+echo $TAB."class Player(renpy.store.object):\r\n";
+echo $TAB.$TAB."def __init__(self, name, max_hp=0, max_mp=0, element=None):\r\n";
+echo $TAB.$TAB.$TAB."self.name=name\r\n";
+echo $TAB.$TAB.$TAB."self.max_hp=max_hp\r\n";
+echo $TAB.$TAB.$TAB."self.hp=max_hp\r\n";
+echo $TAB.$TAB.$TAB."self.max_mp=max_mp\r\n";
+echo $TAB.$TAB.$TAB."self.mp=max_mp\r\n";
+echo $TAB.$TAB.$TAB."self.element=element\r\n";
 echo $story->starting_script."\r\n";
 
 
@@ -42,10 +51,10 @@ foreach ($story->things() as $thing){
 
 
 echo "\r\n#The game start here\r\nlabel start:\r\n";
-if ($story->inventory == 1){
-     echo $TAB."python:\r\n";
-     echo $TAB.$TAB."inventory = Inventory()\r\n";
-     echo $TAB.$TAB."player = Player('Player', 100, 100)\r\n";
+echo $TAB."python:\r\n";
+echo $TAB.$TAB."player = Player('Player', 100, 100)\r\n";
+if ($story->inventory == 1){     
+     echo $TAB.$TAB."inventory = Inventory()\r\n";     
      echo $TAB."show screen inventory_button\r\n";
 }
 

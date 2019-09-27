@@ -4,15 +4,7 @@ init -1 python:
     from operator import attrgetter # we need this for sorting items
 
     inv_page = 0 # initial page of teh inventory screen
-    item = None
-    class Player(renpy.store.object):
-        def __init__(self, name, max_hp=0, max_mp=0, element=None):
-            self.name=name
-            self.max_hp=max_hp
-            self.hp=max_hp
-            self.max_mp=max_mp
-            self.mp=max_mp
-            self.element=element
+    item = None    
     
     class Item(store.object):
         def __init__(self, name, player=None, hp=0, mp=0, element="", image="", cost=0):
