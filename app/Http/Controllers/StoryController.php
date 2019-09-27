@@ -35,7 +35,8 @@ class StoryController extends Controller
 		$story = new Story();	
           $story->lang = 'United Kingdom';
 		$story->width = 1280;
-		$story->height = 720;		
+		$story->height = 720;
+          $story->inventory = 0;		
 		$method = "POST";
 		return view('story/edit',compact('story','method'));
 	}
@@ -94,6 +95,24 @@ class StoryController extends Controller
 		if (!is_dir("stories/".$id."/images")){
 			mkdir ("stories/".$id."/images");
 		}
+		if (!is_dir("stories/".$id."/gui")){
+			mkdir ("stories/".$id."/gui");
+		}
+          if (!is_dir("stories/".$id."/sfx")){
+			mkdir ("stories/".$id."/sfx");
+		}
+          
+          //Copy inventory items
+          $file = "stories/".$id."/sfx/click.wav";
+          file_put_contents($file , file_get_contents("stories/sfx/click.wav"));
+          $file = "stories/".$id."/gui/inventory.png";
+          file_put_contents($file , file_get_contents("stories/gui/inventory.png"));
+          $file = "stories/".$id."/gui/selected.png";
+          file_put_contents($file , file_get_contents("stories/gui/selected.png"));
+          $file = "stories/".$id."/gui/frame.png";
+          file_put_contents($file , file_get_contents("stories/gui/frame.png"));
+          
+
           
           //For resize
           $height_max = $story->height*69/100;
@@ -321,6 +340,9 @@ class StoryController extends Controller
 		if (isset($inputs["name"])){
 			$story->name = $inputs["name"];
 		}
+          if (isset($inputs["inventory"])){
+			$story->inventory = $inputs["inventory"];
+		}
 		if (isset($inputs["lang"])){
 			$story->lang = $inputs["lang"];
 		}
@@ -344,21 +366,22 @@ class StoryController extends Controller
 		$story->save();
 		
           //Upload file
+          if (!is_dir("stories")){
+               mkdir ("stories");
+          }
+          if (!is_dir("stories/".$story->id)){
+               mkdir ("stories/".$story->id);
+          }
+          
+          if (!is_dir("stories/".$story->id."/gui")){
+               mkdir ("stories/".$story->id."/gui");
+          }
+          
+          
 		if ($request->file("picture_file") != ""){
 			$extension = substr(strtolower($request->file("picture_file")->getClientOriginalName()),-4);
                if (in_array($extension, [".png"])){
-				if (!is_dir("stories")){
-					mkdir ("stories");
-				}
-				if (!is_dir("stories/".$story->id)){
-					mkdir ("stories/".$story->id);
-				}
-				
-				if (!is_dir("stories/".$story->id."/gui")){
-					mkdir ("stories/".$story->id."/gui");
-				}
-				
-                $file = "stories/".$story->id."/gui/main_menu.png";
+				$file = "stories/".$story->id."/gui/main_menu.png";
 				Storage::disk('public')->put($file, file_get_contents($request->file("picture_file")));			
 				$story->picture = env("APP_URL")."/stories/".$story->id."/gui/main_menu.png";
 
@@ -533,7 +556,7 @@ class StoryController extends Controller
 			$new->save();			
 		}
 		
-        return redirect('home')->withOk("The story " . $story->name . " has been duplicated .");
+          return redirect('home')->withOk("The story " . $story->name . " has been duplicated .");
     }
 	
      /* Use for tree only */

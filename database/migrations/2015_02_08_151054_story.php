@@ -18,6 +18,7 @@ class Story extends Migration
 			$table->bigInteger('user_id')->unsigned();
 			$table->Integer('width')->unsigned()->default(1280);
 			$table->Integer('height')->unsigned()->default(720);
+               $table->Integer('inventory')->unsigned()->default(0);
 			$table->string('name')->default("Story");			
                $table->string('lang')->default("United Kingdom");
                $table->string('picture')->default('');

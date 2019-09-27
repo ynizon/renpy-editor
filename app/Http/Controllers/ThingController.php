@@ -34,6 +34,10 @@ class ThingController extends Controller
 	public function create($story_id)
 	{	
 		$thing = new Thing();
+          $thing->mp = 0;
+          $thing->hp = 0;
+          $thing->money = 0;
+          
 		$story = Story::find($story_id);
 		if (Helpers::checkPermission($story_id) == false){
 			return view('errors/403',  array());
@@ -73,6 +77,26 @@ class ThingController extends Controller
 		$name = str_replace(".jpeg","",$name);
 		$thing->name = $name;
 		
+          $thing->mp=0;
+          if (isset($inputs["mp"])){
+			$thing->mp = $inputs["mp"];			
+		}
+          
+          $thing->hp=0;
+          if (isset($inputs["hp"])){
+			$thing->hp = $inputs["hp"];			
+		}
+          
+          $thing->money=0;
+          if (isset($inputs["money"])){
+			$thing->money = $inputs["money"];			
+		}
+          
+          $thing->description= "";
+          if (isset($inputs["description"])){
+			$thing->description = $inputs["description"];			
+		}
+          
 		$thing->picture = "";
 		if (isset($inputs["picture"])){
 			$thing->picture = $inputs["picture"];			

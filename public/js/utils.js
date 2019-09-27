@@ -53,6 +53,10 @@ function showAction(action){
 		case "say":
 			$("#bloc_say").show();			
 			break;
+          case "addmp":
+          case "addhp":
+			$("#bloc_hp").show();			
+			break;
           case "iftrue":
 		case "jump":
 			$("#bloc_jump").show();			
@@ -106,10 +110,15 @@ function addAction(story_id, scene_id){
 	if ($("#actions").val() != ""){
 		$("#info").val("");
 		switch ($("#verb").val()){
+			case "addhp":
+               case "addmp":
+				$("#info").val($("#hp").val());
+				break;
+                    
 			case "say":
 				$("#info").val($("#say").val());
 				break;
-			
+                    
 			case "jump":
                case "iftrue":
 				$("#info").val($("#jump").val());

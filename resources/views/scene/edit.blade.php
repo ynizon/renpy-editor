@@ -144,6 +144,9 @@ $params = $scene->getParams();
 												<option value="game_0_end">end</option>
 												<option value="game_0_pause">pause</option>
 												<option value="game_0_jump">go to</option>
+                                                            <option value="game_0_addhp">add Health Point</option>
+                                                            <option value="game_0_addmp">add Magic Point</option>
+                                                            <option value="game_0_inputname">input [name]</option>
 											</optgroup>
 											
 
@@ -226,7 +229,15 @@ $params = $scene->getParams();
 									<label for="say" class="col-md-4 control-label">Say</label>
 
 									<div class="col-md-12">
-										<textarea class="action_info form-control" type="text" name="say" id="say" rows="10" ></textarea>
+										<textarea class="action_info form-control" name="say" id="say" rows="10" ></textarea>
+									</div>
+								</div>
+                                        
+                                        <div id="bloc_hp" class="action_type form-group">
+									<label for="hp" class="col-md-4 control-label">Points</label>
+
+									<div class="col-md-12">
+										<input class="action_info form-control" type="text" name="hp" id="hp" />
 									</div>
 								</div>
 								
@@ -236,7 +247,7 @@ $params = $scene->getParams();
 									<div class="col-md-12">
 										<textarea class="action_info form-control" type="text" name="addscript" id="addscript" rows="10" ></textarea>
                                                   <br/>
-                                                  <i class="fa fa-info"></i>&nbsp;Informations<br/>Add 5 spaces for indent.<br/>Use $my_var=my_var+1 to affect it<br/>Use [my_var] to use it.
+                                                  <i class="fa fa-info"></i>&nbsp;Informations<br/>Add 4 spaces for indent.<br/>Use $my_var=my_var+1 to affect it<br/>Use [my_var] to use it.
 									</div>
 								</div>
 								

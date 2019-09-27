@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
 				'starting_script'=>'',
                     'lang'=>'United Kingdom',
 				'created_at'=>'2019-09-10',
+                    'inventory'=>0,
                     'picture'=>''
 			)
 		); 
@@ -45,7 +46,11 @@ class DatabaseSeeder extends Seeder
 		DB::table('things')->insert(
 			array(
 				'story_id' => '1',
+                    'money'=>0,
+                    'hp'=>0,
+                    'mp'=>0,
 				'name'=>'Keys',
+                    'description'=>'for opening...'
 				'picture'=>'http://bassnovel.com/db/pic/item/14509284.gif'
 			)
 		); 

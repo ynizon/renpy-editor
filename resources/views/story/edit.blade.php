@@ -82,6 +82,23 @@
                                 @endif
                             </div>
                         </div>
+                        
+                        <div class="form-group{{ $errors->has('inventory') ? ' has-error' : '' }}">
+                            <label for="inventory" class="col-md-4 control-label">Inventory</label>
+
+                            <div class="col-md-6">
+                                <select id="inventory" class="form-control" name="inventory">
+                                     <option <?php if ($story->inventory == 1){echo "selected";} ?>  value="0">Without</option>
+                                     <option <?php if ($story->inventory == 1){echo "selected";} ?> value="1">With</option>
+                                </select>
+
+                                @if ($errors->has('inventory'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('inventory') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 						
 					<div class="form-group{{ $errors->has('starting_script') ? ' has-error' : '' }}">
                             <label for="starting_script" class="col-md-4 control-label">Starting Script</label>

@@ -377,6 +377,14 @@ abstract class HelperServiceProvider extends ServiceProvider
           }
           return $r;
 	}
+     
+     /* Encode name for python script */
+	public static function encLine($s){
+		
+		$r = str_replace("\"","''",str_replace("\r","",str_replace("\n","\\n",$s)));
+		  
+          return $r;
+	}
 	
 	public static function skip_accents( $str, $charset='utf-8' ) {
  
