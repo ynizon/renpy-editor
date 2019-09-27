@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 				'starting_script'=>'',
                     'lang'=>'United Kingdom',
 				'created_at'=>'2019-09-10',
-                    'inventory'=>0,
+                    'inventory'=>1,
                     'picture'=>''
 			)
 		); 
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
                     'hp'=>0,
                     'mp'=>0,
 				'name'=>'Keys',
-                    'description'=>'for opening...'
+                    'description'=>'for opening...',
 				'picture'=>'http://bassnovel.com/db/pic/item/14509284.gif'
 			)
 		); 
@@ -169,7 +169,7 @@ class DatabaseSeeder extends Seeder
 				'scene_id' => '1',				
 				'num_order'=>'3',
 				'name'=>'Ma Baker show:Smile truecenter',
-				'parameters'=>'{"element":"character","subject_id":"1","verb":"show","info":{"behaviours":"1","move":"truecenter"}}'
+				'parameters'=>'{"element":"character","subject_id":"1","verb":"show","info":"{\"behaviours\":\"1\",\"move\":\"truecenter\"}"}'
 			)
 		); 
 		
@@ -198,7 +198,7 @@ class DatabaseSeeder extends Seeder
 				'story_id' => '1',				
 				'scene_id' => '1',				
 				'num_order'=>'7',
-				'name'=>'Ma Baker say:I give you the keys of this project',
+				'name'=>'Ma Baker say:I give you the keys of this project. Now open the inventory.',
 				'parameters'=>'{"element":"character","subject_id":"1","verb":"say","info":"I give you the keys of this project, do you want to restart the tutorial ?"}'
 			)
 		); 

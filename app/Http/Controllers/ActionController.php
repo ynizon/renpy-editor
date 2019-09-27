@@ -127,6 +127,9 @@ class ActionController extends Controller
 					break;
 			}			
 		}
+          if (isset($data["action_id"])){
+              unset($data["action_id"]);
+          }
 		$action->parameters = json_encode($data);		
 		$action->story_id = $story_id;
 		$action->scene_id = $scene_id;
