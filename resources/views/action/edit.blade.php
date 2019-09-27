@@ -8,7 +8,14 @@ switch ($params["verb"]){
 		$("#setthings").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
 		<?php
 		break;
-		
+          
+	case "addhp":
+     case "addmp":
+          ?>
+		$("#hp").val(decodeURIComponent("<?php echo rawurlencode($params["info"]);?>"));
+		<?php
+		break;
+          
 	case "show":
 		break;
 		
