@@ -71,7 +71,7 @@ function showAction(action){
                $("#bloc_setthing").show();
                break;
 		case "show":
-          case "showflip":               
+        case "showflip":               
 			if ($("#element").val() == "character"){                    
                     $.ajax({
                          type: "GET",
