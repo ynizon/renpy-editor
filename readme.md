@@ -6,10 +6,14 @@ When you have a lot of scenes, you can chain them with actions.
 When you have finished your story, export the script to Ren'Py and enjoy your visual novel.
 
 ## Install
-- composer update
-- npm install && npm run dev
-- php artisan migrate:refresh --seed
-- login with admin@admin.com / admin
+- `composer update`
+- `npm install`
+- `npm run dev`
+- Check settings (see "Settings" below)
+- `php artisan migrate:refresh --seed`
+- `php artisan key:generate`
+- Open website in browser from subfolder `public/`
+- Login with `admin@admin.com` / `admin`
 
 ## Settings
 - folder public/stories must be writable
